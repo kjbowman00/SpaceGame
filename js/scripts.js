@@ -12,7 +12,7 @@ var xPR = 0;
 var yPR = 0;
 var xP = 0;
 var yP = 0;
-var velocity = 3;
+var velocity = 8;
 
 function inBounds(inner, area) {
 	if (inner.x + inner.w >= area.x && inner.x <= area.x + area.w) {
@@ -22,30 +22,34 @@ function inBounds(inner, area) {
 	} else return false;
 }
 
+var oldX = 0;
+var oldY = 0;
 function update() {
+	camera.x = xP + 25 - camera.w/2;
+	camera.y = yP + 25 - camera.h/2;
+
+	//Update player position
 	xPrevious = xP;
 	yPrevious = yP;
 	xP += deltaTime*xDir*velocity;
 	yP += deltaTime*yDir*velocity;
 }
 
+
 function draw() {
 	var ctx = canvas.getContext("2d");
 	//Clear canvas
 	ctx.clearRect(0, 0, canvas.width, canvas.height);
-
 	//Draw world objects where the camera is
 	for (var i in world.things) {
 		item = world.things[i];
-		if (inBounds(item, camera)) {
-			ctx.fillRect(item.x - camera.x, item.y - camera.y, item.w, item.h);
-		}
+		ctx.fillRect(item.x - camera.x, item.y - camera.y, item.w, item.h);
 	}
 
 	//Round xP and yP
-	xPR = ((0.5 + xP) | 0);
-	yPR = ((0.5 + yP) | 0);
-	ctx.fillRect(xPR, yPR, 50, 50);
+	xPR = Math.round(xP);
+	yPR = Math.round(yP);
+	ctx.fillRect(xPR - camera.x, yPR - camera.y, 50, 50);
 }
 
 function mainLoop(timestamp) {

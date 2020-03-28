@@ -8,8 +8,8 @@ var xP = 0;
 var yP = 0;
 
 function update() {
-	xP += deltaTime;
-	yP += deltaTime;
+	xP += deltaTime*xDir;
+	yP += deltaTime*yDir;
 }
 
 function draw() {

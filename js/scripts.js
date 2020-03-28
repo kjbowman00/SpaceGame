@@ -14,6 +14,10 @@ var xP = 0;
 var yP = 0;
 var velocity = 8;
 
+function lerp(n1, n2, amt) {
+	return (n2-n1) * amt + n1;
+}
+
 function inBounds(inner, area) {
 	if (inner.x + inner.w >= area.x && inner.x <= area.x + area.w) {
 		if (inner.y + inner.h >= area.y && inner.y <= area.y + area.h) {
@@ -25,8 +29,9 @@ function inBounds(inner, area) {
 var oldX = 0;
 var oldY = 0;
 function update() {
-	camera.x = xP + 25 - camera.w/2;
-	camera.y = yP + 25 - camera.h/2;
+	camera.x = lerp(camera.x, xP + 50 - camera.w/2, 0.05);
+	camera.y = lerp(camera.y, yP + 50 - camera.h/2, 0.05);
+	//camera.y = yP + 50 - camera.h/2;
 
 	//Update player position
 	xPrevious = xP;
@@ -34,7 +39,6 @@ function update() {
 	xP += deltaTime*xDir*velocity;
 	yP += deltaTime*yDir*velocity;
 }
-
 
 function draw() {
 	var ctx = canvas.getContext("2d");

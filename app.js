@@ -20,10 +20,9 @@ app.use(express.static('public'));
 io.on('connection', function(socket) {
     socket.on('play_game', function(data) {
         //TODO: Check things
-
-        //Check rooms exist
-        //No rooms, make one
-        //Otherwise add to that room
+        //Call up gameManager
+        console.log("user hit play");
+        gameManager.joinRequest(socket.id);
     });
 });
 

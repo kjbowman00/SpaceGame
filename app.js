@@ -1,3 +1,4 @@
+/*jshint esversion: 6 */
 var express = require('express');
 var app = express();
 var http = require('http').Server(app);
@@ -16,7 +17,12 @@ app.use(express.static('public'));
 ////////////////////////////////////////////////////////
 //io connections and messages
 io.on('connection', function(socket) {
-    socket.on('leave_room', function(data) {
+    socket.on('play_game', function(data) {
+        //TODO: Check things
+
+        //Check rooms exist
+        //No rooms, make one
+        //Otherwise add to that room
     });
 });
 
@@ -26,3 +32,10 @@ http.listen(3000, function() {
 ////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////
+
+///Add this when creating a game
+var nsp = io.of('/my-namespace');
+nsp.on('connection', function(socket) {
+    console.log('someone connected');
+});
+nsp.emit('hi', 'everyone!');

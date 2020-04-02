@@ -1,4 +1,9 @@
 /*jshint esversion: 6 */
+exports.joinRequest = joinRequest;
+
+var appjs = require('./app.js');
+var io = appjs.io;
+
 const MAX_PLAYERS = 30;
 const MAX_GAMES = 10;
 
@@ -10,16 +15,17 @@ var players = new Map();
 
 function _newGame(gameID) {
 	//Spawn a child process to run the room code
-	var child = nodeChildProcess.fork('gameRoom.js');
+	var child = nodeChildProcess.fork('./gameRoom.js');
 
-	games.set(gameID, {gameProcess:gameProcess, nPlayers:0});
+	games.set(gameID, {gameProcess:child, nPlayers:0});
 	numGames++;
 	//Let the child process handle
 	//With its own namespace
-	var gameIO = io.of(concat("/G_", gameID.toString()));
+	console.log(gameID);
+	var gameIO = io.of("/G_" + gameID.toString());
     gameIO.on('connection', function(socket){
+    	console.log('someone connected');
     	child.send('socket', socket);
-        console.log('someone connected');
     });
 }
 
@@ -49,11 +55,11 @@ function joinRequest(playerID) {
 		_newGame(playerID);
 		roomID = playerID;
 		_joinGame(roomID, playerID);
-		return true;
+		return roomID;
 	} else {
 		//We did find a room, join it
 		_joinGame(roomID, playerID);
-		return true;
+		return roomID;
 	}
-	return false; //Failed to join a game
+	return null; //Failed to join a game
 }

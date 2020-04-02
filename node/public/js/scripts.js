@@ -1,15 +1,4 @@
 /*jshint esversion: 6 */
-var canvas = document.getElementById("canvas");
-function resizeCanvas() {
-	canvas.width = window.innerWidth;
-	canvas.height = window.innerHeight;
-	camera.w = canvas.width;
-	camera.h = canvas.height;
-	draw();
-}
-window.addEventListener("resize", resizeCanvas);
-resizeCanvas();
-
 var deltaTime = 0; //In milliseconds
 
 var xPrevious = 0;
@@ -47,7 +36,7 @@ function update() {
 }
 
 function draw() {
-	var ctx = canvas.getContext("2d");
+	var ctx = canvas.getContext('2d');
 	//Clear canvas
 	ctx.clearRect(0, 0, canvas.width, canvas.height);
 	//Draw world objects where the camera is
@@ -70,3 +59,4 @@ function mainLoop(timestamp) {
 }
 
 requestAnimationFrame(mainLoop);
+

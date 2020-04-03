@@ -10,3 +10,18 @@ html, body {
 	height: 100%;
 	display: block;
 }
+#form_box {
+	width:20%;
+	height:30%;
+	position:relative;
+	top:50%;
+	transform: translateY(-70%);
+	margin:auto;
+	background-color:gray;
+	text-align:center;
+}
+#name_form {
+	position:relative;
+	top:50%;
+	transform: translateY(-50%);
+}

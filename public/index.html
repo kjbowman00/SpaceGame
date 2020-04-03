@@ -12,13 +12,25 @@
 </head>
 
 <body>
-	<canvas id="canvas"></canvas>
+	<div id="form_box">
+		<form id="name_form" autocomplete="off">
+			<input type="text" id="username" placeholder="Enter Name:"><br>
+			<select>
+				<option value="game1">Game 1: N Players</option>
+				<option value="game2">Game 2: N Players</option>
+			</select><br>
+			<input type="submit">
+		</form>
+	</div>
+
+
+	<!--<canvas id="canvas"></canvas>
 	<script src="js/camera.js"></script>
 	<script src="js/resizeCanvas.js"></script>
 	<script src="js/input.js"></script>
 	<script src="js/world.js"></script>
 	<script src="js/scripts.js"></script>
 	<script src="/socket.io/socket.io.js"></script>
-	<script src="js/communicator.js"></script>
+	<script src="js/communicator.js"></script>-->
 </body>
 </html>

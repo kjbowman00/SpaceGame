@@ -13,9 +13,9 @@ html, body {
 #form_box {
 	width:20%;
 	height:30%;
-	position:relative;
-	top:50%;
-	transform: translateY(-70%);
+	position:absolute;
+	top:30%;
+	left:40%;
 	margin:auto;
 	background-color:gray;
 	text-align:center;

@@ -1,10 +1,10 @@
-/*jshint esversion: 6 */
 const gameNum = 1;
 const portNum = 2999 + gameNum;
 
 var express = require('express');
 var app = express();
 var http = require('http').createServer();
+var gameLoop = require('./gameLoop.js');
 
 var ioPath = '/game' + gameNum + '/socket.io';
 const io = require('socket.io')(http, {
@@ -25,3 +25,5 @@ io.on('connection', function(socket) {
 http.listen(portNum, function() {
     console.log('listening on localhost:3000');
 });
+
+gameLoop.loop();

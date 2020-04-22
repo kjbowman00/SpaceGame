@@ -26,4 +26,4 @@ http.listen(portNum, function() {
     console.log('listening on localhost:3000');
 });
 
-gameLoop.loop();
+gameLoop.getStarted(io);

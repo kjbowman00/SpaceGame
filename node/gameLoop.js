@@ -1,5 +1,8 @@
 const tickLengthMs = 1000 / 60;
 var previousTick = Date.now();
+var io;
+
+var world = require('./world.js');
 
 var loop = function () {
 	var now = Date.now();
@@ -10,6 +13,8 @@ var loop = function () {
 		previousTick = now;
 
 		//Update
+		var state = world.getState();
+		io.sockets.emit('state', Array.from(state.values()));
 	}
 
 	//Determine whether to immediately loop again or wait a bit
@@ -19,6 +24,10 @@ var loop = function () {
 	} else {
 		setImmediate(loop);
 	}
-}
+};
 
-exports.loop = loop;
+var getStarted = function (ioObject) {
+	io = ioObject;
+	loop();
+};
+exports.getStarted = getStarted;

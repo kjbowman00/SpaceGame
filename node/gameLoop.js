@@ -11,10 +11,25 @@ var loop = function () {
 	if (previousTick + tickLengthMs <= now) {
 		var deltaTime = (now - previousTick) / 1000; // Number of seconds since last update
 		previousTick = now;
+		world.update(deltaTime);
 
 		//Update
 		var state = world.getState();
-		io.sockets.emit('state', Array.from(state.values()));
+		state.forEach((value, key, map) => {
+			//Key is socketid. //value is player object
+			//Need to grab each nearby object to this player
+			var objectsToSend = [];
+			state.forEach((value2, key2, map2) => {
+				if (key != key2) {
+					var distSq = (value.x - value2.x) * (value.x - value2.x);
+					distSq += (value.y - value.y) * (value.y - value2.y);
+					if (distSq <= 1000000) {
+						objectsToSend.push(value2);
+					}
+				}
+			});
+			io.to(key).emit('state', { player: value, others: objectsToSend });
+		});
 	}
 
 	//Determine whether to immediately loop again or wait a bit
@@ -30,4 +45,5 @@ var getStarted = function (ioObject) {
 	io = ioObject;
 	loop();
 };
+exports.world = world;
 exports.getStarted = getStarted;

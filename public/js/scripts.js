@@ -1,6 +1,8 @@
 /*jshint esversion: 6 */
 var deltaTime = 0; //In milliseconds
 
+var worldObjs = [];
+
 var xPrevious = 0;
 var yPrevious = 0;
 var xPR = 0;
@@ -37,6 +39,7 @@ function update() {
 
 function draw() {
 	var ctx = canvas.getContext('2d');
+	ctx.fillStyle = "#000000";
 	//Clear canvas
 	ctx.clearRect(0, 0, canvas.width, canvas.height);
 	//Draw world objects where the camera is
@@ -49,6 +52,13 @@ function draw() {
 	xPR = Math.round(xP);
 	yPR = Math.round(yP);
 	ctx.fillRect(xPR - camera.x, yPR - camera.y, 50, 50);
+
+
+	//Draw world objects
+	ctx.fillStyle = "#FF0000";
+	worldObjs.forEach((elem) => {
+		ctx.fillRect(elem.x - camera.x, elem.y - camera.y, 50, 50);
+	});
 }
 
 function mainLoop(timestamp) {

@@ -25,4 +25,6 @@ var getState = function () {
 	return players;
 };
 
+exports.addPlayer = addPlayer;
 exports.getState = getState;
+exports.update = update;

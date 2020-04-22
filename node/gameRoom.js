@@ -18,6 +18,7 @@ io.on('connection', function(socket) {
     socket.on('play_game', function(data) {
         console.log("yee hooo play_game");
         console.log(data);
+        gameLoop.world.addPlayer(socket.id);
     });
     socket.emit('test1', "heyyy");
 });

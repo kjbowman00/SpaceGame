@@ -23,8 +23,7 @@ function socketStuff(formData) {
         console.log('Test1 receieved');
     });
     socket.on('state', function (data) {
-        console.log(data);
-
+        worldObjs = data.others;
     });
 
     socket.emit('play_game', formData.get('username'));

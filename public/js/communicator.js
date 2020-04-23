@@ -24,6 +24,13 @@ function socketStuff(formData) {
     });
     socket.on('state', function (data) {
         worldObjs = data.others;
+        serverPlayerState = data.player;
+        lastInput.xVel = 10 * xDir;
+        lastInput.yVel = 10 * yDir;
+        console.log(serverPlayerState);
+        //Send current input
+        lastInputTime = performance.now();
+        socket.emit('player_input', { xDir: xDir, yDir: yDir });
     });
 
     socket.emit('play_game', formData.get('username'));

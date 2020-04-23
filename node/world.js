@@ -4,12 +4,38 @@ var players = new Map();
 var fakePlayer = new Player(0, 0);
 players.set(12345, fakePlayer);
 
+const PLAYER_SPEED = 100;
+
 var update = function (deltaTime) {
-	fakePlayer.x += deltaTime * 10;
+	console.log(deltaTime);
+	players.forEach((currentPlayer, key, map) => {
+		currentPlayer.x += currentPlayer.xVel * deltaTime;
+		currentPlayer.y += currentPlayer.yVel * deltaTime;
+	});
 };
 
+var sendUpdates = function(io) {
+	players.forEach((value, key, map) => {
+		//Key is socketid. //value is player object
+		//Need to grab each nearby object to this player
+		var objectsToSend = [];
+		players.forEach((value2, key2, map2) => {
+			if (key != key2) {
+				var distSq = (value.x - value2.x) * (value.x - value2.x);
+				distSq += (value.y - value.y) * (value.y - value2.y);
+				if (distSq <= 1000000000) {
+					objectsToSend.push(value2);
+				}
+			}
+		});
+		//console.log(value);
+		io.to(key).emit('state', { player: value, others: objectsToSend });
+	});
+}
+
 var addPlayer = function (socketID) {
-	players.set(socketID, new Player(0,0));
+	players.set(socketID, new Player(0, 0));
+	console.log(players);
 };
 
 var removePlayer = function (socketID) {
@@ -19,12 +45,29 @@ var removePlayer = function (socketID) {
 function Player(x, y) {
 	this.x = x;
 	this.y = y;
+	this.xVel = 0;
+	this.yVel = 0;
 }
 
-var getState = function () {
-	return players;
-};
+var playerInput = function (socketID, input) {
+	var currentPlayer = players.get(socketID);
+	if (input.xDir == 1) {
+		currentPlayer.xVel = PLAYER_SPEED;
+	} else if (input.xDir == -1) {
+		currentPlayer.xVel = -PLAYER_SPEED;
+	} else {
+		currentPlayer.xVel = 0;
+	}
+	if (input.yDir == 1) {
+		currentPlayer.yVel = PLAYER_SPEED;
+	} else if (input.yDir == -1) {
+		currentPlayer.yVel = -PLAYER_SPEED;
+	} else {
+		currentPlayer.yVel = 0;
+	}
+}
 
 exports.addPlayer = addPlayer;
-exports.getState = getState;
 exports.update = update;
+exports.sendUpdates = sendUpdates;
+exports.playerInput = playerInput;

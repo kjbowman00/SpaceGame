@@ -1,7 +1,13 @@
 /*jshint esversion: 6 */
-var deltaTime = 0; //In milliseconds
+var deltaTime = 0; //In seconds
 
 var worldObjs = [];
+
+var serverPlayerState = { x: 0, y: 0, xVel: 0, yVel: 0 };
+var lastInput = { xVel: 0, yVel: 0 };
+var lastInputTime = performance.now();
+
+var lastUpdateTime = 0;
 
 var xPrevious = 0;
 var yPrevious = 0;
@@ -9,7 +15,7 @@ var xPR = 0;
 var yPR = 0;
 var xP = 0;
 var yP = 0;
-var velocity = 8;
+var velocity = 100;
 
 function lerp(n1, n2, amt) {
 	return (n2-n1) * amt + n1;
@@ -29,6 +35,14 @@ function update() {
 	camera.x = lerp(camera.x, xP + 50 - camera.w/2, 0.05);
 	camera.y = lerp(camera.y, yP + 50 - camera.h/2, 0.05);
 	//camera.y = yP + 50 - camera.h/2;
+
+	//Lerp to predicted server state
+	var deltaServer = (performance.now() - lastInputTime) / 1000;
+	var predictX = serverPlayerState.x + lastInput.xVel * deltaServer;
+	var predictY = serverPlayerState.y + lastInput.yVel * deltaServer;
+
+	xP = lerp(xP, predictX, 0.1);
+	yP = lerp(yP, predictY, 0.1);
 
 	//Update player position
 	xPrevious = xP;
@@ -62,7 +76,8 @@ function draw() {
 }
 
 function mainLoop(timestamp) {
-	deltaTime = performance.now() - timestamp;
+	deltaTime = (timestamp - lastUpdateTime) / 1000;
+	lastUpdateTime = timestamp;
 	update();
 	draw();
 	requestAnimationFrame(mainLoop);

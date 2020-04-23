@@ -20,6 +20,9 @@ io.on('connection', function(socket) {
         console.log(data);
         gameLoop.world.addPlayer(socket.id);
     });
+    socket.on('player_input', function (data) {
+        gameLoop.world.playerInput(socket.id, data);
+    });
     socket.emit('test1', "heyyy");
 });
 

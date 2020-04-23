@@ -1,7 +1,10 @@
 /*jshint esversion: 6 */
 var deltaTime = 0; //In seconds
 
-var worldObjs = [];
+const SERVER_WORLD_UPDATE_TIME = 1 / 60;
+
+var worldObjsOld = new Map();
+var worldObjsUpdated = new Map();
 
 var serverPlayerState = { x: 0, y: 0, xVel: 0, yVel: 0 };
 var lastInput = { xVel: 0, yVel: 0 };
@@ -48,7 +51,17 @@ function update() {
 	xPrevious = xP;
 	yPrevious = yP;
 	xP += deltaTime*xDir*velocity;
-	yP += deltaTime*yDir*velocity;
+	yP += deltaTime * yDir * velocity;
+
+	//Update other player objects
+	var percentageUpdate = deltaServer / SERVER_WORLD_UPDATE_TIME;
+	worldObjsOld.forEach((obj, id, map) => {
+		var objNew = worldObjsUpdated.get(id);
+		if (objNew != undefined) {
+			obj.x = lerp(obj.x, objNew.x, percentageUpdate);
+			obj.y = lerp(obj.y, objNew.y, percentageUpdate);
+		}
+	});
 }
 
 function draw() {
@@ -70,7 +83,7 @@ function draw() {
 
 	//Draw world objects
 	ctx.fillStyle = "#FF0000";
-	worldObjs.forEach((elem) => {
+	worldObjsOld.forEach((elem, id, map) => {
 		ctx.fillRect(elem.x - camera.x, elem.y - camera.y, 50, 50);
 	});
 }

@@ -885,3 +885,4 @@
 2020/04/22 20:44:56 [notice] 7620#10608: signal process started
 2020/04/22 20:45:04 [notice] 908#12384: signal process started
 2020/04/22 20:45:04 [error] 908#12384: CreateFile() "C:\Users\Kyle\source\repos\SpaceGame\nginx/logs/nginx.pid" failed (2: The system cannot find the file specified)
+2020/04/22 23:36:34 [notice] 16240#13132: signal process started

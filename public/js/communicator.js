@@ -23,7 +23,8 @@ function socketStuff(formData) {
         console.log('Test1 receieved');
     });
     socket.on('state', function (data) {
-        worldObjs = data.others;
+        worldObjsOld = worldObjsUpdated;
+        worldObjsUpdated = new Map(data.others);
         serverPlayerState = data.player;
         lastInput.xVel = 10 * xDir;
         lastInput.yVel = 10 * yDir;

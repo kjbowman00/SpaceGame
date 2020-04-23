@@ -18,17 +18,17 @@ var sendUpdates = function(io) {
 	players.forEach((value, key, map) => {
 		//Key is socketid. //value is player object
 		//Need to grab each nearby object to this player
-		var objectsToSend = [];
+		var objectsToSend = new Map();
 		players.forEach((value2, key2, map2) => {
 			if (key != key2) {
 				var distSq = (value.x - value2.x) * (value.x - value2.x);
 				distSq += (value.y - value.y) * (value.y - value2.y);
 				if (distSq <= 1000000000) {
-					objectsToSend.push(value2);
+					objectsToSend.set(key2 , value2);
 				}
 			}
 		});
-		//console.log(value);
+		objectsToSend = Array.from(objectsToSend);
 		io.to(key).emit('state', { player: value, others: objectsToSend });
 	});
 }

@@ -69,6 +69,18 @@ function draw() {
 	ctx.fillStyle = "#000000";
 	//Clear canvas
 	ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+	//Draw background
+	var bCtx = backgroundCanvas.getContext('2d');
+	var amountGoback = camera.x % 32; // Second num is width of background image
+	//This is to avoid drawing accross the entire world and instead just a small portion
+	var pattern = bCtx.createPattern(img, 'repeat');
+	bCtx.translate(-amountGoBack);
+	bCtx.rect(0, 0, canvas.width + amountGoBack, canvas.height + amountGoBack);
+	bCtx.fillStyle = pattern;
+	bCtx.fill();
+	
+
 	//Draw world objects where the camera is
 	for (var i in world.things) {
 		item = world.things[i];

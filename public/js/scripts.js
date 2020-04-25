@@ -1,7 +1,7 @@
 /*jshint esversion: 6 */
 var deltaTime = 0; //In seconds
 
-const SERVER_WORLD_UPDATE_TIME = 1 / 60;
+const SERVER_WORLD_UPDATE_TIME = 1 / 10;
 
 var worldObjsOld = new Map();
 var worldObjsUpdated = new Map();
@@ -35,8 +35,10 @@ function inBounds(inner, area) {
 var oldX = 0;
 var oldY = 0;
 function update() {
-	camera.x = lerp(camera.x, xP + 50 - camera.w/2, 0.05);
-	camera.y = lerp(camera.y, yP + 50 - camera.h/2, 0.05);
+	let nCameraX = xP + 50 - camera.w / 2;
+	let nCameraY = yP + 50 - camera.h / 2;
+	if (Math.abs(camera.x - nCameraX) > 0.5) camera.x = lerp(camera.x, nCameraX, 0.05);
+	if (Math.abs(camera.y - nCameraY) > 0.5) camera.y = lerp(camera.y, nCameraY, 0.05);
 	//camera.y = yP + 50 - camera.h/2;
 
 	//Lerp to predicted server state
@@ -44,8 +46,8 @@ function update() {
 	var predictX = serverPlayerState.x + lastInput.xVel * deltaServer;
 	var predictY = serverPlayerState.y + lastInput.yVel * deltaServer;
 
-	if (xP - predictX < 0.5) xP = lerp(xP, predictX, 0.1);
-	if (yP - predictY < 0.5) yP = lerp(yP, predictY, 0.1);
+	if (Math.abs(xP - predictX) > 0.1) xP = lerp(xP, predictX, 0.1);
+	if (Math.abs(yP - predictY) > 0.1) yP = lerp(yP, predictY, 0.1);
 
 	//Update player position
 	xPrevious = xP;
@@ -58,8 +60,8 @@ function update() {
 	worldObjsOld.forEach((obj, id, map) => {
 		var objNew = worldObjsUpdated.get(id);
 		if (objNew != undefined) {
-			obj.x = lerp(obj.x, objNew.x, percentageUpdate);
-			obj.y = lerp(obj.y, objNew.y, percentageUpdate);
+			if (Math.abs(obj.x - objNew.x) > 0.1) obj.x = lerp(obj.x, objNew.x, percentageUpdate);
+			if (Math.abs(obj.y - objNew.y) > 0.1) obj.y = lerp(obj.y, objNew.y, percentageUpdate);
 		}
 	});
 }
@@ -77,12 +79,7 @@ function draw() {
 	var amountGoBackY = Math.floor(camera.y) % backGroundImage.height;
 	//This is to avoid drawing accross the entire world and instead just a small portion
 	var pattern = bCtx.createPattern(backGroundImage, 'repeat');
-	//if (amountGoBackX < 0) amountGoBackX = -amountGoBackX;
-	//if (amountGoBackY < 0) amountGoBackY = -(amountGoBackY - backGroundImage.height);
 	bCtx.fillStyle = pattern;
-	//bCtx.translate(-amountGoBackX, -amountGoBackY);
-	//bCtx.fillRect(-amountGoBackX, -amountGoBackY, canvas.width + 2*amountGoBackX, canvas.height + 2*amountGoBackY);
-	//bCtx.resetTransform();
 	bCtx.translate(-amountGoBackX, -amountGoBackY);
 	bCtx.fillRect(-backGroundImage.width, -backGroundImage.height,
 		canvas.width + 2*backGroundImage.width, canvas.height + 2*backGroundImage.height);

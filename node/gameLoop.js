@@ -1,5 +1,7 @@
 const tickLengthMs = 1000 / 60;
+const outputTickLengthMs = 1000 / 10;
 var previousTick = Date.now();
+var previousOutputTick = Date.now();
 var io;
 
 var world = require('./world.js');
@@ -16,6 +18,10 @@ var loop = function () {
 
 		//Update
 		world.update(deltaTime);
+	}
+
+	if (previousOutputTick + outputTickLengthMs <= now) {
+		previousOutputTick = now;
 		world.sendUpdates(io);
 	}
 

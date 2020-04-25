@@ -28,7 +28,6 @@ function socketStuff(formData) {
         serverPlayerState = data.player;
         lastInput.xVel = 10 * xDir;
         lastInput.yVel = 10 * yDir;
-        console.log(serverPlayerState);
         //Send current input
         lastInputTime = performance.now();
         socket.emit('player_input', { xDir: xDir, yDir: yDir });

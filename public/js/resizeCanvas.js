@@ -1,3 +1,4 @@
+var canvas_container = document.getElementById('canvas_holder');
 var canvas = document.getElementById('canvas');
 var backgroundCanvas = document.getElementById('background_canvas');
 function resizeCanvas() {

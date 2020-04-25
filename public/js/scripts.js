@@ -44,8 +44,8 @@ function update() {
 	var predictX = serverPlayerState.x + lastInput.xVel * deltaServer;
 	var predictY = serverPlayerState.y + lastInput.yVel * deltaServer;
 
-	xP = lerp(xP, predictX, 0.1);
-	yP = lerp(yP, predictY, 0.1);
+	if (xP - predictX < 0.5) xP = lerp(xP, predictX, 0.1);
+	if (yP - predictY < 0.5) yP = lerp(yP, predictY, 0.1);
 
 	//Update player position
 	xPrevious = xP;
@@ -72,13 +72,21 @@ function draw() {
 
 	//Draw background
 	var bCtx = backgroundCanvas.getContext('2d');
-	var amountGoback = camera.x % 32; // Second num is width of background image
+	bCtx.clearRect(0, 0, canvas.width, canvas.height);
+	var amountGoBackX = Math.floor(camera.x) % backGroundImage.width;
+	var amountGoBackY = Math.floor(camera.y) % backGroundImage.height;
 	//This is to avoid drawing accross the entire world and instead just a small portion
-	var pattern = bCtx.createPattern(img, 'repeat');
-	bCtx.translate(-amountGoBack);
-	bCtx.rect(0, 0, canvas.width + amountGoBack, canvas.height + amountGoBack);
+	var pattern = bCtx.createPattern(backGroundImage, 'repeat');
+	//if (amountGoBackX < 0) amountGoBackX = -amountGoBackX;
+	//if (amountGoBackY < 0) amountGoBackY = -(amountGoBackY - backGroundImage.height);
 	bCtx.fillStyle = pattern;
-	bCtx.fill();
+	//bCtx.translate(-amountGoBackX, -amountGoBackY);
+	//bCtx.fillRect(-amountGoBackX, -amountGoBackY, canvas.width + 2*amountGoBackX, canvas.height + 2*amountGoBackY);
+	//bCtx.resetTransform();
+	bCtx.translate(-amountGoBackX, -amountGoBackY);
+	bCtx.fillRect(-backGroundImage.width, -backGroundImage.height,
+		canvas.width + 2*backGroundImage.width, canvas.height + 2*backGroundImage.height);
+	bCtx.resetTransform();
 	
 
 	//Draw world objects where the camera is
@@ -98,6 +106,14 @@ function draw() {
 	worldObjsOld.forEach((elem, id, map) => {
 		ctx.fillRect(elem.x - camera.x, elem.y - camera.y, 50, 50);
 	});
+
+	//Illuminate background from players
+	var grd = bCtx.createRadialGradient(xPR - camera.x, yPR - camera.y, 30, xPR - camera.x, yPR - camera.y, 100);
+	grd.addColorStop(0, 'rgba(84, 68, 255, 255)');
+	grd.addColorStop(1, 'rgba(84, 68, 255, 0)');
+	bCtx.fillStyle = grd;
+	bCtx.globalCompositeOperation = "lighter";
+	bCtx.fillRect(xPR - camera.x - 50, yPR - camera.y - 50, 150, 150);
 }
 
 function mainLoop(timestamp) {

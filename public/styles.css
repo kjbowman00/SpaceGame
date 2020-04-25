@@ -4,12 +4,24 @@ html, body {
 	/* remove the extra whites around */
 	margin: 0;
 }
-#canvas {
-	background-color: white;
-	width: 100%;
-	height: 100%;
-	display: block;
+
+#canvas_holder {
+	position: absolute;
+	top:0px;
+	left:0px;
 }
+#canvas_holder canvas {
+	position:absolute;
+	top:0px;
+	left:0px;
+}
+#canvas {
+	z-index: -1;
+}
+#background_canvas {
+	z-index:-2;
+}
+
 #form_box {
 	width:20%;
 	height:30%;

@@ -23,7 +23,9 @@ io.on('connection', function(socket) {
     socket.on('player_input', function (data) {
         gameLoop.world.playerInput(socket.id, data);
     });
-    socket.emit('test1', "heyyy");
+    socket.on('disconnect', function () {
+        gameLoop.world.removePlayer(socket.id);
+    });
 });
 
 http.listen(portNum, function() {

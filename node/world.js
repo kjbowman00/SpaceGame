@@ -67,6 +67,7 @@ var playerInput = function (socketID, input) {
 }
 
 exports.addPlayer = addPlayer;
+exports.removePlayer = removePlayer;
 exports.update = update;
 exports.sendUpdates = sendUpdates;
 exports.playerInput = playerInput;

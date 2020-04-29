@@ -1,5 +1,5 @@
 const tickLengthMs = 1000 / 60;
-const outputTickLengthMs = 1000 / 10;
+const outputTickLengthMs = 1000 / 20;
 var previousTick = Date.now();
 var previousOutputTick = Date.now();
 var io;

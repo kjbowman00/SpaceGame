@@ -1,7 +1,7 @@
 /*jshint esversion: 6 */
 var deltaTime = 0; //In seconds
 
-const SERVER_WORLD_UPDATE_TIME = 1 / 10;
+const SERVER_WORLD_UPDATE_TIME = 1 / 20;
 
 var worldObjsOld = new Map();
 var worldObjsUpdated = new Map();
@@ -37,8 +37,8 @@ var oldY = 0;
 function update() {
 	let nCameraX = xP + 50 - camera.w / 2;
 	let nCameraY = yP + 50 - camera.h / 2;
-	if (Math.abs(camera.x - nCameraX) > 0.5) camera.x = lerp(camera.x, nCameraX, 0.05);
-	if (Math.abs(camera.y - nCameraY) > 0.5) camera.y = lerp(camera.y, nCameraY, 0.05);
+	if (Math.abs(camera.x - nCameraX) > 4) camera.x = lerp(camera.x, nCameraX, 0.08);
+	if (Math.abs(camera.y - nCameraY) > 4) camera.y = lerp(camera.y, nCameraY, 0.08);
 	//camera.y = yP + 50 - camera.h/2;
 
 	//Lerp to predicted server state
@@ -46,8 +46,8 @@ function update() {
 	var predictX = serverPlayerState.x + lastInput.xVel * deltaServer;
 	var predictY = serverPlayerState.y + lastInput.yVel * deltaServer;
 
-	if (Math.abs(xP - predictX) > 0.1) xP = lerp(xP, predictX, 0.1);
-	if (Math.abs(yP - predictY) > 0.1) yP = lerp(yP, predictY, 0.1);
+	if (Math.abs(xP - predictX) > 5) xP = lerp(xP, predictX, 0.3);
+	if (Math.abs(yP - predictY) > 5) yP = lerp(yP, predictY, 0.3);
 
 	//Update player position
 	xPrevious = xP;

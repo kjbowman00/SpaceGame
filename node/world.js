@@ -7,7 +7,6 @@ players.set(12345, fakePlayer);
 const PLAYER_SPEED = 100;
 
 var update = function (deltaTime) {
-	console.log(deltaTime);
 	players.forEach((currentPlayer, key, map) => {
 		currentPlayer.x += currentPlayer.xVel * deltaTime;
 		currentPlayer.y += currentPlayer.yVel * deltaTime;

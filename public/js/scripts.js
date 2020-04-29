@@ -12,6 +12,8 @@ var lastInputTime = performance.now();
 
 var lastUpdateTime = 0;
 
+var trailTimer = 0;
+
 var xPrevious = 0;
 var yPrevious = 0;
 var xPR = 0;
@@ -111,6 +113,17 @@ function draw() {
 	bCtx.fillStyle = grd;
 	bCtx.globalCompositeOperation = "lighter";
 	bCtx.fillRect(xPR - camera.x - 50, yPR - camera.y - 50, 150, 150);
+
+	//Add trail objects
+	trailTimer += deltaTime;
+	if (trailTimer > 0.1) {
+		trailTimer = 0;
+		worldObjsOld.forEach((item, id, map) => {
+			Trails.addTrail(item.x + 50 / 2, item.y + 50 / 2, { r: 84, g: 68, b: 255, a: 100 }, 50 / 2);
+		});
+	}
+	//Render trails
+	Trails.updateAndRender(deltaTime, bCtx);
 }
 
 function mainLoop(timestamp) {

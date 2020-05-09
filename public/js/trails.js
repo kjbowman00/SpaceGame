@@ -41,7 +41,7 @@ function _Trails() {
 		//Render if not
 		for (var i = trails.length - 1; i >= 0; i--) {
 			updateTrail(trails[i], deltaTime);
-			if (trails[i].color.a < 50) {
+			if (trails[i].color.a < 40) {
 				trails.splice(i, 1);
 			} else {
 				renderTrail(trails[i], ctx);

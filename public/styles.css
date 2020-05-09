@@ -7,6 +7,7 @@ html, body {
 
 #canvas_holder {
 	position: absolute;
+	display:none;
 	top:0px;
 	left:0px;
 }

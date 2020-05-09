@@ -19,8 +19,11 @@ function socketStuff(formData) {
         path: path
     });
 
-    socket.on('test1', function(data) {
-        console.log('Test1 receieved');
+    socket.on('join_game_success', function (data) {
+        document.getElementById('canvas_holder').style.display = 'block';
+
+        //Data is static world objects
+        world.staticWorldObjs = data;
     });
     socket.on('state', function (data) {
         worldObjsOld = worldObjsUpdated;

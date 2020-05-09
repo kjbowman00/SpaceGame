@@ -11,9 +11,6 @@ function Node() {
 	this.right = null;
 }
 
-function Tree() {
-}
-
 function sortByX(a, b) {
 	return a.x - b.x;
 }
@@ -51,4 +48,34 @@ function makeTreeFromPoints(points, xSort) {
 	return node;
 }
 
-var tree;
+function makeTreeFromWorld(world) {
+	let points = [];
+	for (let i = world.length; i >= 0; i--) {
+		let item = world[i];
+		let p1 = new Node();
+		p1.x = item.x;
+		p1.y = item.y;
+		p1.box = item;
+		let p2 = new Node();
+		p2.x = item.x + item.w;
+		p2.y = item.y;
+		p2.box = item;
+		let p3 = new Node();
+		p3.x = item.x;
+		p3.y = item.y + item.h;
+		p3.box = item;
+		let p4 = new Node();
+		p4.x = item.x + item.w;
+		p4.y = item.y + item.h;
+		p4.box = item;
+
+		//Push a point for each corner
+		points.push(p1);
+		points.push(p2);
+		points.push(p3);
+		points.push(p4);
+	}
+	return makeTreeFromPoints(points, true);
+}
+
+exports.makeTreeFromWorld = makeTreeFromWorld;

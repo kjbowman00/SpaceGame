@@ -41,7 +41,6 @@ function update() {
 	let nCameraY = yP + 50 - camera.h / 2;
 	if (Math.abs(camera.x - nCameraX) > 4) camera.x = lerp(camera.x, nCameraX, 0.08);
 	if (Math.abs(camera.y - nCameraY) > 4) camera.y = lerp(camera.y, nCameraY, 0.08);
-	//camera.y = yP + 50 - camera.h/2;
 
 	//Lerp to predicted server state
 	var deltaServer = (performance.now() - lastInputTime) / 1000;
@@ -54,8 +53,10 @@ function update() {
 	//Update player position
 	xPrevious = xP;
 	yPrevious = yP;
-	xP += deltaTime*xDir*velocity;
+	xP += deltaTime * xDir * velocity;
 	yP += deltaTime * yDir * velocity;
+
+
 
 	//Update other player objects
 	var percentageUpdate = deltaServer / SERVER_WORLD_UPDATE_TIME;
@@ -89,8 +90,8 @@ function draw() {
 	
 
 	//Draw world objects where the camera is
-	for (var i in world.things) {
-		item = world.things[i];
+	for (var i in world.staticWorldObjs) {
+		item = world.staticWorldObjs[i];
 		ctx.fillRect(item.x - camera.x, item.y - camera.y, item.w, item.h);
 	}
 
@@ -107,20 +108,22 @@ function draw() {
 	});
 
 	//Illuminate background from players
+	/*
 	var grd = bCtx.createRadialGradient(xPR - camera.x, yPR - camera.y, 30, xPR - camera.x, yPR - camera.y, 100);
 	grd.addColorStop(0, 'rgba(84, 68, 255, 255)');
 	grd.addColorStop(1, 'rgba(84, 68, 255, 0)');
 	bCtx.fillStyle = grd;
 	bCtx.globalCompositeOperation = "lighter";
-	bCtx.fillRect(xPR - camera.x - 50, yPR - camera.y - 50, 150, 150);
+	bCtx.fillRect(xPR - camera.x - 50, yPR - camera.y - 50, 150, 150);*/
 
 	//Add trail objects
 	trailTimer += deltaTime;
-	if (trailTimer > 0.1) {
+	if (trailTimer > 0.05) {
 		trailTimer = 0;
 		worldObjsOld.forEach((item, id, map) => {
 			Trails.addTrail(item.x + 50 / 2, item.y + 50 / 2, { r: 84, g: 68, b: 255, a: 100 }, 50 / 2);
 		});
+		Trails.addTrail(xP + 50 / 2, yP + 50 / 2, { r: 84, g: 68, b: 255, a: 100 }, 50 / 2);
 	}
 	//Render trails
 	Trails.updateAndRender(deltaTime, bCtx);

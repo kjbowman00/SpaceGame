@@ -1,16 +1,17 @@
-
+var collisions = require('./collisionDetection.js');
 var players = new Map();
-
-var fakePlayer = new Player(0, 0);
-players.set(12345, fakePlayer);
 
 const PLAYER_SPEED = 100;
 
 var update = function (deltaTime) {
+	//Update player positions
 	players.forEach((currentPlayer, key, map) => {
 		currentPlayer.x += currentPlayer.xVel * deltaTime;
 		currentPlayer.y += currentPlayer.yVel * deltaTime;
 	});
+
+	//Handle collisions
+	collisions.updateCollisions(players);
 };
 
 var sendUpdates = function(io) {
@@ -44,6 +45,8 @@ var removePlayer = function (socketID) {
 function Player(x, y) {
 	this.x = x;
 	this.y = y;
+	this.w = 50;
+	this.h = 50;
 	this.xVel = 0;
 	this.yVel = 0;
 }

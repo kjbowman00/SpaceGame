@@ -41,8 +41,8 @@ function makeTreeFromPoints(points, xSort) {
 		i = points.length / 2;
 	}
 
-	node.x = xSort[i].x;
-	node.y = xSort[i].y;
+	node.x = points[i].x;
+	node.y = points[i].y;
 	node.left = makeTreeFromPoints(points.slice(0, i + 1), !xSort);
 	node.right = makeTreeFromPoints(points.slice(i + 1, points.length), !xSort);
 	return node;
@@ -67,7 +67,7 @@ function getClosest(point, tree) {
 
 function makeTreeFromWorld(world) {
 	let points = [];
-	for (let i = world.length; i >= 0; i--) {
+	for (let i = world.length - 1; i >= 0; i--) {
 		let item = world[i];
 		let p1 = new Node();
 		p1.x = item.x;

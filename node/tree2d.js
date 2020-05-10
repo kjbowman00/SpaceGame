@@ -48,6 +48,23 @@ function makeTreeFromPoints(points, xSort) {
 	return node;
 }
 
+function _getClosest(point, tree, checkX) {
+	if (tree.box != null) return tree.box;
+	if (checkX) {
+		if (point.x <= tree.x) {
+			return _getClosest(point, tree.left, !checkX);
+		} else return _getClosest(point, tree.right, !checkX);
+	} else {
+		if (point.y <= tree.x) {
+			return _getClosest(point, tree.left, !checkX);
+		} else return _getClosest(point, tree.right, !checkX);
+	}
+}
+
+function getClosest(point, tree) {
+	return _getClosest(point, tree, true);
+}
+
 function makeTreeFromWorld(world) {
 	let points = [];
 	for (let i = world.length; i >= 0; i--) {
@@ -78,4 +95,5 @@ function makeTreeFromWorld(world) {
 	return makeTreeFromPoints(points, true);
 }
 
+exports.getClosest = getClosest;
 exports.makeTreeFromWorld = makeTreeFromWorld;

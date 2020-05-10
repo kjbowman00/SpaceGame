@@ -14,47 +14,27 @@ var lastUpdateTime = 0;
 
 var trailTimer = 0;
 
-var xPrevious = 0;
-var yPrevious = 0;
-var xPR = 0;
-var yPR = 0;
-var xP = 0;
-var yP = 0;
-var velocity = 100;
+var player = { x: 0, y: 0, w: 50, h: 50, oldX: 0, oldY: 0, xVel: 0, yVel: 0 };
+var playerSpeed = 100;
 
 function lerp(n1, n2, amt) {
 	return (n2-n1) * amt + n1;
 }
 
-function inBounds(inner, area) {
-	if (inner.x + inner.w >= area.x && inner.x <= area.x + area.w) {
-		if (inner.y + inner.h >= area.y && inner.y <= area.y + area.h) {
-			return true;
-		} else return false;
-	} else return false;
-}
-
-var oldX = 0;
-var oldY = 0;
 function update() {
-	let nCameraX = xP + 50 - camera.w / 2;
-	let nCameraY = yP + 50 - camera.h / 2;
-	if (Math.abs(camera.x - nCameraX) > 4) camera.x = lerp(camera.x, nCameraX, 0.08);
-	if (Math.abs(camera.y - nCameraY) > 4) camera.y = lerp(camera.y, nCameraY, 0.08);
+	updateCamera();
 
 	//Lerp to predicted server state
 	var deltaServer = (performance.now() - lastInputTime) / 1000;
 	var predictX = serverPlayerState.x + lastInput.xVel * deltaServer;
 	var predictY = serverPlayerState.y + lastInput.yVel * deltaServer;
 
-	if (Math.abs(xP - predictX) > 5) xP = lerp(xP, predictX, 0.3);
-	if (Math.abs(yP - predictY) > 5) yP = lerp(yP, predictY, 0.3);
+	if (Math.abs(player.x - predictX) > 5) player.x = lerp(player.x, predictX, 0.3);
+	if (Math.abs(player.y - predictY) > 5) player.y = lerp(player.y, predictY, 0.3);
 
 	//Update player position
-	xPrevious = xP;
-	yPrevious = yP;
-	xP += deltaTime * xDir * velocity;
-	yP += deltaTime * yDir * velocity;
+	player.x += deltaTime * xDir * playerSpeed;
+	player.y += deltaTime * yDir * playerSpeed;
 
 
 
@@ -95,26 +75,17 @@ function draw() {
 		ctx.fillRect(item.x - camera.x, item.y - camera.y, item.w, item.h);
 	}
 
-	//Round xP and yP
-	xPR = Math.round(xP);
-	yPR = Math.round(yP);
-	ctx.fillRect(xPR - camera.x, yPR - camera.y, 50, 50);
+	//Round player.x and yP
+	let xRound = Math.round(player.x);
+	let yRound = Math.round(player.y);
+	ctx.fillRect(xRound - camera.x, yRound - camera.y, 50, 50);
 
 
-	//Draw world objects
+	//Draw world objects (other players, bullets)
 	ctx.fillStyle = "#FF0000";
 	worldObjsOld.forEach((elem, id, map) => {
 		ctx.fillRect(elem.x - camera.x, elem.y - camera.y, 50, 50);
 	});
-
-	//Illuminate background from players
-	/*
-	var grd = bCtx.createRadialGradient(xPR - camera.x, yPR - camera.y, 30, xPR - camera.x, yPR - camera.y, 100);
-	grd.addColorStop(0, 'rgba(84, 68, 255, 255)');
-	grd.addColorStop(1, 'rgba(84, 68, 255, 0)');
-	bCtx.fillStyle = grd;
-	bCtx.globalCompositeOperation = "lighter";
-	bCtx.fillRect(xPR - camera.x - 50, yPR - camera.y - 50, 150, 150);*/
 
 	//Add trail objects
 	trailTimer += deltaTime;
@@ -123,7 +94,7 @@ function draw() {
 		worldObjsOld.forEach((item, id, map) => {
 			Trails.addTrail(item.x + 50 / 2, item.y + 50 / 2, { r: 84, g: 68, b: 255, a: 100 }, 50 / 2);
 		});
-		Trails.addTrail(xP + 50 / 2, yP + 50 / 2, { r: 84, g: 68, b: 255, a: 100 }, 50 / 2);
+		Trails.addTrail(player.x + 50 / 2, player.y + 50 / 2, { r: 84, g: 68, b: 255, a: 100 }, 50 / 2);
 	}
 	//Render trails
 	Trails.updateAndRender(deltaTime, bCtx);

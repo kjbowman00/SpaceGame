@@ -3,10 +3,9 @@ var staticWorldObjs = require('./staticWorldObjs').staticWorldObjs;
 console.log(staticWorldObjs);
 var staticObjsTree = tree2d.makeTreeFromWorld(staticWorldObjs);
 
-function handleStaticObjsCollision(players) {
+function handleStaticObjsCollision(players, deltaTime) {
 	players.forEach((player, id, map) => {
-		console.log(player);
-		let bounds = { x: Math.floor(player.x), y: Math.floor(player.y), w: player.w, h: player.h };
+		let bounds = { x: player.x, y: player.y, w: player.w, h: player.h };
 		console.log(bounds);
 		//Check the collision with the following four boxes
 		let b1 = tree2d.getClosest({ x:bounds.x, y:bounds.y }, staticObjsTree);
@@ -17,8 +16,25 @@ function handleStaticObjsCollision(players) {
 		for (let i = 0; i < 4; i++) {
 			let currentBox = boxesToCheck[i];
 			//Check for collision with this box
-			if (doesCollide(bounds, currentBox)) {
+			if (doesCollide(bounds, currentBox)) { //TODO: Can probably remvoe this if
 				//Get the bounds and move the player
+				//Check x direction
+				let xBounds = { x: player.x, y: player.oldY, w: player.w, h: player.h };
+				let yBounds = { x: player.oldX, y: player.y, w: player.w, h: player.h };
+				if (doesCollide(xBounds, currentBox)) {
+					if (player.xVel > 0) {
+						player.x = currentBox.x - player.w;
+					} else {
+						player.x = currentBox.x + currentBox.w;
+					}
+				}
+				if (doesCollide(yBounds, currentBox)) {
+					if (player.yVel > 0) {
+						player.y = currentBox.y - player.h;
+					} else {
+						player.y = currentBox.y + currentBox.h;
+					}
+				}
 			}
 		}
 	});
@@ -35,8 +51,8 @@ function doesCollide(rect1, rect2) {
 }
 
 
-function updateCollisions(players) {
-	handleStaticObjsCollision(players);
+function updateCollisions(players, deltaTime) {
+	handleStaticObjsCollision(players, deltaTime);
 }
 
 

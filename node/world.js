@@ -6,12 +6,16 @@ const PLAYER_SPEED = 100;
 var update = function (deltaTime) {
 	//Update player positions
 	players.forEach((currentPlayer, key, map) => {
+		//Update old positions
+		currentPlayer.oldX = currentPlayer.x;
+		currentPlayer.oldY = currentPlayer.y;
+
 		currentPlayer.x += currentPlayer.xVel * deltaTime;
 		currentPlayer.y += currentPlayer.yVel * deltaTime;
 	});
 
 	//Handle collisions
-	collisions.updateCollisions(players);
+	collisions.updateCollisions(players, deltaTime);
 };
 
 var sendUpdates = function(io) {
@@ -43,6 +47,8 @@ var removePlayer = function (socketID) {
 };
 
 function Player(x, y) {
+	this.oldX = x;
+	this.oldY = y;
 	this.x = x;
 	this.y = y;
 	this.w = 50;

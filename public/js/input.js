@@ -43,6 +43,8 @@ function handleKeyDown(event) {
 	}
 	yDir = getYDir();
 	xDir = getXDir();
+	player.xVel = playerSpeed * xDir;
+	player.yVel = playerSpeed * yDir;
 }
 
 function handleKeyUp(event) {

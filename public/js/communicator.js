@@ -20,10 +20,11 @@ function socketStuff(formData) {
     });
 
     socket.on('join_game_success', function (data) {
-        document.getElementById('canvas_holder').style.display = 'block';
-
         //Data is static world objects
         world.staticWorldObjs = data;
+        staticObjsTree = makeTreeFromWorld(world.staticWorldObjs);
+
+        gameStart();
     });
     socket.on('state', function (data) {
         worldObjsOld = worldObjsUpdated;

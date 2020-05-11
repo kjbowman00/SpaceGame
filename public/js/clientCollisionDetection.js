@@ -25,7 +25,7 @@ function handleStaticObjsCollision(players, deltaTime) {
 					lastInput.xVel = 0;
 				}
 			}
-			if (doesCollide(yBounds, currentBox)) {
+			else if (doesCollide(yBounds, currentBox)) {
 				if (yDir > 0) {
 					player.y = currentBox.y - player.h;
 					lastInput.yVel = 0;

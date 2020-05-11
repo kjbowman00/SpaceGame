@@ -1,3 +1,6 @@
+//Mouse information
+var Mouse = {cameraX:0, cameraY:0};
+
 //Booleans saying if key is held
 var leftHeld = false;
 var rightHeld = false;
@@ -62,6 +65,12 @@ function handleKeyUp(event) {
 	xDir = getXDir();
 }
 
+function mouseMove(event) {
+	Mouse.cameraX = event.clientX;
+	Mouse.cameraY = event.clientY;
+}
+
+window.addEventListener("mousemove", mouseMove);
 window.addEventListener("keydown", handleKeyDown);
 window.addEventListener("keyup", handleKeyUp);
 

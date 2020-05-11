@@ -14,7 +14,8 @@ var lastUpdateTime = 0;
 
 var trailTimer = 0;
 
-var player = { x: 0, y: 0, w: 50, h: 50, oldX: 0, oldY: 0, xVel: 0, yVel: 0 , oldXVel: 0, oldYVel: 0};
+var playerGun = { w: 50, h: 10, rotation: 0 };
+var player = { x: 0, y: 0, w: 50, h: 50, oldX: 0, oldY: 0, xVel: 0, yVel: 0};
 var playerSpeed = 100;
 
 function lerp(n1, n2, amt) {
@@ -31,7 +32,6 @@ function update() {
 
 
 	//Check collision detection
-	//PROBLEM IS THAT OUR VELOCITY IS 0 BUT WE"RE INSIDE THE BOX. SO NOTHING HAPPENS
 	updateCollisions()
 
 	//Lerp to predicted server state
@@ -43,8 +43,8 @@ function update() {
 		if (Math.abs(player.y - predictY) > 5) player.y = lerp(player.y, predictY, 0.2);
 	player.oldX = player.x;
 	player.oldY = player.y;
-	player.oldXVel = player.xVel;
-	player.oldYVel = player.yVel;
+
+	//Update gun rotation
 
 	//Update other player objects
 	var percentageUpdate = deltaServer / SERVER_WORLD_UPDATE_TIME;
@@ -87,6 +87,18 @@ function draw() {
 	let xRound = Math.round(player.x);
 	let yRound = Math.round(player.y);
 	ctx.fillRect(xRound - camera.x, yRound - camera.y, 50, 50);
+	//Draw player gun
+	let centerX = xRound - camera.x + player.w / 2;
+	let centerY = yRound - camera.y + player.h / 2;
+	let xGun = centerX;
+	let yGun = centerY - playerGun.h/2;
+	playerGun.rotation = Math.atan2(Mouse.cameraY - centerY, Mouse.cameraX - centerX);
+	ctx.fillStyle = "red";
+	ctx.translate(centerX, centerY);
+	ctx.rotate(playerGun.rotation);
+	ctx.translate(-centerX, -centerY);
+	ctx.fillRect(xGun, yGun, playerGun.w, playerGun.h);
+	ctx.resetTransform();
 
 
 	//Draw world objects (other players, bullets)

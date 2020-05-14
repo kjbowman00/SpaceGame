@@ -25,6 +25,9 @@ io.on('connection', function(socket) {
     socket.on('player_input', function (data) {
         gameLoop.world.playerInput(socket.id, data);
     });
+    socket.on('player_shot', function (data) {
+        gameLoop.world.playerShot(socket.id);
+    });
     socket.on('disconnect', function () {
         gameLoop.world.removePlayer(socket.id);
     });

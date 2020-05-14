@@ -17,6 +17,8 @@ var trailTimer = 0;
 var playerGun = { w: 50, h: 10, rotation: 0 };
 var player = { x: 0, y: 0, w: 50, h: 50, oldX: 0, oldY: 0, xVel: 0, yVel: 0};
 var playerSpeed = 100;
+var playerFireTimer = 0;
+const playerFireTimeNeeded = 0.3;
 
 function lerp(n1, n2, amt) {
 	if (n2 - n1 == 0) return n1;
@@ -46,9 +48,17 @@ function update() {
 
 	//Update gun rotation
 
+	//Fire gun
+	playerFireTimer += deltaTime;
+	if (Mouse.pressed && playerFireTimer >= playerFireTimeNeeded) {
+		playerFireTimer = 0;
+		console.log("PEW PEW");
+		sendBullet();
+	}
+
 	//Update other player objects
 	var percentageUpdate = deltaServer / SERVER_WORLD_UPDATE_TIME;
-	worldObjsOld.forEach((obj, id, map) => {
+	worldObjsOld.players.forEach((obj, id, map) => {
 		var objNew = worldObjsUpdated.get(id);
 		if (objNew != undefined) {
 			if (Math.abs(obj.x - objNew.x) > 0.1) obj.x = lerp(obj.x, objNew.x, percentageUpdate);
@@ -103,15 +113,18 @@ function draw() {
 
 	//Draw world objects (other players, bullets)
 	ctx.fillStyle = "#FF0000";
-	worldObjsOld.forEach((elem, id, map) => {
+	worldObjsOld.players.forEach((elem, id, map) => {
 		ctx.fillRect(elem.x - camera.x, elem.y - camera.y, 50, 50);
+	});
+	worldObjsOld.bullets.forEach((bullet) => {
+
 	});
 
 	//Add trail objects
 	trailTimer += deltaTime;
 	if (trailTimer > 0.05) {
 		trailTimer = 0;
-		worldObjsOld.forEach((item, id, map) => {
+		worldObjsOld.players.forEach((item, id, map) => {
 			Trails.addTrail(item.x + 50 / 2, item.y + 50 / 2, { r: 84, g: 68, b: 255, a: 100 }, 50 / 2);
 		});
 		Trails.addTrail(player.x + 50 / 2, player.y + 50 / 2, { r: 84, g: 68, b: 255, a: 100 }, 50 / 2);

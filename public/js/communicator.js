@@ -1,4 +1,6 @@
 /*jshint esversion: 6 */
+var socket;
+
 function onPlay() {
     var form = document.getElementById("name_form");
     console.log('play');
@@ -13,7 +15,7 @@ document.getElementById("name_form").onsubmit = onPlay;
 function socketStuff(formData) {
 	var gameName = formData.get('server');
 	var path = '/' + gameName + '/socket.io';
-    const socket = io('/', {
+    socket = io('/', {
         secure: true,
         rejectUnauthorized: false,
         path: path
@@ -28,15 +30,23 @@ function socketStuff(formData) {
     });
     socket.on('state', function (data) {
         worldObjsOld = worldObjsUpdated;
-        worldObjsUpdated = new Map(data.others);
+
+        worldObjsUpdated = {};
+        worldObjsUpdated.players = new Map(data.objects.players);
+        worldObjsUpdated.bullets = data.objects.bullets;
+
         serverPlayerState = data.player;
         lastInput.xVel = 10 * xDir;
         lastInput.yVel = 10 * yDir;
         //Send current input
         lastInputTime = performance.now();
-        socket.emit('player_input', { xDir: xDir, yDir: yDir });
+        socket.emit('player_input', { xDir: xDir, yDir: yDir, rotation: playerGun.rotation });
     });
 
     socket.emit('play_game', formData.get('username'));
 
+}
+
+function sendBullet() {
+    socket.emit('player_shot');
 }

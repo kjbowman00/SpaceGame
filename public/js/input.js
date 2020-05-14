@@ -1,5 +1,5 @@
 //Mouse information
-var Mouse = {cameraX:0, cameraY:0};
+var Mouse = {cameraX:0, cameraY:0, pressed: false};
 
 //Booleans saying if key is held
 var leftHeld = false;
@@ -70,6 +70,15 @@ function mouseMove(event) {
 	Mouse.cameraY = event.clientY;
 }
 
+function mouseDown(event) {
+	Mouse.pressed = true;
+}
+function mouseUp(event) {
+	Mouse.pressed = false;
+}
+
+window.addEventListener("mousedown", mouseDown);
+window.addEventListener("mouseup", mouseUp);
 window.addEventListener("mousemove", mouseMove);
 window.addEventListener("keydown", handleKeyDown);
 window.addEventListener("keyup", handleKeyUp);

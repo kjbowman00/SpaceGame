@@ -6,7 +6,6 @@ var staticObjsTree = tree2d.makeTreeFromWorld(staticWorldObjs);
 function handleStaticObjsCollision(players, deltaTime) {
 	players.forEach((player, id, map) => {
 		let bounds = { x: player.x, y: player.y, w: player.w, h: player.h };
-		console.log(bounds);
 		//Check the collision with the following four boxes
 		let b1 = tree2d.getClosest({ x:bounds.x, y:bounds.y }, staticObjsTree);
 		let b2 = tree2d.getClosest({ x: bounds.x + bounds.w, y: bounds.y }, staticObjsTree);

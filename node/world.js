@@ -1,5 +1,6 @@
 var collisions = require('./collisionDetection.js');
 var players = new Map();
+var bullets = [];
 
 const PLAYER_SPEED = 100;
 
@@ -12,6 +13,13 @@ var update = function (deltaTime) {
 
 		currentPlayer.x += currentPlayer.xVel * deltaTime;
 		currentPlayer.y += currentPlayer.yVel * deltaTime;
+
+		//Handle player shooting
+		if (currentPlayer.gun.shotsRequested > 0 && currentPlayer.gun.shotTimer >= currentPlayer.gun.shotTimeNeeded) {
+			bullets.push({ x: currentPlayer.x, y: currentPlayer.y, rotation: currentPlayer.gun.rotation });
+			currentPlayer.gun.shotTimer = 0;
+			currentPlayer.gun.shotsRequested--;
+		} else currentPlayer.gun.shotTimer += deltaTime;
 	});
 
 	//Handle collisions
@@ -22,18 +30,30 @@ var sendUpdates = function(io) {
 	players.forEach((value, key, map) => {
 		//Key is socketid. //value is player object
 		//Need to grab each nearby object to this player
-		var objectsToSend = new Map();
+		var objectsToSend = {};
+		objectsToSend.players = new Map();
 		players.forEach((value2, key2, map2) => {
 			if (key != key2) {
 				var distSq = (value.x - value2.x) * (value.x - value2.x);
 				distSq += (value.y - value.y) * (value.y - value2.y);
 				if (distSq <= 1000000000) {
-					objectsToSend.set(key2 , value2);
+					objectsToSend.players.set(key2 , value2);
 				}
 			}
 		});
-		objectsToSend = Array.from(objectsToSend);
-		io.to(key).emit('state', { player: value, others: objectsToSend });
+		objectsToSend.players = Array.from(objectsToSend.players);
+
+		objectsToSend.bullets = [];
+		//Gather bullets
+		bullets.forEach((bullet) => {
+			let distSq = (value.x - bullet.x) * (value.x - bullet.x);
+			distSq += (value.y - bullet.y) * (value.y - bullet.y);
+			if (distSq <= 1000000000) {
+				objectsToSend.bullets.push(bullet);
+			}
+		});
+
+		io.to(key).emit('state', { player: value, objects: objectsToSend });
 	});
 }
 
@@ -55,10 +75,18 @@ function Player(x, y) {
 	this.h = 50;
 	this.xVel = 0;
 	this.yVel = 0;
+
+	this.gun = {};
+	this.gun.rotation = 0;
+	this.gun.shotsRequested = 0;
+	this.gun.shotTimer = 0;
+	this.gun.shotTimeNeeded = 0.3; //Default fire rate
 }
 
 var playerInput = function (socketID, input) {
 	var currentPlayer = players.get(socketID);
+	if (currentPlayer == undefined) return;
+
 	if (input.xDir == 1) {
 		currentPlayer.xVel = PLAYER_SPEED;
 	} else if (input.xDir == -1) {
@@ -73,8 +101,18 @@ var playerInput = function (socketID, input) {
 	} else {
 		currentPlayer.yVel = 0;
 	}
+
+	currentPlayer.gun.rotation = input.rotation;
 }
 
+var playerShot = function (socketID) {
+	let player = players.get(socketID);
+	if (player != undefined) {
+		player.gun.shotsRequested += 1;
+	}
+}
+
+exports.playerShot = playerShot;
 exports.addPlayer = addPlayer;
 exports.removePlayer = removePlayer;
 exports.update = update;

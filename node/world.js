@@ -1,6 +1,7 @@
 var collisions = require('./collisionDetection.js');
 var players = new Map();
-var bullets = [];
+var bullets = new Map();
+var bulletNum = 0;
 
 const PLAYER_SPEED = 100;
 
@@ -16,10 +17,24 @@ var update = function (deltaTime) {
 
 		//Handle player shooting
 		if (currentPlayer.gun.shotsRequested > 0 && currentPlayer.gun.shotTimer >= currentPlayer.gun.shotTimeNeeded) {
-			bullets.push({ x: currentPlayer.x, y: currentPlayer.y, rotation: currentPlayer.gun.rotation });
+			bullets.set(bulletNum, { x: currentPlayer.x, y: currentPlayer.y, rotation: currentPlayer.gun.rotation, timeAlive: 0 });
+			bulletNum++;
 			currentPlayer.gun.shotTimer = 0;
 			currentPlayer.gun.shotsRequested--;
 		} else currentPlayer.gun.shotTimer += deltaTime;
+
+		let markedForDelete = [];
+		//Move bullets
+		bullets.forEach((bullet, id, map) => {
+			bullet.timeAlive += deltaTime;
+			if (bullet.timeAlive >= 5) markedForDelete.push(id);
+			bullet.x += 200 * deltaTime * Math.cos(bullet.rotation);
+			bullet.y += 200 * deltaTime * Math.sin(bullet.rotation);
+		});
+		//Delete old bullets
+		for (let i = markedForDelete.length - 1; i >= 0; i--) {
+			bullets.delete(markedForDelete[i]);
+		}
 	});
 
 	//Handle collisions
@@ -43,15 +58,16 @@ var sendUpdates = function(io) {
 		});
 		objectsToSend.players = Array.from(objectsToSend.players);
 
-		objectsToSend.bullets = [];
+		objectsToSend.bullets = new Map();
 		//Gather bullets
-		bullets.forEach((bullet) => {
+		bullets.forEach((bullet, id, map) => {
 			let distSq = (value.x - bullet.x) * (value.x - bullet.x);
 			distSq += (value.y - bullet.y) * (value.y - bullet.y);
 			if (distSq <= 1000000000) {
-				objectsToSend.bullets.push(bullet);
+				objectsToSend.bullets.set(id,bullet);
 			}
 		});
+		objectsToSend.bullets = Array.from(objectsToSend.bullets);
 
 		io.to(key).emit('state', { player: value, objects: objectsToSend });
 	});

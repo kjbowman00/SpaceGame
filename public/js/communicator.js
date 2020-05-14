@@ -33,7 +33,7 @@ function socketStuff(formData) {
 
         worldObjsUpdated = {};
         worldObjsUpdated.players = new Map(data.objects.players);
-        worldObjsUpdated.bullets = data.objects.bullets;
+        worldObjsUpdated.bullets = new Map(data.objects.bullets);
 
         serverPlayerState = data.player;
         lastInput.xVel = 10 * xDir;

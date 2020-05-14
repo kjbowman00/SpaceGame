@@ -3,8 +3,12 @@ var deltaTime = 0; //In seconds
 
 const SERVER_WORLD_UPDATE_TIME = 1 / 20;
 
-var worldObjsOld = new Map();
-var worldObjsUpdated = new Map();
+var worldObjsOld = {};
+worldObjsOld.players = new Map();
+worldObjsOld.bullets = new Map();
+var worldObjsUpdated = {};
+worldObjsUpdated.players = new Map();
+worldObjsUpdated.bullets = new Map();
 
 var serverPlayerState = { x: 0, y: 0, xVel: 0, yVel: 0 };
 var lastInput = { xVel: 0, yVel: 0 };
@@ -52,14 +56,21 @@ function update() {
 	playerFireTimer += deltaTime;
 	if (Mouse.pressed && playerFireTimer >= playerFireTimeNeeded) {
 		playerFireTimer = 0;
-		console.log("PEW PEW");
 		sendBullet();
 	}
 
 	//Update other player objects
 	var percentageUpdate = deltaServer / SERVER_WORLD_UPDATE_TIME;
 	worldObjsOld.players.forEach((obj, id, map) => {
-		var objNew = worldObjsUpdated.get(id);
+		var objNew = worldObjsUpdated.players.get(id);
+		if (objNew != undefined) {
+			if (Math.abs(obj.x - objNew.x) > 0.1) obj.x = lerp(obj.x, objNew.x, percentageUpdate);
+			if (Math.abs(obj.y - objNew.y) > 0.1) obj.y = lerp(obj.y, objNew.y, percentageUpdate);
+		}
+	});
+	//Update bullets
+	worldObjsOld.bullets.forEach((obj, id, map) => {
+		var objNew = worldObjsUpdated.bullets.get(id);
 		if (objNew != undefined) {
 			if (Math.abs(obj.x - objNew.x) > 0.1) obj.x = lerp(obj.x, objNew.x, percentageUpdate);
 			if (Math.abs(obj.y - objNew.y) > 0.1) obj.y = lerp(obj.y, objNew.y, percentageUpdate);
@@ -116,8 +127,9 @@ function draw() {
 	worldObjsOld.players.forEach((elem, id, map) => {
 		ctx.fillRect(elem.x - camera.x, elem.y - camera.y, 50, 50);
 	});
-	worldObjsOld.bullets.forEach((bullet) => {
-
+	console.log(worldObjsOld.bullets);
+	worldObjsOld.bullets.forEach((bullet, id, map) => {
+		ctx.fillRect(bullet.x - camera.x, bullet.y - camera.y, 10, 10);
 	});
 
 	//Add trail objects

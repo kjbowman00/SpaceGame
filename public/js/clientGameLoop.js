@@ -19,7 +19,7 @@ var lastUpdateTime = 0;
 var trailTimer = 0;
 
 var playerGun = { w: 50, h: 10, rotation: 0 };
-var player = { x: 0, y: 0, w: 50, h: 50, oldX: 0, oldY: 0, xVel: 0, yVel: 0};
+var player = { x: 0, y: 0, w: 50, h: 50, oldX: 0, oldY: 0, xVel: 0, yVel: 0, name:"None"};
 var playerSpeed = 100;
 var playerFireTimer = 0;
 const playerFireTimeNeeded = 0.3;
@@ -121,27 +121,16 @@ function draw() {
 	ctx.fillRect(xGun, yGun, playerGun.w, playerGun.h);
 	ctx.resetTransform();
 
+	//Draw player info box
+	drawPlayerInfo(player, ctx);
+
 	//Draw world objects (other players, bullets)
 	ctx.fillStyle = "#FF0000";
 	worldObjsOld.players.forEach((elem, id, map) => {
 		let drawX = elem.x - camera.x;
 		let drawY = elem.y - camera.y;
 		ctx.fillRect(drawX, drawY, elem.w, elem.h);
-
-		//Draw player name and health bar
-		let tW = 8; //Text width
-		let tH = 12; //Text Height
-		let vertOffset = 20;
-		ctx.fillStyle = 'rgba(124, 124, 124, 0.5)';
-		let nameLength = elem.name.length;
-		ctx.fillRect(drawX + (elem.w / 2) - (tW*nameLength/2), drawY - vertOffset - tH, nameLength * tW, tH + 5);
-		ctx.fillStyle = "rgba(0, 0, 0, 0.7)";
-		ctx.font = "12px Arial";
-		ctx.textAlign = "center";
-		console.log(elem.name);
-		ctx.fillText(elem.name, drawX + elem.w / 2, drawY - vertOffset);
-		//Health bar
-
+		drawPlayerInfo(elem, ctx);
 	});
 	ctx.fillStyle = "#FF0000";
 	worldObjsOld.bullets.forEach((bullet, id, map) => {

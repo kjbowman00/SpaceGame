@@ -49,9 +49,38 @@ function doesCollide(rect1, rect2) {
 	return false;
 }
 
+function bulletCollide(player, bullet) {
+	let xsq = (bullet.x - player.x) * (bullet.x - player.x);
+	let ysq = (bullet.y - player.y) * (bullet.y - player.y);
+	let dist = xsq + ysq;
+	if (dist > player.w * player.w + player.h * player.h) return false;
 
-function updateCollisions(players, deltaTime) {
+	//TODO: (CHANGE) currently pretending the bullet is a square
+	//Deeper check
+	return doesCollide(player, { x: bullet.x, y: bullet.y, w: bullet.r * 2, h: bullet.r * 2 });
+}
+
+function handleBulletCollision(players, bullets, bulletsMarkedForExplosion, deltaTime) {
+	//Naive solution for now
+	//TODO: Make this not a naive solution if it's too slow (sweep and prune probably)
+	players.forEach((player, playerId, playerMap) => {
+		bullets.forEach((bullet, bulletId, bulletMap) => {
+			if (bulletCollide(player, bullet) && bullet.playerEmitId != playerId) {
+				//Blow up and damage player
+				player.health -= bullet.damage;
+				bulletsMarkedForExplosion.push(bulletId);
+			}
+		});
+	});
+	//Remove the bullets from our bullets list
+	for (let i = 0; i < bulletsMarkedForExplosion.length; i++) {
+		bullets.delete(bulletsMarkedForExplosion[i]);
+	}
+}
+
+function updateCollisions(players, bullets, bulletsMarkedForExplosion, deltaTime) {
 	handleStaticObjsCollision(players, deltaTime);
+	handleBulletCollision(players, bullets, bulletsMarkedForExplosion, deltaTime);
 }
 
 

@@ -1,7 +1,8 @@
 var collisions = require('./collisionDetection.js');
 var players = new Map();
 var bullets = new Map();
-var bulletNum = 0;
+var bulletNum = 0; //Used to communicate to player what bullet to delete when it hits
+var bulletsMarkedForExplosion = [];
 
 const PLAYER_SPEED = 100;
 
@@ -16,29 +17,37 @@ var update = function (deltaTime) {
 		currentPlayer.y += currentPlayer.yVel * deltaTime;
 
 		//Handle player shooting
-		if (currentPlayer.gun.shotsRequested > 0 && currentPlayer.gun.shotTimer >= currentPlayer.gun.shotTimeNeeded) {
-			bullets.set(bulletNum, { x: currentPlayer.x, y: currentPlayer.y, rotation: currentPlayer.gun.rotation, timeAlive: 0 });
+		if (currentPlayer.gun.shotsRequested > 0 && currentPlayer.gun.shotTimer >= currentPlayer.gun.shotTimeNeeded - 0.1) {
+			bullets.set(bulletNum, {
+				x: currentPlayer.x + currentPlayer.w / 2 - 5, y: currentPlayer.y + currentPlayer.h / 2 - 5,
+				r: 5,
+				rotation: currentPlayer.gun.rotation,
+				damage: 10,
+				timeAlive: 0,
+				playerEmitId: key
+			});
 			bulletNum++;
 			currentPlayer.gun.shotTimer = 0;
 			currentPlayer.gun.shotsRequested--;
 		} else currentPlayer.gun.shotTimer += deltaTime;
+	}); //END update player positions
 
-		let markedForDelete = [];
-		//Move bullets
-		bullets.forEach((bullet, id, map) => {
-			bullet.timeAlive += deltaTime;
-			if (bullet.timeAlive >= 5) markedForDelete.push(id);
-			bullet.x += 200 * deltaTime * Math.cos(bullet.rotation);
-			bullet.y += 200 * deltaTime * Math.sin(bullet.rotation);
-		});
-		//Delete old bullets
-		for (let i = markedForDelete.length - 1; i >= 0; i--) {
-			bullets.delete(markedForDelete[i]);
-		}
+	let bulletsMarkedForDelete = [];
+	//Move bullets
+	bullets.forEach((bullet, id, map) => {
+		bullet.timeAlive += deltaTime;
+		if (bullet.timeAlive >= 5) bulletsMarkedForDelete.push(id);
+		bullet.x += 200 * deltaTime * Math.cos(bullet.rotation);
+		bullet.y += 200 * deltaTime * Math.sin(bullet.rotation);
 	});
 
 	//Handle collisions
-	collisions.updateCollisions(players, deltaTime);
+	collisions.updateCollisions(players, bullets, bulletsMarkedForExplosion, deltaTime);
+
+	//Delete old bullets
+	for (let i = bulletsMarkedForDelete.length - 1; i >= 0; i--) {
+		bullets.delete(bulletsMarkedForDelete[i]);
+	}
 };
 
 var sendUpdates = function(io) {
@@ -69,7 +78,12 @@ var sendUpdates = function(io) {
 		});
 		objectsToSend.bullets = Array.from(objectsToSend.bullets);
 
+		//Exploded bullets
+		objectsToSend.bulletExplosions = bulletsMarkedForExplosion;
+
 		io.to(key).emit('state', { player: value, objects: objectsToSend });
+
+		bulletsMarkedForExplosion.length = 0; //Delete contents of explosion array
 	});
 }
 

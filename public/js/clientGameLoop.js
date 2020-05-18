@@ -127,7 +127,6 @@ function draw() {
 	worldObjsOld.players.forEach((elem, id, map) => {
 		ctx.fillRect(elem.x - camera.x, elem.y - camera.y, 50, 50);
 	});
-	console.log(worldObjsOld.bullets);
 	worldObjsOld.bullets.forEach((bullet, id, map) => {
 		ctx.fillRect(bullet.x - camera.x, bullet.y - camera.y, 10, 10);
 	});

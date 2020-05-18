@@ -121,12 +121,29 @@ function draw() {
 	ctx.fillRect(xGun, yGun, playerGun.w, playerGun.h);
 	ctx.resetTransform();
 
-
 	//Draw world objects (other players, bullets)
 	ctx.fillStyle = "#FF0000";
 	worldObjsOld.players.forEach((elem, id, map) => {
-		ctx.fillRect(elem.x - camera.x, elem.y - camera.y, 50, 50);
+		let drawX = elem.x - camera.x;
+		let drawY = elem.y - camera.y;
+		ctx.fillRect(drawX, drawY, elem.w, elem.h);
+
+		//Draw player name and health bar
+		let tW = 8; //Text width
+		let tH = 12; //Text Height
+		let vertOffset = 20;
+		ctx.fillStyle = 'rgba(124, 124, 124, 0.5)';
+		let nameLength = elem.name.length;
+		ctx.fillRect(drawX + (elem.w / 2) - (tW*nameLength/2), drawY - vertOffset - tH, nameLength * tW, tH + 5);
+		ctx.fillStyle = "rgba(0, 0, 0, 0.7)";
+		ctx.font = "12px Arial";
+		ctx.textAlign = "center";
+		console.log(elem.name);
+		ctx.fillText(elem.name, drawX + elem.w / 2, drawY - vertOffset);
+		//Health bar
+
 	});
+	ctx.fillStyle = "#FF0000";
 	worldObjsOld.bullets.forEach((bullet, id, map) => {
 		ctx.fillRect(bullet.x - camera.x, bullet.y - camera.y, 10, 10);
 	});

@@ -79,7 +79,7 @@ var sendUpdates = function(io) {
 		objectsToSend.bullets = Array.from(objectsToSend.bullets);
 
 		//Exploded bullets
-		objectsToSend.bulletExplosions = bulletsMarkedForExplosion;
+		objectsToSend.bulletsMarkedForExplosion = bulletsMarkedForExplosion;
 
 		io.to(key).emit('state', { player: value, objects: objectsToSend });
 
@@ -87,8 +87,8 @@ var sendUpdates = function(io) {
 	});
 }
 
-var addPlayer = function (socketID) {
-	players.set(socketID, new Player(0, 0));
+var addPlayer = function (socketID, name) {
+	players.set(socketID, new Player(name, 0, 0));
 	console.log(players);
 };
 
@@ -96,7 +96,8 @@ var removePlayer = function (socketID) {
 	players.delete(socketID);
 };
 
-function Player(x, y) {
+function Player(name, x, y) {
+	this.name = name;
 	this.oldX = x;
 	this.oldY = y;
 	this.x = x;
@@ -105,7 +106,7 @@ function Player(x, y) {
 	this.h = 50;
 	this.xVel = 0;
 	this.yVel = 0;
-
+	this.health = 100;
 	this.gun = {};
 	this.gun.rotation = 0;
 	this.gun.shotsRequested = 0;

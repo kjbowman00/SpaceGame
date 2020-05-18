@@ -16,11 +16,20 @@ const io = require('socket.io')(http, {
 
 io.on('connection', function(socket) {
     console.log("websocket established");
-    socket.on('play_game', function(data) {
-        console.log("yee hooo play_game");
-        console.log(data);
-        gameLoop.world.addPlayer(socket.id);
-        socket.emit('join_game_success', staticWorldObjs.staticWorldObjs);
+    socket.on('play_game', function (data) {
+        try {
+            //Input checking
+            let name = data.name.substring(0, 15);
+            if (name == undefined) throw "Name not a string";
+
+            //Add to game server
+            gameLoop.world.addPlayer(socket.id, name);
+            socket.emit('join_game_success', staticWorldObjs.staticWorldObjs);
+        }
+        catch (error) {
+            console.log("PLAYER FAILED TO JOIN SERVER:");
+            console.log(error);
+        }
     });
     socket.on('player_input', function (data) {
         gameLoop.world.playerInput(socket.id, data);

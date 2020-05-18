@@ -35,6 +35,11 @@ function socketStuff(formData) {
         worldObjsUpdated.players = new Map(data.objects.players);
         worldObjsUpdated.bullets = new Map(data.objects.bullets);
 
+        let bulletsToExplode = data.objects.bulletsMarkedForExplosion;
+        for (let i = 0; i < bulletsToExplode.length; i++) {
+            console.log("Bullet " + bulletsToExplode[i] + " exploded!");
+        }
+
         serverPlayerState = data.player;
         lastInput.xVel = 10 * xDir;
         lastInput.yVel = 10 * yDir;
@@ -43,7 +48,7 @@ function socketStuff(formData) {
         socket.emit('player_input', { xDir: xDir, yDir: yDir, rotation: playerGun.rotation });
     });
 
-    socket.emit('play_game', formData.get('username'));
+    socket.emit('play_game', { name: formData.get('username') });
 
 }
 

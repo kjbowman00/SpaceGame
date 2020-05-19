@@ -1,6 +1,8 @@
 /*jshint esversion: 6 */
 var deltaTime = 0; //In seconds
 
+var alive = false;
+
 const SERVER_WORLD_UPDATE_TIME = 1 / 20;
 
 var worldObjsOld = {};
@@ -24,40 +26,46 @@ var playerSpeed = 100;
 var playerFireTimer = 0;
 const playerFireTimeNeeded = 0.3;
 
+const fadeTime = 0.5; //Amount in seconds to fade screen on death
+var fadeTimer = 0;
+
 function lerp(n1, n2, amt) {
 	if (n2 - n1 == 0) return n1;
 	return (n2-n1) * amt + n1;
 }
 
 function update() {
+	if (alive && player.health <= 0) died();
 	updateCamera();
+	var deltaServer = (performance.now() - lastInputTime) / 1000;
 
-	//Update player position
-	player.x += deltaTime * xDir * playerSpeed;
-	player.y += deltaTime * yDir * playerSpeed;
+	if (alive) {
+		//Update player position
+		player.x += deltaTime * xDir * playerSpeed;
+		player.y += deltaTime * yDir * playerSpeed;
 
+		//Check collision detection
+		updateCollisions()
 
-	//Check collision detection
-	updateCollisions()
-
-	//Lerp to predicted server state
-		var deltaServer = (performance.now() - lastInputTime) / 1000;
+		//Lerp to predicted server state
 		var predictX = serverPlayerState.x + lastInput.xVel * deltaServer;
 		var predictY = serverPlayerState.y + lastInput.yVel * deltaServer;
 
 		if (Math.abs(player.x - predictX) > 5) player.x = lerp(player.x, predictX, 0.2);
 		if (Math.abs(player.y - predictY) > 5) player.y = lerp(player.y, predictY, 0.2);
-	player.oldX = player.x;
-	player.oldY = player.y;
+		player.oldX = player.x;
+		player.oldY = player.y;
 
-	//Update gun rotation
+		//Update gun rotation
 
-	//Fire gun
-	playerFireTimer += deltaTime;
-	if (Mouse.pressed && playerFireTimer >= playerFireTimeNeeded) {
-		playerFireTimer = 0;
-		sendBullet();
-	}
+		//Fire gun
+		playerFireTimer += deltaTime;
+		if (Mouse.pressed && playerFireTimer >= playerFireTimeNeeded) {
+			playerFireTimer = 0;
+			sendBullet();
+		}
+	} //END IF ALIVE
+
 
 	//Update other player objects
 	var percentageUpdate = deltaServer / SERVER_WORLD_UPDATE_TIME;
@@ -104,25 +112,28 @@ function draw() {
 		ctx.fillRect(item.x - camera.x, item.y - camera.y, item.w, item.h);
 	}
 
-	//Round player.x and yP
-	let xRound = Math.round(player.x);
-	let yRound = Math.round(player.y);
-	ctx.fillRect(xRound - camera.x, yRound - camera.y, 50, 50);
-	//Draw player gun
-	let centerX = xRound - camera.x + player.w / 2;
-	let centerY = yRound - camera.y + player.h / 2;
-	let xGun = centerX;
-	let yGun = centerY - playerGun.h/2;
-	playerGun.rotation = Math.atan2(Mouse.cameraY - centerY, Mouse.cameraX - centerX);
-	ctx.fillStyle = "red";
-	ctx.translate(centerX, centerY);
-	ctx.rotate(playerGun.rotation);
-	ctx.translate(-centerX, -centerY);
-	ctx.fillRect(xGun, yGun, playerGun.w, playerGun.h);
-	ctx.resetTransform();
+	if (alive) {
+		//Round player.x and yP
+		let xRound = Math.round(player.x);
+		let yRound = Math.round(player.y);
+		ctx.fillRect(xRound - camera.x, yRound - camera.y, 50, 50);
+		//Draw player gun
+		let centerX = xRound - camera.x + player.w / 2;
+		let centerY = yRound - camera.y + player.h / 2;
+		let xGun = centerX;
+		let yGun = centerY - playerGun.h / 2;
+		playerGun.rotation = Math.atan2(Mouse.cameraY - centerY, Mouse.cameraX - centerX);
+		ctx.fillStyle = "red";
+		ctx.translate(centerX, centerY);
+		ctx.rotate(playerGun.rotation);
+		ctx.translate(-centerX, -centerY);
+		ctx.fillRect(xGun, yGun, playerGun.w, playerGun.h);
+		ctx.resetTransform();
 
-	//Draw player info box
-	drawPlayerInfo(player, ctx);
+		//Draw player info box
+		drawPlayerInfo(player, ctx);
+	}
+
 
 	//Draw world objects (other players, bullets)
 	ctx.fillStyle = "#FF0000";
@@ -144,10 +155,18 @@ function draw() {
 		worldObjsOld.players.forEach((item, id, map) => {
 			Trails.addTrail(item.x + 50 / 2, item.y + 50 / 2, { r: 84, g: 68, b: 255, a: 100 }, 50 / 2);
 		});
-		Trails.addTrail(player.x + 50 / 2, player.y + 50 / 2, { r: 84, g: 68, b: 255, a: 100 }, 50 / 2);
+		if (alive) Trails.addTrail(player.x + 50 / 2, player.y + 50 / 2, { r: 84, g: 68, b: 255, a: 100 }, 50 / 2);
 	}
 	//Render trails
 	Trails.updateAndRender(deltaTime, bCtx);
+
+	//Draw gray overlay if dead
+	if (!alive) {
+		if (fadeTimer < fadeTime) fadeTimer += deltaTime;
+		if (fadeTimer > fadeTime) fadeTimer = fadeTime;
+		ctx.fillStyle = 'rgba(255, 255, 255, ' + lerp(0,0.2,(fadeTimer / fadeTime)) + ')';
+		ctx.fillRect(0, 0, canvas.width, canvas.height);
+	}
 }
 
 function mainLoop(timestamp) {

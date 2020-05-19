@@ -41,6 +41,7 @@ function socketStuff(formData) {
         }
 
         serverPlayerState = data.player;
+        player.health = serverPlayerState.health;
         lastInput.xVel = 10 * xDir;
         lastInput.yVel = 10 * yDir;
         //Send current input

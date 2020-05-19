@@ -15,4 +15,9 @@ function drawPlayerInfo(player, ctx) {
 	ctx.fillText(player.name, drawX + player.w / 2, drawY - vertOffset);
 
 	//Health bar
+	ctx.fillStyle = 'rgba(124, 124, 124, 0.7)';
+	ctx.fillRect(drawX, drawY - vertOffset + 6, player.w, 8);
+	ctx.fillStyle = 'rgba(0, 200, 0, 0.7)';
+	console.log(player.health);
+	ctx.fillRect(drawX, drawY - vertOffset + 6, player.w * (player.health / 100), 8);
 }

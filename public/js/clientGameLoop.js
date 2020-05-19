@@ -19,7 +19,7 @@ var lastUpdateTime = 0;
 var trailTimer = 0;
 
 var playerGun = { w: 50, h: 10, rotation: 0 };
-var player = { x: 0, y: 0, w: 50, h: 50, oldX: 0, oldY: 0, xVel: 0, yVel: 0, name:"None"};
+var player = { x: 0, y: 0, w: 50, h: 50, oldX: 0, oldY: 0, xVel: 0, yVel: 0, name:"None", health:100};
 var playerSpeed = 100;
 var playerFireTimer = 0;
 const playerFireTimeNeeded = 0.3;

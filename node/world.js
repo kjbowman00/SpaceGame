@@ -9,27 +9,31 @@ const PLAYER_SPEED = 100;
 var update = function (deltaTime) {
 	//Update player positions
 	players.forEach((currentPlayer, key, map) => {
-		//Update old positions
-		currentPlayer.oldX = currentPlayer.x;
-		currentPlayer.oldY = currentPlayer.y;
+		if (currentPlayer.alive) {
+			//Update old positions
+			currentPlayer.oldX = currentPlayer.x;
+			currentPlayer.oldY = currentPlayer.y;
 
-		currentPlayer.x += currentPlayer.xVel * deltaTime;
-		currentPlayer.y += currentPlayer.yVel * deltaTime;
+			currentPlayer.x += currentPlayer.xVel * deltaTime;
+			currentPlayer.y += currentPlayer.yVel * deltaTime;
 
-		//Handle player shooting
-		if (currentPlayer.gun.shotsRequested > 0 && currentPlayer.gun.shotTimer >= currentPlayer.gun.shotTimeNeeded - 0.1) {
-			bullets.set(bulletNum, {
-				x: currentPlayer.x + currentPlayer.w / 2 - 5, y: currentPlayer.y + currentPlayer.h / 2 - 5,
-				r: 5,
-				rotation: currentPlayer.gun.rotation,
-				damage: 10,
-				timeAlive: 0,
-				playerEmitId: key
-			});
-			bulletNum++;
-			currentPlayer.gun.shotTimer = 0;
-			currentPlayer.gun.shotsRequested--;
-		} else currentPlayer.gun.shotTimer += deltaTime;
+			//Handle player shooting
+			if (currentPlayer.gun.shotsRequested > 0 && currentPlayer.gun.shotTimer >= currentPlayer.gun.shotTimeNeeded - 0.1) {
+				bullets.set(bulletNum, {
+					x: currentPlayer.x + currentPlayer.w / 2 - 5, y: currentPlayer.y + currentPlayer.h / 2 - 5,
+					r: 5,
+					rotation: currentPlayer.gun.rotation,
+					damage: 10,
+					timeAlive: 0,
+					playerEmitId: key
+				});
+				bulletNum++;
+				currentPlayer.gun.shotTimer = 0;
+				currentPlayer.gun.shotsRequested--;
+			} else currentPlayer.gun.shotTimer += deltaTime;
+
+			if (currentPlayer.health <= 0) currentPlayer.alive = false;
+		}
 	}); //END update player positions
 
 	let bulletsMarkedForDelete = [];
@@ -57,7 +61,7 @@ var sendUpdates = function(io) {
 		var objectsToSend = {};
 		objectsToSend.players = new Map();
 		players.forEach((value2, key2, map2) => {
-			if (key != key2) {
+			if (key != key2 && value2.alive) {
 				var distSq = (value.x - value2.x) * (value.x - value2.x);
 				distSq += (value.y - value.y) * (value.y - value2.y);
 				if (distSq <= 1000000000) {
@@ -107,6 +111,7 @@ function Player(name, x, y) {
 	this.xVel = 0;
 	this.yVel = 0;
 	this.health = 100;
+	this.alive = true;
 	this.gun = {};
 	this.gun.rotation = 0;
 	this.gun.shotsRequested = 0;

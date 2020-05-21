@@ -1,6 +1,5 @@
 var tree2d = require('./tree2d.js');
 var staticWorldObjs = require('./staticWorldObjs').staticWorldObjs;
-console.log(staticWorldObjs);
 var staticObjsTree = tree2d.makeTreeFromWorld(staticWorldObjs);
 
 function handleStaticObjsCollision(players, deltaTime) {

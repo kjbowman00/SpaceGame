@@ -48,6 +48,9 @@ function socketStuff(formData) {
         lastInputTime = performance.now();
         socket.emit('player_input', { xDir: xDir, yDir: yDir, rotation: playerGun.rotation });
     });
+    socket.on('player_respawn_success', function (data) {
+        respawnSuccess(data);
+    });
 
     socket.emit('play_game', { name: formData.get('username') });
 

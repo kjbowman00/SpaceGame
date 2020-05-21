@@ -23,3 +23,14 @@ function died() {
 
 	//Pop up with play again and back to menu buttons
 }
+
+function respawnRequest() {
+	socket.emit('player_respawn_request');
+}
+
+function respawnSuccess(pos) {
+	// setup player x and y and health
+	player.x = pos.x;
+	player.y = pos.y;
+	player.alive = true;
+}

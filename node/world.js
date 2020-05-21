@@ -91,10 +91,32 @@ var sendUpdates = function(io) {
 	});
 }
 
+function getRandomSpawn() {
+	const leftMost = 0;
+	const rightMost = 1000;
+	let position = { x: 0, y: 0 };
+	return position;
+}
+
 var addPlayer = function (socketID, name) {
-	players.set(socketID, new Player(name, 0, 0));
-	console.log(players);
+	let position = getRandomSpawn();
+	players.set(socketID, new Player(name, position.x, position.y));
 };
+
+var requestRespawn = function (socketID) {
+	let req = { position: null, success: false };
+	let player = players.get(socketID);
+	if (player == undefined) return req;
+	if (player.alive) return req;
+
+	req.success = true;
+	let position = getRandomSpawn();
+	player.x = position.x;
+	player.y = position.y;
+	req.position = position;
+	player.alive = true;
+	return req;
+}
 
 var removePlayer = function (socketID) {
 	players.delete(socketID);
@@ -148,6 +170,7 @@ var playerShot = function (socketID) {
 	}
 }
 
+exports.requestRespawn = requestRespawn;
 exports.playerShot = playerShot;
 exports.addPlayer = addPlayer;
 exports.removePlayer = removePlayer;

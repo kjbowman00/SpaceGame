@@ -1,10 +1,18 @@
 var collisions = require('./collisionDetection.js');
+
+var staticWorldObjs = require('./staticWorldObjs.js').staticWorldObjs;
+var worldObj = {
+	width: 2000,
+	height: 2000,
+	staticWorldObjs: staticWorldObjs
+};
+
 var players = new Map();
 var bullets = new Map();
 var bulletNum = 0; //Used to communicate to player what bullet to delete when it hits
 var bulletsMarkedForExplosion = [];
 
-const PLAYER_SPEED = 100;
+const PLAYER_SPEED = 1000;
 
 var update = function (deltaTime) {
 	//Update player positions
@@ -178,3 +186,4 @@ exports.removePlayer = removePlayer;
 exports.update = update;
 exports.sendUpdates = sendUpdates;
 exports.playerInput = playerInput;
+exports.worldObj = worldObj;

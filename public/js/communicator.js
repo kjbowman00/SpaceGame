@@ -22,9 +22,7 @@ function socketStuff(formData) {
     });
 
     socket.on('join_game_success', function (data) {
-        //Data is static world objects
-        world.staticWorldObjs = data;
-
+        world = data;
         gameStart();
     });
     socket.on('state', function (data) {

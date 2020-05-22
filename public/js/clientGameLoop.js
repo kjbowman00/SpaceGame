@@ -22,7 +22,7 @@ var trailTimer = 0;
 
 var playerGun = { w: 50, h: 10, rotation: 0 };
 var player = { x: 0, y: 0, w: 50, h: 50, oldX: 0, oldY: 0, xVel: 0, yVel: 0, name:"None", health:100};
-var playerSpeed = 100;
+var playerSpeed = 1000;
 var playerFireTimer = 0;
 const playerFireTimeNeeded = 0.3;
 
@@ -104,6 +104,20 @@ function draw() {
 	bCtx.fillRect(-backGroundImage.width, -backGroundImage.height,
 		canvas.width + 2*backGroundImage.width, canvas.height + 2*backGroundImage.height);
 	bCtx.resetTransform();
+	//Draw black over anything beyond world borders
+	ctx.fillStyle = "#000000";
+	if (camera.x < -world.width / 2) { // Fill left
+		ctx.fillRect(0, 0, -camera.x - world.width/2, canvas.height);
+	}
+	if (camera.y < -world.height / 2) { // Fill top
+		ctx.fillRect(0, 0, canvas.width, -camera.y - world.height / 2);
+	}
+	if (camera.x + canvas.width > world.width / 2) { // Fill right
+		ctx.fillRect(world.width/2 - camera.x, 0, -camera.x + world.width / 2, canvas.height);
+	}
+	if (camera.y + canvas.height > world.height / 2) { // Fill bottom
+		ctx.fillRect(0, world.height / 2 - camera.y, canvas.width, -camera.y + world.height);
+	}
 	
 
 	//Draw world objects where the camera is

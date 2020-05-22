@@ -74,5 +74,4 @@ function updateCollisions(players, bullets, bulletsMarkedForExplosion, deltaTime
 	handleBulletCollision(players, bullets, bulletsMarkedForExplosion, deltaTime);
 }
 
-
 exports.updateCollisions = updateCollisions;

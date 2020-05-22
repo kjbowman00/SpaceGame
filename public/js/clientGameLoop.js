@@ -22,9 +22,9 @@ var trailTimer = 0;
 
 var playerGun = { w: 50, h: 10, rotation: 0 };
 var player = { x: 0, y: 0, w: 50, h: 50, oldX: 0, oldY: 0, xVel: 0, yVel: 0, name:"None", health:100};
-var playerSpeed = 1000;
+var playerSpeed = 250;
 var playerFireTimer = 0;
-const playerFireTimeNeeded = 0.3;
+const playerFireTimeNeeded = 0.1;
 
 const fadeTime = 0.5; //Amount in seconds to fade screen on death
 var fadeTimer = 0;

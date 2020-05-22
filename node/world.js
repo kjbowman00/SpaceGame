@@ -12,7 +12,7 @@ var bullets = new Map();
 var bulletNum = 0; //Used to communicate to player what bullet to delete when it hits
 var bulletsMarkedForExplosion = [];
 
-const PLAYER_SPEED = 1000;
+const PLAYER_SPEED = 250;
 
 var update = function (deltaTime) {
 	//Update player positions
@@ -26,7 +26,7 @@ var update = function (deltaTime) {
 			currentPlayer.y += currentPlayer.yVel * deltaTime;
 
 			//Handle player shooting
-			if (currentPlayer.gun.shotsRequested > 0 && currentPlayer.gun.shotTimer >= currentPlayer.gun.shotTimeNeeded - 0.1) {
+			if (currentPlayer.gun.shotsRequested > 0 && currentPlayer.gun.shotTimer >= currentPlayer.gun.shotTimeNeeded - 0.03) {
 				bullets.set(bulletNum, {
 					x: currentPlayer.x + currentPlayer.w / 2 - 5, y: currentPlayer.y + currentPlayer.h / 2 - 5,
 					r: 5,
@@ -49,8 +49,8 @@ var update = function (deltaTime) {
 	bullets.forEach((bullet, id, map) => {
 		bullet.timeAlive += deltaTime;
 		if (bullet.timeAlive >= 5) bulletsMarkedForDelete.push(id);
-		bullet.x += 200 * deltaTime * Math.cos(bullet.rotation);
-		bullet.y += 200 * deltaTime * Math.sin(bullet.rotation);
+		bullet.x += 500 * deltaTime * Math.cos(bullet.rotation);
+		bullet.y += 500 * deltaTime * Math.sin(bullet.rotation);
 	});
 
 	//Handle collisions
@@ -147,7 +147,7 @@ function Player(name, x, y) {
 	this.gun.rotation = 0;
 	this.gun.shotsRequested = 0;
 	this.gun.shotTimer = 0;
-	this.gun.shotTimeNeeded = 0.3; //Default fire rate
+	this.gun.shotTimeNeeded = 0.1; //Default fire rate
 }
 
 var playerInput = function (socketID, input) {

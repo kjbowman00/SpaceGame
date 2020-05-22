@@ -22,15 +22,24 @@ function died() {
 	alive = false; //This will change the game loop to draw a gray overlay and stop allowing player updates
 
 	//Pop up with play again and back to menu buttons
+	document.getElementById("respawn_form_box").style.display = "block";
 }
 
 function respawnRequest() {
 	socket.emit('player_respawn_request');
+	console.log("Respawn request");
 }
 
 function respawnSuccess(pos) {
-	// setup player x and y and health
+	//Reset player attributes
 	player.x = pos.x;
 	player.y = pos.y;
-	player.alive = true;
+	player.health = 100;
+	alive = true;
+
+	//Hide respawn box
+	document.getElementById("respawn_form_box").style.display = "none";
 }
+
+document.getElementById("respawn_form_box").children[0].onclick = respawnRequest;
+document.getElementById("respawn_form_box").children[1].onclick = toMenu;

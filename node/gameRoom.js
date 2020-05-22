@@ -35,7 +35,7 @@ io.on('connection', function(socket) {
         gameLoop.world.playerInput(socket.id, data);
     });
     socket.on('player_respawn_request', function () {
-        let resReq = world.requestRespawn(socket.id);
+        let resReq = gameLoop.world.requestRespawn(socket.id);
         if (resReq.success) {
             socket.emit('player_respawn_success', resReq.position);
         }

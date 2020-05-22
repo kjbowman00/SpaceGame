@@ -115,6 +115,7 @@ var requestRespawn = function (socketID) {
 	player.y = position.y;
 	req.position = position;
 	player.alive = true;
+	player.health = 100;
 	return req;
 }
 

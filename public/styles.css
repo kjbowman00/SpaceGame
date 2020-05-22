@@ -38,6 +38,17 @@ html, body {
 	top:50%;
 	transform: translateY(-50%);
 }
+#respawn_form_box {
+	display: none;
+	width: 20%;
+	height: 30%;
+	position: absolute;
+	top: 30%;
+	left: 40%;
+	margin: auto;
+	background-color: gray;
+	text-align: center;
+}
 
 
 

@@ -40,6 +40,8 @@ function update() {
 	var deltaServer = (performance.now() - lastInputTime) / 1000;
 
 	if (alive) {
+		player.oldX = player.x;
+		player.oldY = player.y;
 		//Update player position
 		player.x += deltaTime * xDir * playerSpeed;
 		player.y += deltaTime * yDir * playerSpeed;
@@ -53,8 +55,6 @@ function update() {
 
 		if (Math.abs(player.x - predictX) > 5) player.x = lerp(player.x, predictX, 0.2);
 		if (Math.abs(player.y - predictY) > 5) player.y = lerp(player.y, predictY, 0.2);
-		player.oldX = player.x;
-		player.oldY = player.y;
 
 		//Update gun rotation
 

@@ -8,12 +8,18 @@
 	<meta name="author" content="Kyle Bowman">
 
 	<link rel="stylesheet" href="styles.css">
+
+	<script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+	<script src='libs/spectrum/spectrum.js'></script>
+	<link rel='stylesheet' href='libs/spectrum/spectrum.css' />
 </head>
 
 <body>
 	<div id="form_box">
 		<form id="name_form" autocomplete="off" action="none">
-			<input type="text" id="username" name="username" placeholder="Enter Name:"><br>
+			<input type="text" id="username" name="username" placeholder="Enter Name:">
+			<input type='text' id="color_picker" /><br />
+			<script src="js/color_picker.js"></script>
 			<select name="server">
 				<option value="game1">Game 1: N Players</option>
 				<option value="game2">Game 2: N Players</option>
@@ -36,11 +42,11 @@
 	<script src="js/clientWorld.js"></script>
 	<script src="js/trails.js"></script>
 	<script src="js/playerInfoBox.js"></script>
+	<script src="js/players.js"></script>
 	<script src="js/clientGameLoop.js"></script>
 	<script src="js/socket/socket.io.js"></script>
 	<script src="js/communicator.js"></script>
 
-	<script src="js/clientTree2d.js"></script>
 	<script src="js/clientCollisionDetection.js"></script>
 	<script src="js/clientStateHandler.js"></script>
 	<script src="js/resizeCanvas.js"></script>

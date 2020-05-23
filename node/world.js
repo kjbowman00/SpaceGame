@@ -28,7 +28,7 @@ var update = function (deltaTime) {
 			//Handle player shooting
 			if (currentPlayer.gun.shotsRequested > 0 && currentPlayer.gun.shotTimer >= currentPlayer.gun.shotTimeNeeded - 0.03) {
 				bullets.set(bulletNum, {
-					x: currentPlayer.x + currentPlayer.w / 2 - 5, y: currentPlayer.y + currentPlayer.h / 2 - 5,
+					x: currentPlayer.x + currentPlayer.w / 2 - 5, y: currentPlayer.y + (currentPlayer.h / 2) - 5,
 					r: 5,
 					rotation: currentPlayer.gun.rotation,
 					damage: 10,

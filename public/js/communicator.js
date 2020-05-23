@@ -43,13 +43,16 @@ function socketStuff(formData) {
         lastInput.yVel = 10 * yDir;
         //Send current input
         lastInputTime = performance.now();
-        socket.emit('player_input', { xDir: xDir, yDir: yDir, rotation: playerGun.rotation });
+        socket.emit('player_input', { xDir: xDir, yDir: yDir, rotation: player.gun.rotation });
     });
     socket.on('player_respawn_success', function (data) {
         respawnSuccess(data);
     });
 
-    socket.emit('play_game', { name: formData.get('username') });
+    socket.emit('play_game', {
+        name: formData.get('username'),
+        color: formData.get('color')
+    });
 
 }
 

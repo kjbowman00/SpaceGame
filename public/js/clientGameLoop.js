@@ -20,8 +20,10 @@ var lastUpdateTime = 0;
 
 var trailTimer = 0;
 
-var playerGun = { w: 50, h: 10, rotation: 0 };
-var player = { x: 0, y: 0, w: 50, h: 50, oldX: 0, oldY: 0, xVel: 0, yVel: 0, name:"None", health:100};
+var player = {
+	x: 0, y: 0, w: 50, h: 50, oldX: 0, oldY: 0, xVel: 0, yVel: 0, name: "None", health: 100,
+	gun: { w: 50, h: 10, rotation: 0 }
+};
 var playerSpeed = 250;
 var playerFireTimer = 0;
 const playerFireTimeNeeded = 0.1;
@@ -57,6 +59,9 @@ function update() {
 		if (Math.abs(player.y - predictY) > 5) player.y = lerp(player.y, predictY, 0.2);
 
 		//Update gun rotation
+		let centerX = Math.round(player.x) - camera.x + player.w / 2;
+		let centerY = Math.round(player.y) - camera.y + player.h / 2;
+		player.gun.rotation = Math.atan2(Mouse.cameraY - centerY, Mouse.cameraX - centerX);
 
 		//Fire gun
 		playerFireTimer += deltaTime;
@@ -74,6 +79,7 @@ function update() {
 		if (objNew != undefined) {
 			if (Math.abs(obj.x - objNew.x) > 0.1) obj.x = lerp(obj.x, objNew.x, percentageUpdate);
 			if (Math.abs(obj.y - objNew.y) > 0.1) obj.y = lerp(obj.y, objNew.y, percentageUpdate);
+			obj.rotation = lerp(obj.rotation, objNew.rotation, percentageUpdate);
 		}
 	});
 	//Update bullets
@@ -127,35 +133,13 @@ function draw() {
 	}
 
 	if (alive) {
-		//Round player.x and yP
-		let xRound = Math.round(player.x);
-		let yRound = Math.round(player.y);
-		ctx.fillRect(xRound - camera.x, yRound - camera.y, 50, 50);
-		//Draw player gun
-		let centerX = xRound - camera.x + player.w / 2;
-		let centerY = yRound - camera.y + player.h / 2;
-		let xGun = centerX;
-		let yGun = centerY - playerGun.h / 2;
-		playerGun.rotation = Math.atan2(Mouse.cameraY - centerY, Mouse.cameraX - centerX);
-		ctx.fillStyle = "red";
-		ctx.translate(centerX, centerY);
-		ctx.rotate(playerGun.rotation);
-		ctx.translate(-centerX, -centerY);
-		ctx.fillRect(xGun, yGun, playerGun.w, playerGun.h);
-		ctx.resetTransform();
-
-		//Draw player info box
-		drawPlayerInfo(player, ctx);
+		drawPlayer(player, ctx);
 	}
-
 
 	//Draw world objects (other players, bullets)
 	ctx.fillStyle = "#FF0000";
 	worldObjsOld.players.forEach((elem, id, map) => {
-		let drawX = elem.x - camera.x;
-		let drawY = elem.y - camera.y;
-		ctx.fillRect(drawX, drawY, elem.w, elem.h);
-		drawPlayerInfo(elem, ctx);
+		drawPlayer(elem, ctx);
 	});
 	ctx.fillStyle = "#FF0000";
 	worldObjsOld.bullets.forEach((bullet, id, map) => {

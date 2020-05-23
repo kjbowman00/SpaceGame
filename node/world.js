@@ -2,8 +2,8 @@ var collisions = require('./collisionDetection.js');
 
 var staticWorldObjs = require('./staticWorldObjs.js').staticWorldObjs;
 var worldObj = {
-	width: 2000,
-	height: 2000,
+	width: 6000,
+	height: 6000,
 	staticWorldObjs: staticWorldObjs
 };
 

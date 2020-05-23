@@ -1,0 +1,23 @@
+{
+  "name": "hexwars",
+  "version": "1.0.0",
+  "description": "Multiplayer real-time 2d arcade shooter",
+  "main": "gameRoom.js",
+  "dependencies": {
+    "express": "^4.17.1",
+    "express-status-monitor": "^1.2.11",
+    "node": "^13.12.0",
+    "npm": "^6.14.5",
+    "socket.io": "^2.3.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "\u0016https://github.com/kjbowman00/SpaceGame"
+  },
+  "author": "Kyle Bowman",
+  "license": "ISC"
+}

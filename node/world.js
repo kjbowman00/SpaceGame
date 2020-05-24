@@ -106,9 +106,9 @@ function getRandomSpawn() {
 	return position;
 }
 
-var addPlayer = function (socketID, name) {
+var addPlayer = function (socketID, name, color) {
 	let position = getRandomSpawn();
-	players.set(socketID, new Player(name, position.x, position.y));
+	players.set(socketID, new Player(name, position.x, position.y, color));
 };
 
 var requestRespawn = function (socketID) {
@@ -131,7 +131,7 @@ var removePlayer = function (socketID) {
 	players.delete(socketID);
 };
 
-function Player(name, x, y) {
+function Player(name, x, y, color) {
 	this.name = name;
 	this.oldX = x;
 	this.oldY = y;
@@ -139,12 +139,15 @@ function Player(name, x, y) {
 	this.y = y;
 	this.w = 50;
 	this.h = 50;
+	this.color = color;
 	this.xVel = 0;
 	this.yVel = 0;
 	this.health = 100;
 	this.alive = true;
 	this.gun = {};
 	this.gun.rotation = 0;
+	this.gun.w = 50;
+	this.gun.h = 10;
 	this.gun.shotsRequested = 0;
 	this.gun.shotTimer = 0;
 	this.gun.shotTimeNeeded = 0.1; //Default fire rate

@@ -13,7 +13,12 @@ function onPlay() {
 document.getElementById("name_form").onsubmit = onPlay;
 
 function socketStuff(formData) {
-	var gameName = formData.get('server');
+    var gameName = formData.get('server');
+
+    let playerColor = "#" + $('#color_picker').spectrum("get").toHex();
+    player.color = playerColor;
+    playerColor = getColorIndexFromPalette(playerColor);
+
 	var path = '/' + gameName + '/socket.io';
     socket = io('/', {
         secure: true,
@@ -51,7 +56,7 @@ function socketStuff(formData) {
 
     socket.emit('play_game', {
         name: formData.get('username'),
-        color: formData.get('color')
+        color: playerColor
     });
 
 }

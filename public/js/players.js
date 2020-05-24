@@ -8,7 +8,7 @@ function drawPlayer(player, ctx) {
 	let centerY = yRound - camera.y + player.h / 2;
 	let xGun = centerX;
 	let yGun = centerY - player.gun.h / 2;
-	ctx.fillStyle = "red";
+	ctx.fillStyle = player.color;
 	ctx.translate(centerX, centerY);
 	ctx.rotate(player.gun.rotation);
 	ctx.translate(-centerX, -centerY);

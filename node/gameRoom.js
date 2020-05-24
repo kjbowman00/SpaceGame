@@ -6,6 +6,14 @@ var app = express();
 var http = require('http').createServer();
 var gameLoop = require('./gameLoop.js');
 
+const colorPalette = [
+    ["#ff0000", "#ff9900", "#ffff00", "#00ff00", "#00ffff", "#0000ff", "#9900ff", "#ff00ff"],
+    ["#cc0000", "#e69138", "#f1c232", "#6aa84f", "#45818e", "#3d85c6", "#674ea7", "#a64d79"],
+    ["#990000", "#b45f06", "#bf9000", "#38761d", "#134f5c", "#0b5394", "#351c75", "#741b47"],
+    ["#660000", "#783f04", "#7f6000", "#274e13", "#0c343d", "#073763", "#20124d", "#4c1130"]
+];
+
+
 var ioPath = '/game' + gameNum + '/socket.io';
 const io = require('socket.io')(http, {
   path: ioPath
@@ -21,8 +29,13 @@ io.on('connection', function(socket) {
             let name = data.name.substring(0, 15);
             if (name == undefined) throw "Name not a string";
 
+            let color = colorPalette[data.color.i][data.color.j];
+            console.log(color);
+            if (color == undefined) throw "Color not known";
+
+
             //Add to game server
-            gameLoop.world.addPlayer(socket.id, name);
+            gameLoop.world.addPlayer(socket.id, name, color);
             socket.emit('join_game_success', gameLoop.world.worldObj);
         }
         catch (error) {

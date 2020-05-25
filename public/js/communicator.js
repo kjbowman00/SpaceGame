@@ -27,7 +27,9 @@ function socketStuff(formData) {
     });
 
     socket.on('join_game_success', function (data) {
-        world = data;
+        world = data.world;
+        player.x = data.startPos.x;
+        player.y = data.startPos.y;
         gameStart();
     });
     socket.on('state', function (data) {

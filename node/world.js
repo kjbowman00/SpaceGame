@@ -100,15 +100,39 @@ var sendUpdates = function(io) {
 }
 
 function getRandomSpawn() {
-	const leftMost = 0;
-	const rightMost = 1000;
+	const smallW = worldObj.width / 4;
+	const smallH = worldObj.height / 4;
+	const halfW = worldObj.width / 2;
+	const halfH = worldObj.height / 2;
+	const w = worldObj.width;
+	const h = worldObj.height;
+	let side = Math.floor(Math.random() * 4);
+
 	let position = { x: 0, y: 0 };
+	if (side == 0) { // top
+		position.x = Math.random() * (w - 50) - halfW;
+		position.y = Math.random() * (smallH - 50) - halfH;
+		console.log(position);
+	} else if (side == 1) { // right
+		position.x = halfW - smallW + (Math.random() * (smallW - 50));
+		position.y = Math.random() * (h - 50) - halfH;
+	} else if (side == 2) { // Bottom
+		position.x = Math.random() * (w - 50) - halfW;
+		position.y = halfH - smallH + (Math.random() * (smallH - 50));
+	} else { // left
+		position.x = Math.random() * (smallW - 50) - halfW;
+		position.y = Math.random() * (h - 50) - halfH;
+	}
+	position.x = Math.floor(position.x);
+	position.y = Math.floor(position.y);
+
 	return position;
 }
 
 var addPlayer = function (socketID, name, color) {
 	let position = getRandomSpawn();
 	players.set(socketID, new Player(name, position.x, position.y, color));
+	return position;
 };
 
 var requestRespawn = function (socketID) {

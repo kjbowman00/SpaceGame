@@ -9,9 +9,6 @@ function resizeCanvas() {
 		camera.h = canvas.height;
 		backgroundCanvas.width = canvas.width;
 		backgroundCanvas.height = canvas.height;
-
-		draw();
 	}
 }
 window.addEventListener('resize', resizeCanvas);
-resizeCanvas();

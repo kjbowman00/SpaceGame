@@ -4,10 +4,14 @@ function gameStart() {
 	alive = true;
 	//Turn on canvas
 	document.getElementById('canvas_holder').style.display = 'block';
-	//Enable animation frame updating
+
 	gameRunning = true;
-	loopID = requestAnimationFrame(mainLoop);
 	resizeCanvas();
+	camera.x = player.x + 50 - camera.w / 2;
+	camera.y = player.y + 50 - camera.h / 2;
+
+	//Enable animation frame updating
+	loopID = requestAnimationFrame(mainLoop);
 }
 
 function toMenu() {

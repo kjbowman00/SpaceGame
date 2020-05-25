@@ -35,8 +35,8 @@ io.on('connection', function(socket) {
 
 
             //Add to game server
-            gameLoop.world.addPlayer(socket.id, name, color);
-            socket.emit('join_game_success', gameLoop.world.worldObj);
+            let startPos = gameLoop.world.addPlayer(socket.id, name, color);
+            socket.emit('join_game_success', { world:gameLoop.world.worldObj, startPos: startPos });
         }
         catch (error) {
             console.log("PLAYER FAILED TO JOIN SERVER:");

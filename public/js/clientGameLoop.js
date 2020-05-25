@@ -151,9 +151,11 @@ function draw() {
 	if (trailTimer > 0.05) {
 		trailTimer = 0;
 		worldObjsOld.players.forEach((item, id, map) => {
-			Trails.addTrail(item.x + 50 / 2, item.y + 50 / 2, { r: 84, g: 68, b: 255, a: 100 }, 50 / 2);
+			let pColor = hexToRGB(item.color);
+			Trails.addTrail(item.x + 50 / 2, item.y + 50 / 2, { r: pColor.r, g: pColor.g, b: pColor.b, a: 100 }, 50 / 2);
 		});
-		if (alive) Trails.addTrail(player.x + 50 / 2, player.y + 50 / 2, { r: 84, g: 68, b: 255, a: 100 }, 50 / 2);
+		let pColor = hexToRGB(player.color);
+		if (alive) Trails.addTrail(player.x + 50 / 2, player.y + 50 / 2, { r: pColor.r, g: pColor.g, b: pColor.b, a: 100 }, 50 / 2);
 	}
 	//Render trails
 	Trails.updateAndRender(deltaTime, bCtx);

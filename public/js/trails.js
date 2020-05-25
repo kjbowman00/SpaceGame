@@ -13,7 +13,7 @@ function _Trails() {
 		let y = trail.y;
 		let r = trail.radius;
 		let c = trail.color;
-		var grd = ctx.createRadialGradient(x-camera.x, y-camera.y, trail.radius/4, x-camera.x, y-camera.y, trail.radius);
+		var grd = ctx.createRadialGradient(x-camera.x, y-camera.y, trail.radius/25, x-camera.x, y-camera.y, trail.radius);
 		grd.addColorStop(0, 'rgba(' + c.r + ', ' + c.g + ', ' + c.b + ', ' + c.a + ')');
 		grd.addColorStop(1, 'rgba(' + c.r + ', ' + c.g + ', ' + c.b + ', 0)');
 		ctx.fillStyle = grd;

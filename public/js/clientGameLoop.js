@@ -143,7 +143,16 @@ function draw() {
 	});
 	ctx.fillStyle = "#FF0000";
 	worldObjsOld.bullets.forEach((bullet, id, map) => {
-		ctx.fillRect(bullet.x - camera.x, bullet.y - camera.y, 10, 10);
+		//ctx.beginPath();
+		//ctx.arc(bullet.x - camera.x, bullet.y - camera.y, 5, 0, 2 * Math.PI);
+		//ctx.fill();
+
+		var grd = bCtx.createRadialGradient(bullet.x - camera.x, bullet.y - camera.y, 1, bullet.x - camera.x, bullet.y - camera.y, 7);
+		grd.addColorStop(0, 'rgba(255, 0, 0, 1.0)');
+		grd.addColorStop(1, 'rgba(255, 0, 0, 0.0)');
+		bCtx.fillStyle = grd;
+		bCtx.globalCompositeOperation = "lighter";
+		bCtx.fillRect(bullet.x - 5 - camera.x, bullet.y - 5 - camera.y, 2 * 5, 2 * 5);
 	});
 
 	//Add trail objects
@@ -152,10 +161,10 @@ function draw() {
 		trailTimer = 0;
 		worldObjsOld.players.forEach((item, id, map) => {
 			let pColor = hexToRGB(item.color);
-			Trails.addTrail(item.x + 50 / 2, item.y + 50 / 2, { r: pColor.r, g: pColor.g, b: pColor.b, a: 100 }, 50 / 2);
+			Trails.addTrail(item.x + 50 / 2, item.y + 50 / 2, { r: pColor.r, g: pColor.g, b: pColor.b, a: 100 }, 25);
 		});
 		let pColor = hexToRGB(player.color);
-		if (alive) Trails.addTrail(player.x + 50 / 2, player.y + 50 / 2, { r: pColor.r, g: pColor.g, b: pColor.b, a: 100 }, 50 / 2);
+		if (alive) Trails.addTrail(player.x + 50 / 2, player.y + 50 / 2, { r: pColor.r, g: pColor.g, b: pColor.b, a: 100 }, 25);
 	}
 	//Render trails
 	Trails.updateAndRender(deltaTime, bCtx);

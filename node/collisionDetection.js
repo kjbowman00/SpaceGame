@@ -1,6 +1,6 @@
 var staticWorldObjs = require('./staticWorldObjs').staticWorldObjs;
 
-function handleStaticObjsCollision(players, deltaTime) {
+function handleStaticObjsCollision(players, bullets, deltaTime) {
 	players.forEach((player, id, map) => {
 		let bounds = { x: player.x, y: player.y, w: player.w, h: player.h };
 		//Naive approach. test each object with each player
@@ -28,6 +28,20 @@ function handleStaticObjsCollision(players, deltaTime) {
 			}
 		}
 	});
+
+	let bulletDeleteList = [];
+	bullets.forEach((bullet, id, map) => {
+		let bounds = { x: bullet.x, y: bullet.y, w: bullet.r * 2, h: bullet.r * 2 };
+		for (let i = staticWorldObjs.length - 1; i >= 0; i--) {
+			if (doesCollide(bounds, staticWorldObjs[i])) {
+				bulletDeleteList.push(id);
+				break;
+			}
+		}
+	});
+	for (let i = bulletDeleteList.length - 1; i >= 0; i--) {
+		bullets.delete(bulletDeleteList[i]);
+	}
 }
 
 function doesCollide(rect1, rect2) {
@@ -59,7 +73,7 @@ function handleBulletCollision(players, bullets, bulletsMarkedForExplosion, delt
 			if (bulletCollide(player, bullet) && bullet.playerEmitId != playerId) {
 				//Blow up and damage player
 				player.health -= bullet.damage;
-				bulletsMarkedForExplosion.push(bulletId);
+				bulletsMarkedForExplosion.push(bulletId); //used so the player can make animation
 			}
 		});
 	});
@@ -70,7 +84,7 @@ function handleBulletCollision(players, bullets, bulletsMarkedForExplosion, delt
 }
 
 function updateCollisions(players, bullets, bulletsMarkedForExplosion, deltaTime) {
-	handleStaticObjsCollision(players, deltaTime);
+	handleStaticObjsCollision(players, bullets, deltaTime);
 	handleBulletCollision(players, bullets, bulletsMarkedForExplosion, deltaTime);
 }
 

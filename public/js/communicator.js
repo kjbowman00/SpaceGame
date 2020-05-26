@@ -39,15 +39,15 @@ function socketStuff(formData) {
         worldObjsUpdated.players = new Map(data.objects.players);
         worldObjsUpdated.bullets = new Map(data.objects.bullets);
 
-        let bulletsToExplode = data.objects.bulletsMarkedForExplosion;
+        /*let bulletsToExplode = data.objects.bulletsMarkedForExplosion;
         for (let i = 0; i < bulletsToExplode.length; i++) {
             console.log("Bullet " + bulletsToExplode[i] + " exploded!");
-        }
+        }*/
 
         serverPlayerState = data.player;
         player.health = serverPlayerState.health;
-        lastInput.xVel = 10 * xDir;
-        lastInput.yVel = 10 * yDir;
+        lastInput.xVel = playerSpeed * xDir;
+        lastInput.yVel = playerSpeed * yDir;
         //Send current input
         lastInputTime = performance.now();
         socket.emit('player_input', { xDir: xDir, yDir: yDir, rotation: player.gun.rotation });

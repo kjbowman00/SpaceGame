@@ -30,8 +30,10 @@ var update = function (deltaTime) {
 				bullets.set(bulletNum, {
 					x: currentPlayer.x + currentPlayer.w / 2 - 5, y: currentPlayer.y + (currentPlayer.h / 2) - 5,
 					r: 5,
-					rotation: currentPlayer.gun.rotation,
+					xVel: Math.cos(currentPlayer.gun.rotation) * 500 + currentPlayer.xVel/2,
+					yVel: Math.sin(currentPlayer.gun.rotation) * 500 + currentPlayer.yVel/2,
 					damage: 10,
+					color: currentPlayer.color,
 					timeAlive: 0,
 					playerEmitId: key
 				});
@@ -49,8 +51,8 @@ var update = function (deltaTime) {
 	bullets.forEach((bullet, id, map) => {
 		bullet.timeAlive += deltaTime;
 		if (bullet.timeAlive >= 5) bulletsMarkedForDelete.push(id);
-		bullet.x += 500 * deltaTime * Math.cos(bullet.rotation);
-		bullet.y += 500 * deltaTime * Math.sin(bullet.rotation);
+		bullet.x += bullet.xVel * deltaTime;
+		bullet.y += bullet.yVel * deltaTime;
 	});
 
 	//Handle collisions

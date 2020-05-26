@@ -147,12 +147,13 @@ function draw() {
 		//ctx.arc(bullet.x - camera.x, bullet.y - camera.y, 5, 0, 2 * Math.PI);
 		//ctx.fill();
 
-		var grd = bCtx.createRadialGradient(bullet.x - camera.x, bullet.y - camera.y, 1, bullet.x - camera.x, bullet.y - camera.y, 7);
-		grd.addColorStop(0, 'rgba(255, 0, 0, 1.0)');
-		grd.addColorStop(1, 'rgba(255, 0, 0, 0.0)');
+		var grd = bCtx.createRadialGradient(bullet.x - camera.x + 5, bullet.y - camera.y + 5, 1, bullet.x - camera.x + 5, bullet.y - camera.y + 5, 7);
+		let c = hexToRGB(bullet.color);
+		grd.addColorStop(0, 'rgba(' + c.r + ', ' + c.g + ', ' + c.b + ', 1.0)');
+		grd.addColorStop(1, 'rgba(' + c.r + ', ' + c.g + ', ' + c.b + ', 0)');
 		bCtx.fillStyle = grd;
 		bCtx.globalCompositeOperation = "lighter";
-		bCtx.fillRect(bullet.x - 5 - camera.x, bullet.y - 5 - camera.y, 2 * 5, 2 * 5);
+		bCtx.fillRect(bullet.x - camera.x, bullet.y - camera.y, 2 * 5, 2 * 5);
 	});
 
 	//Add trail objects

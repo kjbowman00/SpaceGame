@@ -7,6 +7,9 @@ var worldObj = {
 	staticWorldObjs: staticWorldObjs
 };
 
+var orbs = require('./orb.js');
+orbs.initializeOrbs(worldObj, staticWorldObjs);
+
 var players = new Map();
 var bullets = new Map();
 var bulletNum = 0; //Used to communicate to player what bullet to delete when it hits
@@ -55,6 +58,8 @@ var update = function (deltaTime) {
 		bullet.y += bullet.yVel * deltaTime;
 	});
 
+	orbs.update(deltaTime);
+
 	//Handle collisions
 	collisions.updateCollisions(players, bullets, bulletsMarkedForExplosion, deltaTime);
 
@@ -64,7 +69,8 @@ var update = function (deltaTime) {
 	}
 };
 
-var sendUpdates = function(io) {
+var sendUpdates = function (io) {
+	const DIST_NEEDED = 1000000000;
 	players.forEach((value, key, map) => {
 		//Key is socketid. //value is player object
 		//Need to grab each nearby object to this player
@@ -74,7 +80,7 @@ var sendUpdates = function(io) {
 			if (key != key2 && value2.alive) {
 				var distSq = (value.x - value2.x) * (value.x - value2.x);
 				distSq += (value.y - value.y) * (value.y - value2.y);
-				if (distSq <= 1000000000) {
+				if (distSq <= DIST_NEEDED) {
 					objectsToSend.players.set(key2 , value2);
 				}
 			}
@@ -86,11 +92,14 @@ var sendUpdates = function(io) {
 		bullets.forEach((bullet, id, map) => {
 			let distSq = (value.x - bullet.x) * (value.x - bullet.x);
 			distSq += (value.y - bullet.y) * (value.y - bullet.y);
-			if (distSq <= 1000000000) {
+			if (distSq <= DIST_NEEDED) {
 				objectsToSend.bullets.set(id,bullet);
 			}
 		});
 		objectsToSend.bullets = Array.from(objectsToSend.bullets);
+
+		//Gather Orbs
+		objectsToSend.orbs = Array.from(orbs.gather(value, DIST_NEEDED));
 
 		//Exploded bullets
 		objectsToSend.bulletsMarkedForExplosion = bulletsMarkedForExplosion;

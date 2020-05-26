@@ -8,9 +8,11 @@ const SERVER_WORLD_UPDATE_TIME = 1 / 20;
 var worldObjsOld = {};
 worldObjsOld.players = new Map();
 worldObjsOld.bullets = new Map();
+worldObjsOld.orbs = new Map();
 var worldObjsUpdated = {};
 worldObjsUpdated.players = new Map();
 worldObjsUpdated.bullets = new Map();
+worldObjsUpdated.orbs = new Map();
 
 var serverPlayerState = { x: 0, y: 0, xVel: 0, yVel: 0 };
 var lastInput = { xVel: 0, yVel: 0 };
@@ -68,6 +70,7 @@ function update() {
 		if (Mouse.pressed && playerFireTimer >= playerFireTimeNeeded) {
 			playerFireTimer = 0;
 			sendBullet();
+			Sounds.playLaser();
 		}
 	} //END IF ALIVE
 
@@ -85,6 +88,13 @@ function update() {
 	//Update bullets
 	worldObjsOld.bullets.forEach((obj, id, map) => {
 		var objNew = worldObjsUpdated.bullets.get(id);
+		if (objNew != undefined) {
+			if (Math.abs(obj.x - objNew.x) > 0.1) obj.x = lerp(obj.x, objNew.x, percentageUpdate);
+			if (Math.abs(obj.y - objNew.y) > 0.1) obj.y = lerp(obj.y, objNew.y, percentageUpdate);
+		}
+	});
+	worldObjsOld.orbs.forEach((obj, id, map) => {
+		var objNew = worldObjsUpdated.orbs.get(id);
 		if (objNew != undefined) {
 			if (Math.abs(obj.x - objNew.x) > 0.1) obj.x = lerp(obj.x, objNew.x, percentageUpdate);
 			if (Math.abs(obj.y - objNew.y) > 0.1) obj.y = lerp(obj.y, objNew.y, percentageUpdate);
@@ -154,6 +164,10 @@ function draw() {
 		bCtx.fillStyle = grd;
 		bCtx.globalCompositeOperation = "lighter";
 		bCtx.fillRect(bullet.x - camera.x, bullet.y - camera.y, 2 * 5, 2 * 5);
+	});
+	ctx.fillStyle = "#00FF00";
+	worldObjsOld.orbs.forEach((elem, id, map) => {
+		ctx.fillRect(elem.x - camera.x, elem.y - camera.y, elem.w, elem.h);
 	});
 
 	//Add trail objects

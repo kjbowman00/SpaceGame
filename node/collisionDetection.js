@@ -14,19 +14,19 @@ function handleStaticObjsCollision(players, bullets, deltaTime) {
 				if (doesCollide(xBounds, currentBox)) {
 					if (player.x - player.oldX > 0) {
 						player.x = currentBox.x - player.w;
-						player.oldX = player.x;
+						player.oldX = player.x; //Prevents other boxes from handling the same collision
 					} else if (player.x - player.oldX < 0){
 						player.x = currentBox.x + currentBox.w;
-						player.oldX = player.x;
+						player.oldX = player.x; //Prevents other boxes from handling the same collision
 					}
 				}
 				if (doesCollide(yBounds, currentBox)) {
 					if (player.y - player.oldY > 0) {
 						player.y = currentBox.y - player.h;
-						player.oldY = player.y;
+						player.oldY = player.y; //Prevents other boxes from handling the same collision
 					} else if (player.y - player.oldY < 0){
 						player.y = currentBox.y + currentBox.h;
-						player.oldY = player.y;
+						player.oldY = player.y; //Prevents other boxes from handling the same collision
 					}
 				}
 			}

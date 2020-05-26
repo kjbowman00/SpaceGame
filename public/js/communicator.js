@@ -38,6 +38,7 @@ function socketStuff(formData) {
         worldObjsUpdated = {};
         worldObjsUpdated.players = new Map(data.objects.players);
         worldObjsUpdated.bullets = new Map(data.objects.bullets);
+        worldObjsUpdated.orbs = new Map(data.objects.orbs);
 
         /*let bulletsToExplode = data.objects.bulletsMarkedForExplosion;
         for (let i = 0; i < bulletsToExplode.length; i++) {

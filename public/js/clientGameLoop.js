@@ -165,9 +165,18 @@ function draw() {
 		bCtx.globalCompositeOperation = "lighter";
 		bCtx.fillRect(bullet.x - camera.x, bullet.y - camera.y, 2 * 5, 2 * 5);
 	});
-	ctx.fillStyle = "#00FF00";
 	worldObjsOld.orbs.forEach((elem, id, map) => {
-		ctx.fillRect(elem.x - camera.x, elem.y - camera.y, elem.w, elem.h);
+		//ctx.fillStyle = elem.color;
+		//ctx.fillRect(elem.x - camera.x, elem.y - camera.y, elem.w, elem.h);
+
+		var grd = bCtx.createRadialGradient(elem.x - camera.x + 5, elem.y - camera.y + 5, 2, elem.x - camera.x + 5, elem.y - camera.y + 5, 5);
+		let c = hexToRGB(elem.color);
+		grd.addColorStop(0, 'rgba(255,255,255, 0.8)');
+		grd.addColorStop(0.5, 'rgba(' + c.r + ', ' + c.g + ', ' + c.b + ', 0.5)');
+		grd.addColorStop(1, 'rgba(' + c.r + ', ' + c.g + ', ' + c.b + ', 0.0)');
+		bCtx.fillStyle = grd;
+		bCtx.globalCompositeOperation = "lighter";
+		bCtx.fillRect(elem.x - camera.x, elem.y - camera.y, 10, 10);
 	});
 
 	//Add trail objects
@@ -177,6 +186,10 @@ function draw() {
 		worldObjsOld.players.forEach((item, id, map) => {
 			let pColor = hexToRGB(item.color);
 			Trails.addTrail(item.x + 50 / 2, item.y + 50 / 2, { r: pColor.r, g: pColor.g, b: pColor.b, a: 100 }, 25);
+		});
+		worldObjsOld.orbs.forEach((item, id, map) => {
+			let pColor = hexToRGB(item.color);
+			Trails.addTrail(item.x + 5, item.y + 5, { r: pColor.r, g: pColor.g, b: pColor.b, a: 80 }, 5);
 		});
 		let pColor = hexToRGB(player.color);
 		if (alive) Trails.addTrail(player.x + 50 / 2, player.y + 50 / 2, { r: pColor.r, g: pColor.g, b: pColor.b, a: 100 }, 25);

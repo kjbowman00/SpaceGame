@@ -3,7 +3,7 @@ var orbCounter = 0;
 var worldObj;
 var staticWorldObjs;
 
-const ORB_WIDTH = 5;
+const ORB_WIDTH = 6;
 const ORB_CAPACITY = 1000;
 
 function update(deltaTime) {
@@ -24,7 +24,8 @@ function addOrb() {
 		x: position.x, y: position.y,
 		startX: position.x, startY: position.y,
 		xToGo: position.x, yToGo: position.y,
-		w: ORB_WIDTH, h: ORB_WIDTH
+		w: ORB_WIDTH, h: ORB_WIDTH,
+		color: getColor()
 	};
 	orbs.set(orbCounter, orb);
 	orbCounter++;
@@ -98,6 +99,18 @@ function gather(player, DIST_NEEDED) {
 		}
 	});
 	return orbsToSend;
+}
+
+const colorPalette = [
+	["#ff0000", "#ff9900", "#ffff00", "#00ff00", "#00ffff", "#0000ff", "#9900ff", "#ff00ff"],
+	["#cc0000", "#e69138", "#f1c232", "#6aa84f", "#45818e", "#3d85c6", "#674ea7", "#a64d79"],
+	["#990000", "#b45f06", "#bf9000", "#38761d", "#134f5c", "#0b5394", "#351c75", "#741b47"],
+	["#660000", "#783f04", "#7f6000", "#274e13", "#0c343d", "#073763", "#20124d", "#4c1130"]
+];
+function getColor() {
+	let j = Math.floor(Math.random() * 8);
+	let i = Math.floor(Math.random() * 4);
+	return colorPalette[i][j];
 }
 
 

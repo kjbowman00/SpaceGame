@@ -1,4 +1,4 @@
-function drawPlayer(player, ctx) {
+function drawPlayer(player, ctx, bCtx) {
 	//SETTINGS
 	const borderThickness = 2;
 	const gunBorderThickness = 1;
@@ -26,4 +26,9 @@ function drawPlayer(player, ctx) {
 
 	//Draw player info box
 	drawPlayerInfo(player, ctx);
+
+	//Draw trail
+	if (player.trail != undefined) {
+		player.trail.render(bCtx);
+	}
 }

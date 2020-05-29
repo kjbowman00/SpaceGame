@@ -72,6 +72,13 @@ function update() {
 			sendBullet();
 			Sounds.playLaser();
 		}
+
+		if (player.trail != undefined) {
+			player.trail.update(player.x, player.y, player.w/2, deltaTime);
+		} else {
+			player.trail = new Trail(player.x, player.y, player.color, 25, 30);
+			console.log("WAHOOO!");
+		}
 	} //END IF ALIVE
 
 
@@ -83,6 +90,12 @@ function update() {
 			if (Math.abs(obj.x - objNew.x) > 0.1) obj.x = lerp(obj.x, objNew.x, percentageUpdate);
 			if (Math.abs(obj.y - objNew.y) > 0.1) obj.y = lerp(obj.y, objNew.y, percentageUpdate);
 			obj.gun.rotation = lerp(obj.gun.rotation, objNew.gun.rotation, percentageUpdate);
+		}
+
+		if (obj.trail != undefined) {
+			obj.trail.update(obj.x, obj.y, deltaTime);
+		} else {
+			obj.trail = new Trail(obj.x, obj.y, obj.color, 5, 20);
 		}
 	});
 	//Update bullets
@@ -143,20 +156,16 @@ function draw() {
 	}
 
 	if (alive) {
-		drawPlayer(player, ctx);
+		drawPlayer(player, ctx, bCtx);
 	}
 
 	//Draw world objects (other players, bullets)
 	ctx.fillStyle = "#FF0000";
 	worldObjsOld.players.forEach((elem, id, map) => {
-		drawPlayer(elem, ctx);
+		drawPlayer(elem, ctx, bCtx);
 	});
 	ctx.fillStyle = "#FF0000";
 	worldObjsOld.bullets.forEach((bullet, id, map) => {
-		//ctx.beginPath();
-		//ctx.arc(bullet.x - camera.x, bullet.y - camera.y, 5, 0, 2 * Math.PI);
-		//ctx.fill();
-
 		var grd = bCtx.createRadialGradient(bullet.x - camera.x + 5, bullet.y - camera.y + 5, 1, bullet.x - camera.x + 5, bullet.y - camera.y + 5, 7);
 		let c = hexToRGB(bullet.color);
 		grd.addColorStop(0, 'rgba(' + c.r + ', ' + c.g + ', ' + c.b + ', 1.0)');
@@ -166,9 +175,6 @@ function draw() {
 		bCtx.fillRect(bullet.x - camera.x, bullet.y - camera.y, 2 * 5, 2 * 5);
 	});
 	worldObjsOld.orbs.forEach((elem, id, map) => {
-		//ctx.fillStyle = elem.color;
-		//ctx.fillRect(elem.x - camera.x, elem.y - camera.y, elem.w, elem.h);
-
 		var grd = bCtx.createRadialGradient(elem.x - camera.x + 5, elem.y - camera.y + 5, 2, elem.x - camera.x + 5, elem.y - camera.y + 5, 5);
 		let c = hexToRGB(elem.color);
 		grd.addColorStop(0, 'rgba(255,255,255, 0.8)');
@@ -177,25 +183,12 @@ function draw() {
 		bCtx.fillStyle = grd;
 		bCtx.globalCompositeOperation = "lighter";
 		bCtx.fillRect(elem.x - camera.x, elem.y - camera.y, 10, 10);
-	});
 
-	//Add trail objects
-	trailTimer += deltaTime;
-	if (trailTimer > 0.05) {
-		trailTimer = 0;
-		worldObjsOld.players.forEach((item, id, map) => {
-			let pColor = hexToRGB(item.color);
-			Trails.addTrail(item.x + 50 / 2, item.y + 50 / 2, { r: pColor.r, g: pColor.g, b: pColor.b, a: 100 }, 25);
-		});
-		worldObjsOld.orbs.forEach((item, id, map) => {
-			let pColor = hexToRGB(item.color);
-			Trails.addTrail(item.x + 5, item.y + 5, { r: pColor.r, g: pColor.g, b: pColor.b, a: 80 }, 5);
-		});
-		let pColor = hexToRGB(player.color);
-		if (alive) Trails.addTrail(player.x + 50 / 2, player.y + 50 / 2, { r: pColor.r, g: pColor.g, b: pColor.b, a: 100 }, 25);
-	}
-	//Render trails
-	Trails.updateAndRender(deltaTime, bCtx);
+		//Render trail
+		if (elem.trail != undefined) {
+			elem.trail.render(bCtx);
+		}
+	});
 
 	//Draw gray overlay if dead
 	if (!alive) {

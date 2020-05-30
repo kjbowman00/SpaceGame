@@ -77,7 +77,6 @@ function update() {
 			player.trail.update(player.x, player.y, player.w/2, deltaTime);
 		} else {
 			player.trail = new Trail(player.x, player.y, player.color, 25, 30);
-			console.log("WAHOOO!");
 		}
 	} //END IF ALIVE
 
@@ -93,7 +92,7 @@ function update() {
 		}
 
 		if (obj.trail != undefined) {
-			obj.trail.update(obj.x, obj.y, deltaTime);
+			obj.trail.update(obj.x, obj.y, obj.w/2, deltaTime);
 		} else {
 			obj.trail = new Trail(obj.x, obj.y, obj.color, 5, 20);
 		}
@@ -111,6 +110,12 @@ function update() {
 		if (objNew != undefined) {
 			if (Math.abs(obj.x - objNew.x) > 0.1) obj.x = lerp(obj.x, objNew.x, percentageUpdate);
 			if (Math.abs(obj.y - objNew.y) > 0.1) obj.y = lerp(obj.y, objNew.y, percentageUpdate);
+		}
+
+		if (obj.trail != undefined) {
+			obj.trail.update(obj.x, obj.y, 5, deltaTime);
+		} else {
+			obj.trail = new Trail(obj.x, obj.y, obj.color, 10, 5);
 		}
 	});
 }

@@ -32,8 +32,8 @@ function addOrb() {
 }
 
 function atPosition(orb) {
-	if (orb.x - orb.xToGo > 4) return false;
-	if (orb.y - orb.yToGo > 4) return false;
+	if (Math.abs(orb.x - orb.xToGo) > 2) return false;
+	if (Math.abs(orb.y - orb.yToGo) > 2) return false;
 	return true;
 }
 
@@ -84,7 +84,7 @@ function initializeOrbs(worldObj2, staticWorldObjs2) {
 	worldObj = worldObj2;
 	staticWorldObjs = staticWorldObjs2;
 
-	for (let i = 0; i < 300; i++) {
+	for (let i = 0; i < 500; i++) {
 		addOrb();
 	}
 }
@@ -113,7 +113,12 @@ function getColor() {
 	return colorPalette[i][j];
 }
 
+function moveToNewState(oldState, newState) {
+
+}
+
 
 exports.initializeOrbs = initializeOrbs;
 exports.update = update;
 exports.gather = gather;
+orbs.moveToNewState = moveToNewState;

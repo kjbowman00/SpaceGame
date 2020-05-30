@@ -1,3 +1,5 @@
+var TEST = true;
+
 function _TrailNode(x, y, startColor, startR) { // Each individual circle object
 	this.x = x;
 	this.y = y;
@@ -9,7 +11,7 @@ function _TrailNode(x, y, startColor, startR) { // Each individual circle object
 	//Each trail object slowly decreases in size and opacity
 	this.update = function(deltaTime) {
 		let p = deltaTime / 1; // Divide by num seconds to get rid of thing
-		this.radius = lerp(this.radius, this.startR / 4, p);
+		this.radius = lerp(this.radius, this.startR / 2, p);
 		this.color.a = lerp(this.color.a, 0, p);
 	}
 
@@ -34,7 +36,12 @@ function Trail(x, y, color, maxRadius, spawnRate) {
 	this.x = x;
 	this.y = y;
 	this.maxRadius = maxRadius;
-	this.color = hexToRGB(color);
+	if (typeof color === 'string' || color instanceof String) {
+		this.color = hexToRGB(color);
+	}
+	else {
+		this.color = { r: color.r, g: color.g, b: color.b, a: 0.8 };
+	}
 
 	this.update = function (x, y, r, deltaTime) {
 		this.x = x + r;
@@ -50,7 +57,7 @@ function Trail(x, y, color, maxRadius, spawnRate) {
 		for (let i = this.nodes.length - 1; i >= 0; i--) {
 			let currentNode = this.nodes[i];
 			currentNode.update(deltaTime);
-			if (currentNode.color.a <= 0.25) { //Remove when alpha gets too low
+			if (currentNode.color.a <= 0.4) { //Remove when alpha gets too low
 				this.nodes.splice(i, 1);
 			}
 		}

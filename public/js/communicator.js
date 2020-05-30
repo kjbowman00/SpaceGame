@@ -33,6 +33,13 @@ function socketStuff(formData) {
         gameStart();
     });
     socket.on('state', function (data) {
+        worldObjsOld.orbs.forEach((obj, id, map) => {
+            let newObj = worldObjsUpdated.orbs.get(id);
+            if (newObj != undefined) {
+                let trail = obj.trail;
+                newObj.trail = obj.trail;
+            }
+        });
         worldObjsOld = worldObjsUpdated;
 
         worldObjsUpdated = {};

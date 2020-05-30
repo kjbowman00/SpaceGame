@@ -70,7 +70,7 @@ var update = function (deltaTime) {
 };
 
 var sendUpdates = function (io) {
-	const DIST_NEEDED = 1000000000;
+	const DIST_NEEDED = 1000000;
 	players.forEach((value, key, map) => {
 		//Key is socketid. //value is player object
 		//Need to grab each nearby object to this player

@@ -115,7 +115,7 @@ function update() {
 		if (obj.trail != undefined) {
 			obj.trail.update(obj.x, obj.y, 5, deltaTime);
 		} else {
-			obj.trail = new Trail(obj.x, obj.y, obj.color, 10, 5);
+			obj.trail = new Trail(obj.x, obj.y, obj.color, 5, 5);
 		}
 	});
 }

@@ -3,7 +3,7 @@ var orbCounter = 0;
 var worldObj;
 var staticWorldObjs;
 
-const ORB_WIDTH = 6;
+const ORB_WIDTH = 20;
 const ORB_CAPACITY = 1000;
 
 function update(deltaTime) {

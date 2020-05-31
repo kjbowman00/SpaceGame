@@ -113,9 +113,9 @@ function update() {
 		}
 
 		if (obj.trail != undefined) {
-			obj.trail.update(obj.x, obj.y, 5, deltaTime);
+			obj.trail.update(obj.x, obj.y, 10, deltaTime);
 		} else {
-			obj.trail = new Trail(obj.x, obj.y, obj.color, 5, 5);
+			obj.trail = new Trail(obj.x, obj.y, obj.color, 10, 5);
 		}
 	});
 }
@@ -180,14 +180,14 @@ function draw() {
 		bCtx.fillRect(bullet.x - camera.x, bullet.y - camera.y, 2 * 5, 2 * 5);
 	});
 	worldObjsOld.orbs.forEach((elem, id, map) => {
-		var grd = bCtx.createRadialGradient(elem.x - camera.x + 5, elem.y - camera.y + 5, 2, elem.x - camera.x + 5, elem.y - camera.y + 5, 5);
+		var grd = bCtx.createRadialGradient(elem.x - camera.x + 10, elem.y - camera.y + 10, 3, elem.x - camera.x + 10, elem.y - camera.y + 10, 10);
 		let c = hexToRGB(elem.color);
 		grd.addColorStop(0, 'rgba(255,255,255, 0.8)');
 		grd.addColorStop(0.5, 'rgba(' + c.r + ', ' + c.g + ', ' + c.b + ', 0.5)');
 		grd.addColorStop(1, 'rgba(' + c.r + ', ' + c.g + ', ' + c.b + ', 0.0)');
 		bCtx.fillStyle = grd;
 		bCtx.globalCompositeOperation = "lighter";
-		bCtx.fillRect(elem.x - camera.x, elem.y - camera.y, 10, 10);
+		bCtx.fillRect(elem.x - camera.x, elem.y - camera.y, 20, 20);
 
 		//Render trail
 		if (elem.trail != undefined) {

@@ -141,23 +141,27 @@ function draw() {
 	//Draw black over anything beyond world borders
 	ctx.fillStyle = "#000000";
 	if (camera.x < -world.width / 2) { // Fill left
-		ctx.fillRect(0, 0, -camera.x - world.width/2, canvas.height);
+		ctx.fillRect(0, 0, Math.floor(-camera.x) - world.width/2, canvas.height);
 	}
 	if (camera.y < -world.height / 2) { // Fill top
-		ctx.fillRect(0, 0, canvas.width, -camera.y - world.height / 2);
+		ctx.fillRect(0, 0, canvas.width, Math.floor(-camera.y) - world.height / 2);
 	}
 	if (camera.x + canvas.width > world.width / 2) { // Fill right
-		ctx.fillRect(world.width/2 - camera.x, 0, -camera.x + world.width / 2, canvas.height);
+		ctx.fillRect(world.width/2 - Math.floor(camera.x), 0, -Math.floor(camera.x) + world.width / 2, canvas.height);
 	}
 	if (camera.y + canvas.height > world.height / 2) { // Fill bottom
-		ctx.fillRect(0, world.height / 2 - camera.y, canvas.width, -camera.y + world.height);
+		ctx.fillRect(0, world.height / 2 - Math.floor(camera.y), canvas.width, -Math.floor(camera.y) + world.height);
 	}
 	
 
 	//Draw world objects where the camera is
 	for (var i in world.staticWorldObjs) {
 		item = world.staticWorldObjs[i];
-		ctx.fillRect(item.x - camera.x, item.y - camera.y, item.w, item.h);
+		ctx.fillRect(Math.floor(item.x - camera.x), Math.floor(item.y - camera.y), item.w, item.h);
+
+		//Fill sides with color
+		bCtx.fillStyle = "red";
+		bCtx.fillRect(Math.floor(item.x - camera.x) - 1, Math.floor(item.y - camera.y) - 1, item.w + 2, item.h + 2);
 	}
 
 	if (alive) {

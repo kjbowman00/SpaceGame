@@ -87,9 +87,30 @@ function handleBulletCollision(players, bullets, bulletsMarkedForExplosion, delt
 	}
 }
 
-function updateCollisions(players, bullets, bulletsMarkedForExplosion, deltaTime) {
+function handleOrbCollision(players, orbs) {
+	//Naive solution temporairly
+	let orbsToRemove = [];
+	players.forEach((player, playerId, map) => {
+		orbs.forEach((orb, orbId, map) => {
+			if (doesCollide(player, orb)) {
+				//Mark orb for deletion
+				orbsToRemove.push(orbId);
+
+				//Add to player energy/cash points
+				player.orbs += 1;
+			}
+		});
+	});
+	//Remove the orbs that are marked
+	for (let i = orbsToRemove.length - 1; i >= 0; i--) {
+		orbs.delete(orbsToRemove.pop());
+	}
+}
+
+function updateCollisions(players, bullets, bulletsMarkedForExplosion, orbs, deltaTime) {
 	handleStaticObjsCollision(players, bullets, deltaTime);
 	handleBulletCollision(players, bullets, bulletsMarkedForExplosion, deltaTime);
+	handleOrbCollision(players, orbs);
 }
 
 exports.updateCollisions = updateCollisions;

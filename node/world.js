@@ -61,7 +61,7 @@ var update = function (deltaTime) {
 	orbs.update(deltaTime);
 
 	//Handle collisions
-	collisions.updateCollisions(players, bullets, bulletsMarkedForExplosion, deltaTime);
+	collisions.updateCollisions(players, bullets, bulletsMarkedForExplosion, orbs.orbs, deltaTime);
 
 	//Delete old bullets
 	for (let i = bulletsMarkedForDelete.length - 1; i >= 0; i--) {

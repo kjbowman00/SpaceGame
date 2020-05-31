@@ -113,12 +113,7 @@ function getColor() {
 	return colorPalette[i][j];
 }
 
-function moveToNewState(oldState, newState) {
-
-}
-
-
 exports.initializeOrbs = initializeOrbs;
 exports.update = update;
 exports.gather = gather;
-orbs.moveToNewState = moveToNewState;
+exports.orbs = orbs;

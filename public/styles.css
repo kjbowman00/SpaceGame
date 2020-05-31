@@ -3,6 +3,7 @@ html, body {
 	height: 100%;
 	/* remove the extra whites around */
 	margin: 0;
+	background-color:black;
 }
 
 #canvas_holder {
@@ -23,19 +24,25 @@ html, body {
 	z-index:-2;
 }
 
+#title_screen_image {
+	min-width: 100%;
+	max-width:100%;
+	height: auto;
+}
+
 #form_box {
 	width:20%;
-	height:30%;
+	height:40%;
 	position:absolute;
-	top:30%;
+	top:20%;
 	left:40%;
 	margin:auto;
-	background-color:gray;
+	background-color:black;
 	text-align:center;
 }
 #name_form {
 	position:relative;
-	top:50%;
+	top:25%;
 	transform: translateY(-50%);
 }
 #respawn_form_box {

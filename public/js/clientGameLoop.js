@@ -94,7 +94,7 @@ function update() {
 		if (obj.trail != undefined) {
 			obj.trail.update(obj.x, obj.y, obj.w/2, deltaTime);
 		} else {
-			obj.trail = new Trail(obj.x, obj.y, obj.color, 5, 20);
+			obj.trail = new Trail(obj.x, obj.y, obj.color, 25, 20);
 		}
 	});
 	//Update bullets

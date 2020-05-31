@@ -40,6 +40,13 @@ function socketStuff(formData) {
                 newObj.trail = obj.trail;
             }
         });
+        worldObjsOld.players.forEach((obj, id, map) => {
+            let newObj = worldObjsUpdated.players.get(id);
+            if (newObj != undefined) {
+                let trail = obj.trail;
+                newObj.trail = obj.trail;
+            }
+        });
         worldObjsOld = worldObjsUpdated;
 
         worldObjsUpdated = {};

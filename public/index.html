@@ -15,18 +15,20 @@
 </head>
 
 <body>
-	<div id="form_box">
-		<img id ="title_screen_image"src="/images/titleScreen.png"/>
-		<form id="name_form" autocomplete="off" action="none">
-			<input type="text" id="username" name="username" placeholder="Enter Name:">
-			<input type='text' id="color_picker" /><br />
-			<script src="js/color_picker.js"></script>
-			<select name="server">
-				<option value="game1">Game 1: N Players</option>
-				<option value="game2">Game 2: N Players</option>
-			</select><br>
-			<input type="submit">
-		</form>
+	<div id="main_menu">
+		<div id="form_box">
+			<img id="title_screen_image" src="/images/titleScreen.png" />
+			<form id="name_form" autocomplete="off" action="none">
+				<input type="text" id="username" name="username" placeholder="Enter Name:">
+				<input type='text' id="color_picker" /><br />
+				<script src="js/color_picker.js"></script>
+				<select name="server">
+					<option value="game1">Game 1: N Players</option>
+					<option value="game2">Game 2: N Players</option>
+				</select><br>
+				<input type="submit">
+			</form>
+		</div>
 	</div>
 
 	<div id="respawn_form_box" class="fade-in">

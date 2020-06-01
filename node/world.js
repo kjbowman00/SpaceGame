@@ -10,6 +10,9 @@ var worldObj = {
 var orbs = require('./orb.js');
 orbs.initializeOrbs(worldObj, staticWorldObjs);
 
+var powerups = require('./powerups.js');
+var middlePowerup = new powerups.powerupObj(-50, -50, 100, 100);
+
 var players = new Map();
 var bullets = new Map();
 var bulletNum = 0; //Used to communicate to player what bullet to delete when it hits

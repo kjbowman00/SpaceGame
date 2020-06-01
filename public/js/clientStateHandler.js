@@ -4,6 +4,7 @@ function gameStart() {
 	alive = true;
 	//Turn on canvas
 	document.getElementById('canvas_holder').style.display = 'block';
+	document.getElementById('main_menu').style.display = 'none';
 
 	gameRunning = true;
 	resizeCanvas();
@@ -20,6 +21,7 @@ function toMenu() {
 	//Turn off canvas
 	gameRunning = false;
 	document.getElementById('canvas_holder').style.display = 'none';
+	document.getElementById('main_menu').style.display = 'block';
 }
 
 function died() {

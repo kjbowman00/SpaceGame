@@ -66,6 +66,9 @@ var update = function (deltaTime) {
 	//Handle collisions
 	collisions.updateCollisions(players, bullets, bulletsMarkedForExplosion, orbs.orbs, deltaTime);
 
+	//Handle powerup obj
+	powerups.updatePowerup(middlePowerup, players, deltaTime);
+
 	//Delete old bullets
 	for (let i = bulletsMarkedForDelete.length - 1; i >= 0; i--) {
 		bullets.delete(bulletsMarkedForDelete[i]);
@@ -106,6 +109,9 @@ var sendUpdates = function (io) {
 
 		//Exploded bullets
 		objectsToSend.bulletsMarkedForExplosion = bulletsMarkedForExplosion;
+
+		//Powerups
+		objectsToSend.powerups = [middlePowerup];
 
 		io.to(key).emit('state', { player: value, objects: objectsToSend });
 

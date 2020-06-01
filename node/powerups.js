@@ -24,7 +24,6 @@ var powerupObj = function (x, y, w, h) {
 	this.spawnTimer = 0;
 	this.contestTimeNeeded = CONTEST_TIME;
 	this.contestTimer = 0;
-	this.playerInside = null;
 }
 
 function intersects(rect1, rect2) {
@@ -45,8 +44,8 @@ function updatePowerup(powerup, players, deltaTime) {
 		let iterator = players.entries();
 		let player = iterator.next();
 		let playerCount = 0;
-		while (player != null) {
-			if (intersects(player, powerup)) {
+		while (player.value != undefined) {
+			if (intersects(player.value[1], powerup)) {
 				playerCount++;
 				powerup.playerInside = player;
 				if (playerCount > 1) {
@@ -65,9 +64,9 @@ function updatePowerup(powerup, players, deltaTime) {
 		}
 
 	} else {
-		powerup.spawnTime += deltaTime;
-		if (powerup.spawnTime >= powerup.spawnTimeNeeded) {
-			powerup.spawnTime = 0;
+		powerup.spawnTimer += deltaTime;
+		if (powerup.spawnTimer >= powerup.spawnTimeNeeded) {
+			powerup.spawnTimer = 0;
 			powerup.spawned = true;
 		}
 	}

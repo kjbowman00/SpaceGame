@@ -24,6 +24,21 @@ function displayPowerupObj(powerup, ctx) {
 		ctx.globalCompositeOperation = "lighter";
 		ctx.drawImage(image, Math.floor(powerup.x - camera.x), Math.floor(powerup.y - camera.y), powerup.w, powerup.h);
 
+		//draw box behind text
+		let drawX = Math.floor(powerup.x - camera.x + powerup.w / 2);
+		let drawY = Math.floor(powerup.y - camera.y - 25);
+		let tW = 8; //Text width
+		let tH = 12; //Text Height
+		let vertOffset = 20;
+		ctx.fillStyle = 'rgba(124, 124, 124, 0.5)';
+		let text = (powerup.contestTimeNeeded - powerup.contestTimer).toFixed(1) + "s";
+		ctx.fillRect(drawX - tW * text.length / 2 - 3, drawY - tH / 2 - 3, tW * text.length + 6, tH + 6);
+		ctx.globalCompositeOperation = "source-over";
+		ctx.fillStyle = "rgba(0, 0, 0, 0.7)";
+		ctx.font = "15px Arial Bold";
+		ctx.textAlign = "center";
+		ctx.fillText(text, drawX, drawY + tH / 2);
+
 		//Draw tint if contested or only one on it
 	} else {
 		let image = basePowerupImage;
@@ -38,12 +53,13 @@ function displayPowerupObj(powerup, ctx) {
 		let tH = 12; //Text Height
 		let vertOffset = 20;
 		ctx.fillStyle = 'rgba(124, 124, 124, 0.5)';
-		let text = Math.ceil(powerup.spawnTimeNeeded - powerup.spawnTimer).toString();
-		let textLength = text.length;
+		let text = (powerup.spawnTimeNeeded - powerup.spawnTimer).toFixed(1) + "s";
+		ctx.fillRect(drawX - tW * text.length / 2 - 3, drawY - tH / 2 - 3, tW * text.length + 6, tH + 6);
+		ctx.globalCompositeOperation = "source-over";
 		ctx.fillStyle = "rgba(0, 0, 0, 0.7)";
-		ctx.font = "12px Arial";
+		ctx.font = "15px Arial Bold";
 		ctx.textAlign = "center";
-		ctx.fillText(player.name, drawX + player.w / 2, drawY - vertOffset);
+		ctx.fillText(text, drawX, drawY + tH/2);
 	}
 
 }

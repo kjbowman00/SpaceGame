@@ -57,6 +57,10 @@ function updatePowerup(powerup, players, deltaTime) {
 			}
 			player = iterator.next();
 		}
+		if (playerCount == 0) {
+			powerup.playerInside = null;
+			powerup.contestTimer = 0;
+		}
 		//Only one player inside?
 		//Increment the timer
 		if (powerup.playerInside != null) {

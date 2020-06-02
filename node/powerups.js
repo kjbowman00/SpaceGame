@@ -9,7 +9,7 @@ const powerups = {
 };
 
 function getRandomPowerup() {
-	Math.floor(Math.random() * Object.keys(powerups).length);
+	return Math.floor(Math.random() * Object.keys(powerups).length);
 }
 
 var powerupObj = function (x, y, w, h) {

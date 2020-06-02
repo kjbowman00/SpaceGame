@@ -54,7 +54,7 @@ function socketStuff(formData) {
         worldObjsUpdated.bullets = new Map(data.objects.bullets);
         worldObjsUpdated.orbs = new Map(data.objects.orbs);
 
-        console.log(data.objects.powerups);
+        powerupObjs = data.objects.powerups;
 
         /*let bulletsToExplode = data.objects.bulletsMarkedForExplosion;
         for (let i = 0; i < bulletsToExplode.length; i++) {

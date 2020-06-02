@@ -14,6 +14,8 @@ worldObjsUpdated.players = new Map();
 worldObjsUpdated.bullets = new Map();
 worldObjsUpdated.orbs = new Map();
 
+var powerupObjs = [];
+
 var serverPlayerState = { x: 0, y: 0, xVel: 0, yVel: 0 };
 var lastInput = { xVel: 0, yVel: 0 };
 var lastInputTime = performance.now();
@@ -198,6 +200,11 @@ function draw() {
 			elem.trail.render(bCtx);
 		}
 	});
+
+	//Render powerups
+	for (let i = 0; i < powerupObjs.length; i++) {
+		displayPowerupObj(powerupObjs[i], bCtx);
+	}
 
 	//Draw gray overlay if dead
 	if (!alive) {

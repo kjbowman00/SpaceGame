@@ -40,6 +40,18 @@ function displayPowerupObj(powerup, ctx) {
 		ctx.fillText(text, drawX, drawY + tH / 2);
 
 		//Draw tint if contested or only one on it
+		if (powerup.playerInside !== undefined) {
+			console.log("NOT DEFINED");
+			if (powerup.playerInside == null) {
+				//Contested
+				console.log("CONTESTED");
+				ctx.fillStyle = 'rgba(100, 0, 0, 0.5)';
+				ctx.fillRect(Math.floor(powerup.x - camera.x), Math.floor(powerup.y - camera.y), powerup.w, powerup.h);
+			} else {
+				ctx.fillStyle = 'rgba(0, 100, 0, 0.5)';
+				ctx.fillRect(Math.floor(powerup.x - camera.x), Math.floor(powerup.y - camera.y), powerup.w, powerup.h);
+			}
+		}
 	} else {
 		let image = basePowerupImage;
 		ctx.drawImage(image, Math.floor(powerup.x - camera.x), Math.floor(powerup.y - camera.y), powerup.w, powerup.h);

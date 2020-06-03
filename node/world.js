@@ -196,6 +196,7 @@ function Player(name, x, y, color) {
 	this.gun.shotsRequested = 0;
 	this.gun.shotTimer = 0;
 	this.gun.shotTimeNeeded = 0.1; //Default fire rate
+	this.activePowerups = [];
 }
 
 var playerInput = function (socketID, input) {

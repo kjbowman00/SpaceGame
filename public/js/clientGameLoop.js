@@ -16,7 +16,7 @@ worldObjsUpdated.orbs = new Map();
 
 var powerupObjs = [];
 
-var serverPlayerState = { x: 0, y: 0, xVel: 0, yVel: 0 };
+var serverPlayerState = { x: 0, y: 0, xVel: 0, yVel: 0, activePowerups: [] };
 var lastInput = { xVel: 0, yVel: 0 };
 var lastInputTime = performance.now();
 
@@ -26,7 +26,8 @@ var trailTimer = 0;
 
 var player = {
 	x: 0, y: 0, w: 50, h: 50, oldX: 0, oldY: 0, xVel: 0, yVel: 0, name: "None", health: 100,
-	gun: { w: 50, h: 10, rotation: 0 }
+	gun: { w: 50, h: 10, rotation: 0 },
+	activePowerups: []
 };
 var playerSpeed = 250;
 var playerFireTimer = 0;

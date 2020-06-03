@@ -63,6 +63,10 @@ function socketStuff(formData) {
 
         serverPlayerState = data.player;
         player.health = serverPlayerState.health;
+
+        handleInitialPowerup(serverPlayerState);
+        player.activePowerups = serverPlayerState.activePowerups;
+
         lastInput.xVel = playerSpeed * xDir;
         lastInput.yVel = playerSpeed * yDir;
         //Send current input

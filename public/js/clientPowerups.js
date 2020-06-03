@@ -1,3 +1,4 @@
+var SUPER_TEST = {};
 const powerups = {
 	triShot: 0,
 	superSpeed: 1,
@@ -41,10 +42,8 @@ function displayPowerupObj(powerup, ctx) {
 
 		//Draw tint if contested or only one on it
 		if (powerup.playerInside !== undefined) {
-			console.log("NOT DEFINED");
 			if (powerup.playerInside == null) {
 				//Contested
-				console.log("CONTESTED");
 				ctx.fillStyle = 'rgba(100, 0, 0, 0.5)';
 				ctx.fillRect(Math.floor(powerup.x - camera.x), Math.floor(powerup.y - camera.y), powerup.w, powerup.h);
 			} else {
@@ -73,5 +72,36 @@ function displayPowerupObj(powerup, ctx) {
 		ctx.textAlign = "center";
 		ctx.fillText(text, drawX, drawY + tH/2);
 	}
+}
 
+function handleInitialPowerup(playerState) {
+	//Goes through new player state and old player state to determine if new powerups are active
+	//If they are, play a sound and animation
+	let newPowerups = playerState.activePowerups;
+	let oldPowerups = player.activePowerups;
+	SUPER_TEST = { n: newPowerups, o: oldPowerups };
+	for (let i = 0; i < newPowerups.length; i++) {
+		let newPowerup = newPowerups[i];
+		let previousPowerup = null;
+
+		//Check if we already had this powerup active
+		for (let j = 0; j < oldPowerups.length; j++) {
+			if (newPowerup.powerupType == oldPowerups[j].powerupType) {
+				previousPowerup = oldPowerups[j];
+			}
+		}
+		if (previousPowerup != null) {
+			if (newPowerup.timeLeft > previousPowerup.timeLeft) {
+				//Powerup was RE-activated
+				console.log("POWERUP REACTIVATED");
+				console.log(newPowerup);
+			}
+		} else {
+			//Powerup activated
+			//Play sound, animation
+			console.log("POWERUP ACTIVATED");
+			console.log(newPowerup);
+			Sounds.playPowerup(newPowerup.type);
+		}
+	}
 }

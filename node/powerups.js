@@ -47,7 +47,7 @@ function updatePowerup(powerup, players, deltaTime) {
 		while (player.value != undefined) {
 			if (intersects(player.value[1], powerup)) {
 				playerCount++;
-				powerup.playerInside = player;
+				powerup.playerInside = player.value[0];
 				if (playerCount > 1) {
 					//Reset timer
 					powerup.contestTimer = 0;
@@ -67,6 +67,15 @@ function updatePowerup(powerup, players, deltaTime) {
 			powerup.contestTimer += deltaTime;
 		}
 
+		//Handle player getting the powerup
+		if (powerup.contestTimer >= powerup.contestTimeNeeded && powerup.playerInside != undefined) {
+			powerup.spawned = false;
+			powerup.contestTimer = 0;
+			powerup.spawnTimer = 0;
+			powerup.powerupType = getRandomPowerup();
+			console.log("PLAYER GOT POWERUP");
+			players.get(powerup.playerInside).activePowerups.push({ type: powerup.powerupType, timeLeft: 15 });
+		}
 	} else {
 		powerup.spawnTimer += deltaTime;
 		if (powerup.spawnTimer >= powerup.spawnTimeNeeded) {

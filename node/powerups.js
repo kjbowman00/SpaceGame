@@ -72,7 +72,25 @@ function updatePowerup(powerup, players, deltaTime) {
 			powerup.spawned = false;
 			powerup.contestTimer = 0;
 			powerup.spawnTimer = 0;
-			players.get(powerup.playerInside).activePowerups.push({ type: powerup.powerupType, timeLeft: 15 });
+			let powerupList = players.get(powerup.playerInside).activePowerups;
+
+			//Handle if player already has the powerup active (just reset the timer)
+			let alreadyHas = false;
+			console.log(powerup.powerupType);
+			for (let i = 0; i < powerupList.length; i++) {
+				console.log(powerupList[i]);
+				if (powerupList[i].type == powerup.powerupType) {
+					alreadyHas = true;
+					powerupList[i].timeLeft = 15;
+					console.log("already had it!");
+				}
+			}
+			if (!alreadyHas) {
+				//Add the powerup if the player doesn't have it
+				console.log("They didn't have it");
+				powerupList.push({ type: powerup.powerupType, timeLeft: 15 });
+			}
+
 			powerup.powerupType = getRandomPowerup();
 		}
 	} else {

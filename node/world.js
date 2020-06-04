@@ -48,7 +48,20 @@ var update = function (deltaTime) {
 				currentPlayer.gun.shotsRequested--;
 			} else currentPlayer.gun.shotTimer += deltaTime;
 
-			if (currentPlayer.health <= 0) currentPlayer.alive = false;
+			//Remove old powerups
+			for (let i = currentPlayer.activePowerups.length - 1; i >= 0; i--) {
+				let currentPowerup = currentPlayer.activePowerups[i];
+				currentPowerup.timeLeft -= deltaTime;
+				if (currentPowerup.timeLeft <= 0) {
+					currentPlayer.activePowerups.splice(i, 1);
+				}
+			}
+
+			if (currentPlayer.health <= 0) {
+				currentPlayer.alive = false;
+				//Remove items/powerups
+				currenPlayer.activePowerups = [];
+			}
 		}
 	}); //END update player positions
 

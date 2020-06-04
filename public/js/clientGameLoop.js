@@ -41,12 +41,24 @@ function lerp(n1, n2, amt) {
 	return (n2-n1) * amt + n1;
 }
 
+function isPowerupActive(type, player) {
+	let activePowerups = player.activePowerups;
+	for (let i = activePowerups.length - 1; i >= 0; i--) {
+		if (activePowerups[i].type == type) return true;
+	}
+	return false;
+}
+
 function update() {
 	if (alive && player.health <= 0) died();
 	updateCamera();
 	var deltaServer = (performance.now() - lastInputTime) / 1000;
 
 	if (alive) {
+		//Get powerup for superspeed
+		let velocityMod = 1;
+		if (isPowerupActive(powerups.superSpeed, player)) velocityMod = 1.8;
+
 		player.oldX = player.x;
 		player.oldY = player.y;
 		//Update player position

@@ -122,7 +122,13 @@ function displayActivePowerups(activePowerups, ctx) {
 		ctx.fillStyle = "rgba(0, 0, 0, 0.7)";
 		ctx.font = "15px Arial Bold";
 		ctx.textAlign = "center";
-		let text = currentPowerup.timeLeft.toFixed(1) + "s";
+		let text = "";
+		if (currentPowerup.timeLeft > 0) {
+			text = currentPowerup.timeLeft.toFixed(1) + "s";
+		}
+		else {
+			text = "0s";
+		}
 		ctx.fillText(text, x + imgWidth + width / 2, y + height / 2 + 7);
 
 		y += height;

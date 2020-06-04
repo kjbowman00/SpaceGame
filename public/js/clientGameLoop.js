@@ -169,6 +169,7 @@ function draw() {
 
 	if (alive) {
 		drawPlayer(player, ctx, bCtx);
+		displayActivePowerups(player.activePowerups, ctx);
 	}
 
 	//Draw world objects (other players, bullets)

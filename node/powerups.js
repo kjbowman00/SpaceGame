@@ -72,9 +72,8 @@ function updatePowerup(powerup, players, deltaTime) {
 			powerup.spawned = false;
 			powerup.contestTimer = 0;
 			powerup.spawnTimer = 0;
-			powerup.powerupType = getRandomPowerup();
-			console.log("PLAYER GOT POWERUP");
 			players.get(powerup.playerInside).activePowerups.push({ type: powerup.powerupType, timeLeft: 15 });
+			powerup.powerupType = getRandomPowerup();
 		}
 	} else {
 		powerup.spawnTimer += deltaTime;

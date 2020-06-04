@@ -105,3 +105,26 @@ function handleInitialPowerup(playerState) {
 		}
 	}
 }
+
+function displayActivePowerups(activePowerups, ctx) {
+	let x = 25;
+	let y = 25;
+	const width = 50;
+	const height = 50;
+	const imgWidth = 50;
+	const imgHeight = 50;
+	for (let i = 0; i < activePowerups.length; i++) {
+		let currentPowerup = activePowerups[i];
+		let image = powerupImages[currentPowerup.type];
+		ctx.drawImage(image, x, y, imgWidth, imgHeight);
+		ctx.fillStyle = 'rgba(124, 124, 124, 0.5)';
+		ctx.fillRect(x + imgWidth, y, width, height);
+		ctx.fillStyle = "rgba(0, 0, 0, 0.7)";
+		ctx.font = "15px Arial Bold";
+		ctx.textAlign = "center";
+		let text = currentPowerup.timeLeft.toFixed(1) + "s";
+		ctx.fillText(text, x + imgWidth + width / 2, y + height / 2 + 7);
+
+		y += height;
+	}
+}

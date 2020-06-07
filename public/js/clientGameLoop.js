@@ -223,6 +223,8 @@ function draw() {
 		displayPowerupObj(powerupObjs[i], bCtx);
 	}
 
+	displayLeaderboard(ctx);
+
 	//Draw gray overlay if dead
 	if (!alive) {
 		if (fadeTimer < fadeTime) fadeTimer += deltaTime;

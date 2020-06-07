@@ -9,7 +9,7 @@ function drawPlayerInfo(player, ctx) {
 	ctx.fillStyle = 'rgba(124, 124, 124, 0.5)';
 	let nameLength = player.name.length;
 	ctx.fillRect(drawX + (player.w / 2) - (tW * nameLength / 2), drawY - vertOffset - tH, nameLength * tW, tH + 5);
-	ctx.fillStyle = "rgba(0, 0, 0, 0.7)";
+	ctx.fillStyle = "rgba(255, 255, 255, 0.8)";
 	ctx.font = "12px Arial";
 	ctx.textAlign = "center";
 	ctx.fillText(player.name, drawX + player.w / 2, drawY - vertOffset);

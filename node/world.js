@@ -10,6 +10,8 @@ var worldObj = {
 var orbs = require('./orb.js');
 orbs.initializeOrbs(worldObj, staticWorldObjs);
 
+var leaderboard = require('./leaderboard.js');
+
 var powerups = require('./powerups.js');
 var middlePowerup = new powerups.powerupObj(-50, -50, 100, 100);
 
@@ -109,6 +111,13 @@ var update = function (deltaTime) {
 
 			if (currentPlayer.health <= 0) {
 				currentPlayer.alive = false;
+
+				//Reward killing player
+				let killingPlayer = players.get(currentPlayer.lastDamagedBy);
+				if (killingPlayer != undefined) {
+					killingPlayer.kills++;
+				}
+
 				//Remove items/powerups
 				currentPlayer.activePowerups = [];
 			}
@@ -147,6 +156,8 @@ function isPowerupActive(type, player) {
 }
 
 var sendUpdates = function (io) {
+	let leaderboardToSend = leaderboard.getTop10(players);
+
 	const DIST_NEEDED = 1000000;
 	players.forEach((value, key, map) => {
 		//Key is socketid. //value is player object
@@ -184,7 +195,7 @@ var sendUpdates = function (io) {
 		//Powerups
 		objectsToSend.powerups = [middlePowerup];
 
-		io.to(key).emit('state', { player: value, objects: objectsToSend });
+		io.to(key).emit('state', { player: value, objects: objectsToSend, leaderboard: leaderboardToSend });
 
 		bulletsMarkedForExplosion.length = 0; //Delete contents of explosion array
 	});
@@ -268,6 +279,8 @@ function Player(name, x, y, color) {
 	this.gun.shotTimer = 0;
 	this.gun.shotTimeNeeded = 0.1; //Default fire rate
 	this.activePowerups = [];
+	this.kills = 0;
+	this.lastDamagedBy = undefined;
 }
 
 var playerInput = function (socketID, input) {

@@ -4,10 +4,19 @@ var worldObj;
 var staticWorldObjs;
 
 const ORB_WIDTH = 20;
-const ORB_CAPACITY = 1000;
+const ORB_CAPACITY = 750;
 
 function update(deltaTime) {
 	//Add new orbs if not at capacity
+	if (orbs.size < ORB_CAPACITY) {
+		//get difference and add random amount
+		let diff = ORB_CAPACITY - orbs.size;
+		let numToAdd = Math.floor(Math.random() * diff);
+
+		for (let i = 0; i < numToAdd; i++) {
+			addOrb();
+		}
+	}
 
 	//Update orbs positions
 	orbs.forEach((orb, id, map) => {

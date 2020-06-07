@@ -9,7 +9,6 @@ const powerups = {
 };
 
 function getRandomPowerup() {
-	return powerups.overcharge;
 	return Math.floor(Math.random() * Object.keys(powerups).length);
 }
 

@@ -105,7 +105,7 @@ var update = function (deltaTime) {
 			if (currentPlayer.health <= 0) {
 				currentPlayer.alive = false;
 				//Remove items/powerups
-				currenPlayer.activePowerups = [];
+				currentPlayer.activePowerups = [];
 			}
 		}
 	}); //END update player positions

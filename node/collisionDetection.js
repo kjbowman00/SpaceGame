@@ -75,8 +75,12 @@ function handleBulletCollision(players, bullets, bulletsMarkedForExplosion, delt
 	players.forEach((player, playerId, playerMap) => {
 		bullets.forEach((bullet, bulletId, bulletMap) => {
 			if (bulletCollide(player, bullet) && bullet.playerEmitId != playerId) {
+				if (isPowerupActive(2, player)) { //CHECK if juggernaut enabled
+					player.health -= bullet.damage / 4; // Cut damage in 4ths if juggernaut enabled
+				} else {
+					player.health -= bullet.damage;
+				}
 				//Blow up and damage player
-				player.health -= bullet.damage;
 				bulletsMarkedForExplosion.push(bulletId); //used so the player can make animation
 			}
 		});
@@ -85,6 +89,14 @@ function handleBulletCollision(players, bullets, bulletsMarkedForExplosion, delt
 	for (let i = 0; i < bulletsMarkedForExplosion.length; i++) {
 		bullets.delete(bulletsMarkedForExplosion[i]);
 	}
+}
+
+function isPowerupActive(type, player) {
+	let activePowerups = player.activePowerups;
+	for (let i = activePowerups.length - 1; i >= 0; i--) {
+		if (activePowerups[i].type == type) return true;
+	}
+	return false;
 }
 
 function handleOrbCollision(players, orbs) {

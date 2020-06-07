@@ -19,7 +19,7 @@ var powerupObj = function (x, y, w, h) {
 	this.w = w;
 	this.h = h;
 	this.spawned = false;
-	this.playerInside = null;
+	this.playerInside = undefined;
 	this.powerupType = getRandomPowerup();
 	this.spawnTimeNeeded = SPAWN_TIME;
 	this.spawnTimer = 0;
@@ -93,6 +93,7 @@ function updatePowerup(powerup, players, deltaTime) {
 			}
 
 			powerup.powerupType = getRandomPowerup();
+			powerup.playerInside = undefined;
 		}
 	} else {
 		powerup.spawnTimer += deltaTime;

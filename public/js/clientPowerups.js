@@ -47,6 +47,7 @@ function displayPowerupObj(powerup, ctx) {
 				ctx.fillStyle = 'rgba(100, 0, 0, 0.5)';
 				ctx.fillRect(Math.floor(powerup.x - camera.x), Math.floor(powerup.y - camera.y), powerup.w, powerup.h);
 			} else {
+				console.log(powerup);
 				ctx.fillStyle = 'rgba(0, 100, 0, 0.5)';
 				ctx.fillRect(Math.floor(powerup.x - camera.x), Math.floor(powerup.y - camera.y), powerup.w, powerup.h);
 			}

@@ -80,9 +80,12 @@ function update() {
 		let centerY = Math.round(player.y) - camera.y + player.h / 2;
 		player.gun.rotation = Math.atan2(Mouse.cameraY - centerY, Mouse.cameraX - centerX);
 
+		let fireTimeMod = 1;
+		if (isPowerupActive(powerups.overcharge, player)) fireTimeMod = 0.5;
+
 		//Fire gun
 		playerFireTimer += deltaTime;
-		if (Mouse.pressed && playerFireTimer >= playerFireTimeNeeded) {
+		if (Mouse.pressed && playerFireTimer >= playerFireTimeNeeded * fireTimeMod) {
 			playerFireTimer = 0;
 			sendBullet();
 			Sounds.playLaser();

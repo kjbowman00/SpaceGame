@@ -27,7 +27,8 @@ var trailTimer = 0;
 var player = {
 	x: 0, y: 0, w: 50, h: 50, oldX: 0, oldY: 0, xVel: 0, yVel: 0, name: "None", health: 100,
 	gun: { w: 50, h: 10, rotation: 0 },
-	activePowerups: []
+	activePowerups: [],
+	orbs: 0, kills: 0
 };
 var playerSpeed = 250;
 var playerFireTimer = 0;
@@ -224,6 +225,7 @@ function draw() {
 	}
 
 	displayLeaderboard(ctx);
+	drawTopInfoBar(ctx);
 
 	//Draw gray overlay if dead
 	if (!alive) {

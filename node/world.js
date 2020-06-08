@@ -280,6 +280,7 @@ function Player(name, x, y, color) {
 	this.gun.shotTimeNeeded = 0.1; //Default fire rate
 	this.activePowerups = [];
 	this.kills = 0;
+	this.orbs = 0;
 	this.lastDamagedBy = undefined;
 }
 

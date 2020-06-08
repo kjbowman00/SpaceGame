@@ -10,6 +10,30 @@ html, body {
 	height:100%;
 }
 
+#username {
+	padding:5px;
+	margin:5px;
+	background-color:black;
+	border:solid 2px red;
+	color:white;
+}
+#server_selection_input {
+	margin:5px;
+	padding: 5px;
+	background-color:black;
+	width:70%;
+	color:white;
+	border:solid 2px red;
+}
+#name_form_submit {
+	margin:5px;
+	padding:5px;
+	width:70%;
+	background-color:black;
+	border:solid 2px red;
+	color:white;
+}
+
 #canvas_holder {
 	position: absolute;
 	display:none;

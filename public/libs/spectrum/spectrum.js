@@ -54,7 +54,7 @@
         containerClassName: "",
         replacerClassName: "",
         showAlpha: false,
-        theme: "sp-light",
+        theme: "sp-dark",
         palette: [["#ffffff", "#000000", "#ff0000", "#ff8000", "#ffff00", "#008000", "#0000ff", "#4b0082", "#9400d3"]],
         selectionPalette: [],
         disabled: false,

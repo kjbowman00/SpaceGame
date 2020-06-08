@@ -19,14 +19,16 @@
 		<div id="form_box">
 			<img id="title_screen_image" src="/images/titleScreen.png" />
 			<form id="name_form" autocomplete="off" action="none">
-				<input type="text" id="username" name="username" placeholder="Enter Name:">
-				<input type='text' id="color_picker" /><br />
+				<div>
+					<input type="text" id="username" name="username" placeholder="Enter Name:">
+					<input type='text' id="color_picker" />
+				</div><br />
 				<script src="js/color_picker.js"></script>
-				<select name="server">
+				<select name="server" id="server_selection_input">
 					<option value="game1">Game 1: N Players</option>
 					<option value="game2">Game 2: N Players</option>
-				</select><br>
-				<input type="submit">
+				</select><br />
+				<input id="name_form_submit" type="submit" value="Play">
 			</form>
 		</div>
 	</div>

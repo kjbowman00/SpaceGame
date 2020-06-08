@@ -8,6 +8,7 @@ let colorPalette = [
 $("#color_picker").spectrum({
     showPaletteOnly: true,
     showPalette: true,
+    theme: "sp-dark",
     hideAfterPaletteSelect: true,
     color: 'red',
     preferredFormat: "hex",

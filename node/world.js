@@ -12,6 +12,8 @@ orbs.initializeOrbs(worldObj, staticWorldObjs);
 
 var leaderboard = require('./leaderboard.js');
 
+var upgrades = require('./upgrades.js');
+
 var powerups = require('./powerups.js');
 var middlePowerup = new powerups.powerupObj(-50, -50, 100, 100);
 
@@ -282,6 +284,7 @@ function Player(name, x, y, color) {
 	this.kills = 0;
 	this.orbs = 0;
 	this.lastDamagedBy = undefined;
+	this.upgrades = new Array(Object.keys(upgrades.UPGRADE_TYPES).length).fill(0); //[0, 0, 0, ...]
 }
 
 var playerInput = function (socketID, input) {

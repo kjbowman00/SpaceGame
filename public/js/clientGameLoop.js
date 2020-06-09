@@ -28,7 +28,8 @@ var player = {
 	x: 0, y: 0, w: 50, h: 50, oldX: 0, oldY: 0, xVel: 0, yVel: 0, name: "None", health: 100,
 	gun: { w: 50, h: 10, rotation: 0 },
 	activePowerups: [],
-	orbs: 0, kills: 0
+	orbs: 0, kills: 0,
+	upgrades:[0,0,0,0,0,0,0]
 };
 var playerSpeed = 250;
 var playerFireTimer = 0;
@@ -58,7 +59,9 @@ function update() {
 	if (alive) {
 		//Get powerup for superspeed
 		let velocityMod = 1;
-		if (isPowerupActive(powerups.superSpeed, player)) velocityMod = 1.8;
+		if (isPowerupActive(powerups.superSpeed, player)) velocityMod += .8;
+		velocityMod += player.upgrades[1] * 0.25;
+		console.log(velocityMod);
 
 		player.oldX = player.x;
 		player.oldY = player.y;

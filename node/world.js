@@ -31,7 +31,8 @@ var update = function (deltaTime) {
 			//Get powerup mods
 			let velocityMod = 1;
 			if (isPowerupActive(powerups.powerups.superSpeed, currentPlayer)) velocityMod += 0.8;
-			//velocityMod += currentPlayer.upgrades[upgrades.UPGRADE_TYPES.speed] * 0.2;
+			velocityMod += currentPlayer.upgrades[upgrades.UPGRADE_TYPES.speed] * 0.25;
+			console.log(velocityMod);
 
 			//Update old positions
 			currentPlayer.oldX = currentPlayer.x;

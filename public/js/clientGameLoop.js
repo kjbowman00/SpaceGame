@@ -226,6 +226,7 @@ function draw() {
 
 	displayLeaderboard(ctx);
 	drawTopInfoBar(ctx);
+	drawUpgrades(ctx);
 
 	//Draw gray overlay if dead
 	if (!alive) {

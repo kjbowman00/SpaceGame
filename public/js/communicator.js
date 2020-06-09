@@ -68,6 +68,8 @@ function socketStuff(formData) {
         player.health = serverPlayerState.health;
         player.orbs = serverPlayerState.orbs;
         player.kills = serverPlayerState.kills;
+        player.levelUpInProgress = serverPlayerState.levelUpInProgress;
+        player.upgradesAvailable = serverPlayerState.upgradesAvailable;
 
         handleInitialPowerup(serverPlayerState);
         player.activePowerups = serverPlayerState.activePowerups;

@@ -19,10 +19,12 @@ const UPGRADE_PROBABILITIES = [ //Should add to 1
 ];
 
 //Get what types of upgrades are available to the player on levelup
-function getUpgradeSet() {
+function getUpgradeSet(player) {
 	return [0, 1];
 }
 
 
 
 exports.UPGRADE_TYPES = UPGRADE_TYPES;
+exports.AMOUNT_TO_UPGRADE = AMOUNT_TO_UPGRADE;
+exports.getUpgradeSet = getUpgradeSet;

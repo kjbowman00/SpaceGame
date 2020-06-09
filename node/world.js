@@ -30,7 +30,8 @@ var update = function (deltaTime) {
 		if (currentPlayer.alive) {
 			//Get powerup mods
 			let velocityMod = 1;
-			if (isPowerupActive(powerups.powerups.superSpeed, currentPlayer)) velocityMod = 1.8;
+			if (isPowerupActive(powerups.powerups.superSpeed, currentPlayer)) velocityMod += 0.8;
+			//velocityMod += currentPlayer.upgrades[upgrades.UPGRADE_TYPES.speed] * 0.2;
 
 			//Update old positions
 			currentPlayer.oldX = currentPlayer.x;
@@ -124,6 +125,15 @@ var update = function (deltaTime) {
 				currentPlayer.activePowerups = [];
 			}
 		}
+
+		//Determine if player should be leveled up
+		if (!currentPlayer.levelUpInProgress) {
+			if (currentPlayer.orbs >= upgrades.AMOUNT_TO_UPGRADE[currentPlayer.level]) {
+				//Level up!
+				currentPlayer.levelUpInProgress = true;
+				currentPlayer.availableUpgrades = upgrades.getUpgradeSet(currentPlayer);
+			}
+		}
 	}); //END update player positions
 
 	let bulletsMarkedForDelete = [];
@@ -204,7 +214,6 @@ var sendUpdates = function (io) {
 }
 
 function getRandomSpawn() {
-	return { x: 0, y: 0 };
 	const smallW = worldObj.width / 4;
 	const smallH = worldObj.height / 4;
 	const halfW = worldObj.width / 2;
@@ -285,6 +294,9 @@ function Player(name, x, y, color) {
 	this.orbs = 0;
 	this.lastDamagedBy = undefined;
 	this.upgrades = new Array(Object.keys(upgrades.UPGRADE_TYPES).length).fill(0); //[0, 0, 0, ...]
+	this.levelUpInProgress = false;
+	this.level = 0;
+	this.availableUpgrades = [];
 }
 
 var playerInput = function (socketID, input) {

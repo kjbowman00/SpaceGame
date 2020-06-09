@@ -4,7 +4,7 @@ function drawTopInfoBar(ctx) {
 	ctx.fillText("Kills: " + player.kills, canvas.width / 3, 25);
 
 	ctx.fillText("Orbs: " + player.orbs, canvas.width * 1.5 / 3, 25);
-	ctx.fillText("Orbs for upgrade: 50", canvas.width * 2 / 3, 25);
+	ctx.fillText("Orbs for upgrade: " + player.orbsToUpgrade, canvas.width * 2 / 3, 25);
 }
 
 

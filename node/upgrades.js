@@ -20,16 +20,17 @@ const UPGRADE_PROBABILITIES = [ //Should add to 1
 
 //Get what types of upgrades are available to the player on levelup
 function getUpgradeSet(player) {
-	return [0, 1];
+	return [0, 1, 3];
 }
 
-function upgradePlayer(player) {
+function upgradePlayer(player, selection) {
 	player.orbs -= AMOUNT_TO_UPGRADE[player.level];
 	player.levelUpInProgress = false;
 	player.level += 1;
 
 	//Add to their upgrades
-
+	let upgradeType = player.availableUpgrades[selection];
+	player.upgrades[upgradeType] += 1;
 }
 
 

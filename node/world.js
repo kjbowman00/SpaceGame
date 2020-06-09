@@ -331,7 +331,7 @@ var playerShot = function (socketID) {
 var upgradePlayer = function (socketID, upgradeNum) {
 	let player = players.get(socketID);
 	if (player !== undefined && player.alive && player.levelUpInProgress) {
-		upgrades.upgradePlayer(player);
+		upgrades.upgradePlayer(player, upgradeNum);
 	}
 }
 

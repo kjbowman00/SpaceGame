@@ -11,7 +11,7 @@ const UPGRADE_TYPES = {
 };
 
 const AMOUNT_TO_UPGRADE = [
-	25, 50, 50, 75, 75, "N/A"
+	3, 50, 50, 75, 75, "N/A"
 ];
 
 const UPGRADE_PROBABILITIES = [ //Should add to 1
@@ -23,8 +23,18 @@ function getUpgradeSet(player) {
 	return [0, 1];
 }
 
+function upgradePlayer(player) {
+	player.orbs -= AMOUNT_TO_UPGRADE[player.level];
+	player.levelUpInProgress = false;
+	player.level += 1;
+
+	//Add to their upgrades
+
+}
+
 
 
 exports.UPGRADE_TYPES = UPGRADE_TYPES;
 exports.AMOUNT_TO_UPGRADE = AMOUNT_TO_UPGRADE;
 exports.getUpgradeSet = getUpgradeSet;
+exports.upgradePlayer = upgradePlayer;

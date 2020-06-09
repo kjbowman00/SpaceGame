@@ -55,6 +55,18 @@ io.on('connection', function(socket) {
     socket.on('player_shot', function (data) {
         gameLoop.world.playerShot(socket.id);
     });
+
+    socket.on('upgrade_request', function (data) {
+        //Check if integer
+        //Check if valid upgrade int
+        console.log(data);
+        if (Number.isInteger(data)) {
+            if (data >= 0 && data < 3) {
+                gameLoop.world.upgradePlayer(socket.id, data);
+            }
+        }
+    });
+
     socket.on('disconnect', function () {
         gameLoop.world.removePlayer(socket.id);
     });

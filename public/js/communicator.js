@@ -94,3 +94,7 @@ function socketStuff(formData) {
 function sendBullet() {
     socket.emit('player_shot');
 }
+
+function sendUpgradeRequest(upgradeNum) {
+    socket.emit('upgrade_request', upgradeNum);
+}

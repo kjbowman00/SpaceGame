@@ -328,6 +328,13 @@ var playerShot = function (socketID) {
 	}
 }
 
+var upgradePlayer = function (socketID, upgradeNum) {
+	let player = players.get(socketID);
+	if (player !== undefined && player.alive && player.levelUpInProgress) {
+		upgrades.upgradePlayer(player);
+	}
+}
+
 exports.requestRespawn = requestRespawn;
 exports.playerShot = playerShot;
 exports.addPlayer = addPlayer;
@@ -336,3 +343,4 @@ exports.update = update;
 exports.sendUpdates = sendUpdates;
 exports.playerInput = playerInput;
 exports.worldObj = worldObj;
+exports.upgradePlayer = upgradePlayer;

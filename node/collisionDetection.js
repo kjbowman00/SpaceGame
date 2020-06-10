@@ -81,6 +81,7 @@ function handleBulletCollision(players, bullets, bulletsMarkedForExplosion, delt
 					player.health -= bullet.damage;
 				}
 				player.lastDamagedBy = bullet.playerEmitId;
+				player.regenStartTimer = 0;
 				//Blow up and damage player
 				bulletsMarkedForExplosion.push(bulletId); //used so the player can make animation
 			}

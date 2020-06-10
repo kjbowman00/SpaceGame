@@ -25,7 +25,7 @@ var lastUpdateTime = 0;
 var trailTimer = 0;
 
 var player = {
-	x: 0, y: 0, w: 50, h: 50, oldX: 0, oldY: 0, xVel: 0, yVel: 0, name: "None", health: 100,
+	x: 0, y: 0, w: 50, h: 50, oldX: 0, oldY: 0, xVel: 0, yVel: 0, name: "None", health: 100, maxHealth:100,
 	gun: { w: 50, h: 10, rotation: 0 },
 	activePowerups: [],
 	orbs: 0, kills: 0,

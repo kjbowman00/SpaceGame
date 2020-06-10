@@ -32,16 +32,15 @@ var update = function (deltaTime) {
 		if (currentPlayer.alive) {
 			currentPlayer.regenStartTimer += deltaTime;
 			if (currentPlayer.regenStartTimer > REGEN_START_TIME) {
-				currentPlayer.health += deltaTime * 10; //10 health per second
-				let maxHealth = 100 + currentPlayer.upgrades[upgrades.UPGRADE_TYPES.health] * 20;
-				if (currentPlayer.health > maxHealth) currentPlayer.health = maxHealth;
+				currentPlayer.health += deltaTime * 5; //5 health per second
+				if (currentPlayer.health > currentPlayer.maxHealth) currentPlayer.health = currentPlayer.maxHealth;
+				console.log(currentPlayer.maxHealth);
 			}
 
 			//Get powerup mods
 			let velocityMod = 1;
 			if (isPowerupActive(powerups.powerups.superSpeed, currentPlayer)) velocityMod += 0.8;
 			velocityMod += currentPlayer.upgrades[upgrades.UPGRADE_TYPES.speed] * 0.25;
-			console.log(velocityMod);
 
 			//Update old positions
 			currentPlayer.oldX = currentPlayer.x;
@@ -291,6 +290,7 @@ function Player(name, x, y, color) {
 	this.xVel = 0;
 	this.yVel = 0;
 	this.health = 100;
+	this.maxHealth = 100;
 	this.alive = true;
 	this.gun = {};
 	this.gun.rotation = 0;
@@ -308,6 +308,7 @@ function Player(name, x, y, color) {
 	this.level = 0;
 	this.availableUpgrades = [];
 	this.regenStartTimer = 0;
+	this.orbsToUpgrade = upgrades.AMOUNT_TO_UPGRADE[0];
 }
 
 var playerInput = function (socketID, input) {

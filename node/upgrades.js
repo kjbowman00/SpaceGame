@@ -27,9 +27,14 @@ function upgradePlayer(player, selection) {
 	player.orbs -= AMOUNT_TO_UPGRADE[player.level];
 	player.levelUpInProgress = false;
 	player.level += 1;
+	player.orbsToUpgrade = AMOUNT_TO_UPGRADE[player.level];
 
 	//Add to their upgrades
 	let upgradeType = player.availableUpgrades[selection];
+
+	//Handle things that need to be changed once
+	if (upgradeType == UPGRADE_TYPES.health) player.maxHealth += 20;
+
 	player.upgrades[upgradeType] += 1;
 }
 

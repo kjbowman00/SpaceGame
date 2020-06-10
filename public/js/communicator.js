@@ -67,7 +67,9 @@ function socketStuff(formData) {
         serverPlayerState = data.player;
         player.health = serverPlayerState.health;
         player.orbs = serverPlayerState.orbs;
+        player.orbsToUpgrade = serverPlayerState.orbsToUpgrade;
         player.kills = serverPlayerState.kills;
+        player.maxHealth = serverPlayerState.maxHealth;
         player.levelUpInProgress = serverPlayerState.levelUpInProgress;
         player.upgradesAvailable = serverPlayerState.upgradesAvailable;
         player.upgrades = serverPlayerState.upgrades; //Remove later so we're not constantly sending this same with above

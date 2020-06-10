@@ -85,11 +85,12 @@ function update() {
 		player.gun.rotation = Math.atan2(Mouse.cameraY - centerY, Mouse.cameraX - centerX);
 
 		let fireTimeMod = 1;
-		if (isPowerupActive(powerups.overcharge, player)) fireTimeMod = 0.5;
+		if (isPowerupActive(powerups.overcharge, player)) fireTimeMod *= 2;
+		fireTimeMod += 0.2 * player.upgrades[2];
 
 		//Fire gun
 		playerFireTimer += deltaTime;
-		if (Mouse.pressed && playerFireTimer >= playerFireTimeNeeded * fireTimeMod) {
+		if (Mouse.pressed && playerFireTimer >= playerFireTimeNeeded / fireTimeMod) {
 			playerFireTimer = 0;
 			sendBullet();
 			Sounds.playLaser();

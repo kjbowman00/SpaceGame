@@ -51,11 +51,12 @@ var update = function (deltaTime) {
 
 			let shotTimeMod = 1;
 			if (isPowerupActive(powerups.powerups.overcharge, currentPlayer)) {
-				shotTimeMod = 0.5;
+				shotTimeMod *= 2;
 			}
+			shotTimeMod += 0.2 * currentPlayer.upgrades[upgrades.UPGRADE_TYPES.fire_rate];
 
 			//Handle player shooting
-			if (currentPlayer.gun.shotsRequested > 0 && currentPlayer.gun.shotTimer >= currentPlayer.gun.shotTimeNeeded*shotTimeMod - 0.03) {
+			if (currentPlayer.gun.shotsRequested > 0 && currentPlayer.gun.shotTimer >= currentPlayer.gun.shotTimeNeeded / shotTimeMod - 0.03) {
 				if (isPowerupActive(powerups.powerups.triShot, currentPlayer)) {
 					//TRI shot powerup is active
 					let spreadAngle = 0.44; //radians

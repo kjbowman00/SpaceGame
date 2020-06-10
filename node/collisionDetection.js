@@ -75,11 +75,15 @@ function handleBulletCollision(players, bullets, bulletsMarkedForExplosion, delt
 	players.forEach((player, playerId, playerMap) => {
 		bullets.forEach((bullet, bulletId, bulletMap) => {
 			if (bulletCollide(player, bullet) && bullet.playerEmitId != playerId) {
+				let armor = 0;
 				if (isPowerupActive(2, player)) { //CHECK if juggernaut enabled
-					player.health -= bullet.damage / 4; // Cut damage in 4ths if juggernaut enabled
-				} else {
-					player.health -= bullet.damage;
+					armor += 0.5;
 				}
+				armor += 0.05 * player.upgrades[4]; //Armor
+
+				let damage = bullet.damage - bullet.damage * armor;
+				player.health -= damage;
+
 				player.lastDamagedBy = bullet.playerEmitId;
 				player.regenStartTimer = 0;
 				//Blow up and damage player

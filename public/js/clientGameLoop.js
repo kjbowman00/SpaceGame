@@ -29,7 +29,8 @@ var player = {
 	gun: { w: 50, h: 10, rotation: 0 },
 	activePowerups: [],
 	orbs: 0, kills: 0,
-	upgrades:[0,0,0,0,0,0,0]
+	upgrades: [0, 0, 0, 0, 0, 0, 0],
+	availableUpgrades:[0,0,0]
 };
 var playerSpeed = 250;
 var playerFireTimer = 0;

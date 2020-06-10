@@ -1,3 +1,12 @@
+const UPGRADE_TEXT = [
+	"+20% Health",
+	"+20% Speed",
+	"+20% Fire-Rate",
+	"+5% Armor",
+	"+5% Health Regen",
+	"BITCH FUK YOU"
+];
+
 function drawTopInfoBar(ctx) {
 	ctx.fillStyle = "rgba(255, 255, 255, 0.8)";
 	ctx.font = "12px Arial";
@@ -38,7 +47,7 @@ function drawUpgrades(ctx) {
 			ctx.fillStyle = "rgba(255, 255, 255, 0.8)";
 			ctx.font = "15px Arial";
 			ctx.textAlign = "center";
-			ctx.fillText("+25% Speed", x + width / 2, y - textVertOffset);
+			ctx.fillText(UPGRADE_TEXT[player.availableUpgrades[i]], x + width / 2, y - textVertOffset);
 		}
 
 		ctx.fillStyle = "rgba(255, 255, 255, 0.8)";

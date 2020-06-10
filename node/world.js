@@ -22,12 +22,21 @@ var bullets = new Map();
 var bulletNum = 0; //Used to communicate to player what bullet to delete when it hits
 var bulletsMarkedForExplosion = [];
 
+const REGEN_START_TIME = 5; //5 seconds of not being hit
+
 const PLAYER_SPEED = 250;
 
 var update = function (deltaTime) {
 	//Update player positions
 	players.forEach((currentPlayer, key, map) => {
 		if (currentPlayer.alive) {
+			currentPlayer.regenStartTimer += deltaTime;
+			if (currentPlayer.regenStartTimer > REGEN_START_TIME) {
+				currentPlayer.health += deltaTime * 10; //10 health per second
+				let maxHealth = 100 + currentPlayer.upgrades[upgrades.UPGRADE_TYPES.health] * 20;
+				if (currentPlayer.health > maxHealth) currentPlayer.health = maxHealth;
+			}
+
 			//Get powerup mods
 			let velocityMod = 1;
 			if (isPowerupActive(powerups.powerups.superSpeed, currentPlayer)) velocityMod += 0.8;
@@ -298,6 +307,7 @@ function Player(name, x, y, color) {
 	this.levelUpInProgress = false;
 	this.level = 0;
 	this.availableUpgrades = [];
+	this.regenStartTimer = 0;
 }
 
 var playerInput = function (socketID, input) {

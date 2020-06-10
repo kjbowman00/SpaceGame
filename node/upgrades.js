@@ -20,7 +20,7 @@ const UPGRADE_PROBABILITIES = [ //Should add to 1
 
 //Get what types of upgrades are available to the player on levelup
 function getUpgradeSet(player) {
-	return [0, 1, 3];
+	return [0, 1, 2];
 }
 
 function upgradePlayer(player, selection) {

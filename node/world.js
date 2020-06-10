@@ -34,7 +34,6 @@ var update = function (deltaTime) {
 			if (currentPlayer.regenStartTimer > REGEN_START_TIME) {
 				currentPlayer.health += deltaTime * 5; //5 health per second
 				if (currentPlayer.health > currentPlayer.maxHealth) currentPlayer.health = currentPlayer.maxHealth;
-				console.log(currentPlayer.maxHealth);
 			}
 
 			//Get powerup mods
@@ -280,6 +279,7 @@ var removePlayer = function (socketID) {
 };
 
 function Player(name, x, y, color) {
+	this.bot = false;
 	this.name = name;
 	this.oldX = x;
 	this.oldY = y;

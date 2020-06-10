@@ -62,7 +62,6 @@ function update() {
 		let velocityMod = 1;
 		if (isPowerupActive(powerups.superSpeed, player)) velocityMod += .8;
 		velocityMod += player.upgrades[1] * 0.25;
-		console.log(velocityMod);
 
 		player.oldX = player.x;
 		player.oldY = player.y;

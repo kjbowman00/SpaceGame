@@ -28,6 +28,7 @@ const colorPalette = [
 
 var addPlayerFunc;
 var bots = []; // Stores the id to retrieve from player map
+var players;
 let startingBots = 20;
 
 const NORMAL_LAST_TIME = 900; // 15 minutes to delete bot
@@ -46,10 +47,11 @@ function addBot() {
 	let name = name1 + name2;
 
 	addPlayerFunc(botNum, name, color);
+	bots.push(botNum);
 	botNum++;
 }
 
-function updateBot(bot) {
+function updateBot(botNum, bot) {
 	//If near position to head to, find new position
 	//otherwise move
 
@@ -57,9 +59,13 @@ function updateBot(bot) {
 
 }
 
-function generateStartingBots(addPlayerFunc2) {
+function generateStartingBots(addPlayerFunc2, players2) {
 	addPlayerFunc = addPlayerFunc2;
+	players = players2;
 	for (let i = 0; i < startingBots; i++) {
 		addBot();
 	}
 }
+
+exports.generateStartingBots = generateStartingBots;
+exports.updateBot = updateBot;

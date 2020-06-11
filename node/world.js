@@ -32,9 +32,6 @@ var update = function (deltaTime) {
 	//Update player positions
 	players.forEach((currentPlayer, key, map) => {
 		if (currentPlayer.alive) {
-			if (currentPlayer.bot) {
-				botManager.updateBot(key, currentPlayer, deltaTime);
-			}
 			currentPlayer.regenStartTimer += deltaTime;
 			if (currentPlayer.regenStartTimer > REGEN_START_TIME) {
 				currentPlayer.health += deltaTime * 5; //5 health per second
@@ -47,11 +44,15 @@ var update = function (deltaTime) {
 			velocityMod += currentPlayer.upgrades[upgrades.UPGRADE_TYPES.speed] * 0.25;
 
 			//Update old positions
-			currentPlayer.oldX = currentPlayer.x;
-			currentPlayer.oldY = currentPlayer.y;
+			if (currentPlayer.bot) {
+				botManager.updateBot(key, currentPlayer, deltaTime);
+			} else {
+				currentPlayer.oldX = currentPlayer.x;
+				currentPlayer.oldY = currentPlayer.y;
 
-			currentPlayer.x += currentPlayer.xVel * deltaTime * velocityMod;
-			currentPlayer.y += currentPlayer.yVel * deltaTime * velocityMod;
+				currentPlayer.x += currentPlayer.xVel * deltaTime * velocityMod;
+				currentPlayer.y += currentPlayer.yVel * deltaTime * velocityMod;
+			}
 
 			let shotTimeMod = 1;
 			if (isPowerupActive(powerups.powerups.overcharge, currentPlayer)) {

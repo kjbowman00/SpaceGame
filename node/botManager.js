@@ -17,7 +17,8 @@ const BOT_NAMES = [
 	"Engine", "Sock", "Shirt", "Pants", "Door", "Key", "Lock", "Microwave", "Fridge", "Tile",
 	"Protein", "Shake", "Calorie", "Dense", "Long", "Short", "Cable", "Internet", "Web",
 	"Land", "Apple", "Orange", "Kiwi", "Blowhole", "Bumpkin", "Cabbage", "Egg", "Troglodyte",
-	"EEEEEE", "Jeroo", "Jerboa", "Upgrade", "Stealer"
+	"EEEEEE", "Jeroo", "Jerboa", "Upgrade", "Stealer", "Nose", "Cant", "Burp", "Juicy",
+	"Bent", "Spine"
 ];
 const colorPalette = [
 	"#ff0000", "#ff9900", "#ffff00", "#00ff00", "#00ffff", "#0000ff", "#9900ff", "#ff00ff",
@@ -26,6 +27,7 @@ const colorPalette = [
 	"#660000", "#783f04", "#7f6000", "#274e13", "#0c343d", "#073763", "#20124d", "#4c1130"
 ];
 
+var staticWorldObjs;
 var addPlayerFunc;
 var bots = []; // Stores the id to retrieve from player map
 var players;
@@ -47,19 +49,96 @@ function addBot() {
 	let name = name1 + name2;
 
 	addPlayerFunc(botNum, name, color);
+	let bot = players.get(botNum);
+	bot.bot = true;
+	bot.rotation = Math.random() * 3;
+	let pos = findRandomPosNear(bot, 0);
+	bot.xToGo = pos.x;
+	bot.yToGo = pos.y;
 	bots.push(botNum);
 	botNum++;
 }
 
-function updateBot(botNum, bot) {
+function hitsBox(collider) {
+	for (let i = staticWorldObjs.length - 1; i >= 0; i--) {
+		let obj = staticWorldObjs[i];
+		if (doesCollide(collider, obj)) {
+			return true;
+		}
+	}
+	return false;
+}
+
+function doesCollide(rect1, rect2) {
+	if (rect1.x < rect2.x + rect2.w &&
+		rect1.x + rect1.w > rect2.x &&
+		rect1.y < rect2.y + rect2.h &&
+		rect1.y + rect1.h > rect2.y) {
+		return true;
+	}
+	return false;
+}
+
+function findRandomPosNear(bot, count) {
+	let pos = { x: bot.x, y: bot.y };
+	if (count > 5) return pos; //Prevent endless loop if bot gets stuck somehow
+
+	let side = Math.random();
+	let distance = Math.random() * 300 + 50;
+	if (side > 0.6) {
+		//Randomly pick behind or to the right or left
+		let diff = Math.floor(Math.random() * 3 + 1) * 1.57;
+		bot.rotation += diff;
+
+		let diff2 = Math.random() * 1.57 - 0.785;
+		bot.rotation += diff2;
+
+		if (bot.rotation > 2 * Math.PI) bot.rotation -= Math.PI;
+		if (bot.rotation < 0) bot.rotation += Math.PI;
+
+		//Calculate new point
+		pos.x = pos.x + distance * Math.cos(bot.rotation);
+		pos.y = pos.y + distance * Math.sin(bot.rotation);
+	} else {
+		//Randomly pick a direction in front of it
+		let diff2 = Math.random() * 1.57 - 0.785;
+		bot.rotation += diff2;
+		if (bot.rotation > 2 * Math.PI) bot.rotation -= Math.PI;
+		if (bot.rotation < 0) bot.rotation += Math.PI;
+		pos.x = pos.x + distance * Math.cos(bot.rotation);
+		pos.y = pos.y + distance * Math.sin(bot.rotation);
+	}
+
+	//Check collision
+	if (hitsBox({ x: pos.x, y: pos.y, w: bot.w, h: bot.h })) {
+		return findRandomPosNear(bot, count+1);
+	}
+	return pos;
+}
+
+function updateBot(botNum, bot, deltaTime) {
 	//If near position to head to, find new position
 	//otherwise move
+	if (Math.abs(bot.x - bot.xToGo) < 5 && Math.abs(bot.y - bot.yToGo) < 5) {
+		let newPos = findRandomPosNear(bot, 0);
+		bot.xToGo = newPos.x;
+		bot.yToGo = newPos.y;
+	}
+	//Move towards new position
+	if (Math.abs(bot.x - bot.xToGo) > 2) {
+		bot.x += deltaTime * 250 * Math.cos(bot.rotation);
+	}
+	if (Math.abs(bot.y - bot.yToGo) > 2) {
+		bot.y += deltaTime * 250 * Math.sin(bot.rotation);
+	}
 
 	//other player nearby, target them and shoot at them
 
 }
 
-function generateStartingBots(addPlayerFunc2, players2) {
+function generateStartingBots(addPlayerFunc2, players2, staticWorldObjs2) {
+	console.log(staticWorldObjs2);
+	staticWorldObjs = staticWorldObjs2;
 	addPlayerFunc = addPlayerFunc2;
 	players = players2;
 	for (let i = 0; i < startingBots; i++) {

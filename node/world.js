@@ -32,7 +32,7 @@ var update = function (deltaTime) {
 	//Update player positions
 	players.forEach((currentPlayer, key, map) => {
 		if (currentPlayer.bot) {
-			botManager.updateBot(key, currentPlayer);
+			botManager.updateBot(key, currentPlayer, deltaTime);
 		} else {
 			if (currentPlayer.alive) {
 				currentPlayer.regenStartTimer += deltaTime;
@@ -356,7 +356,7 @@ var upgradePlayer = function (socketID, upgradeNum) {
 	}
 }
 
-botManager.generateStartingBots(addPlayer, players);
+botManager.generateStartingBots(addPlayer, players, staticWorldObjs);
 
 exports.requestRespawn = requestRespawn;
 exports.playerShot = playerShot;

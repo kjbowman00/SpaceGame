@@ -34,7 +34,7 @@ var staticWorldObjs;
 var addPlayerFunc;
 var bots = []; // Stores the id to retrieve from player map
 var players;
-let startingBots = 20;
+let startingBots = 50;
 
 const NORMAL_LAST_TIME = 900; // 15 minutes to delete bot
 const LAST_TIME_RANDOMNESS = 600; // 10 minutes random change
@@ -103,16 +103,16 @@ function findRandomPosNear(bot, count) {
 
 	let side = Math.random();
 	let distance = Math.random() * 300 + 50;
-	if (side > 0.6) {
+	if (side > 0.8) {
 		//Randomly pick behind or to the right or left
-		let diff = Math.floor(Math.random() * 3 + 1) * 1.57;
+		let diff = Math.floor(Math.random() * 2 + 1) * 1.57;
 		bot.rotation += diff;
 
 		let diff2 = Math.random() * 1.57 - 0.785;
 		bot.rotation += diff2;
 
-		if (bot.rotation > 2 * Math.PI) bot.rotation -= Math.PI;
-		if (bot.rotation < 0) bot.rotation += Math.PI;
+		if (bot.rotation > 2 * Math.PI) bot.rotation -= 2*Math.PI;
+		if (bot.rotation < 0) bot.rotation += 2*Math.PI;
 
 		//Calculate new point
 		pos.x = pos.x + distance * Math.cos(bot.rotation);
@@ -121,8 +121,8 @@ function findRandomPosNear(bot, count) {
 		//Randomly pick a direction in front of it
 		let diff2 = Math.random() * 1.57 - 0.785;
 		bot.rotation += diff2;
-		if (bot.rotation > 2 * Math.PI) bot.rotation -= Math.PI;
-		if (bot.rotation < 0) bot.rotation += Math.PI;
+		if (bot.rotation > 2 * Math.PI) bot.rotation -= 2*Math.PI;
+		if (bot.rotation < 0) bot.rotation += 2*Math.PI;
 		pos.x = pos.x + distance * Math.cos(bot.rotation);
 		pos.y = pos.y + distance * Math.sin(bot.rotation);
 	}

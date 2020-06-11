@@ -31,122 +31,121 @@ const PLAYER_SPEED = 250;
 var update = function (deltaTime) {
 	//Update player positions
 	players.forEach((currentPlayer, key, map) => {
-		if (currentPlayer.bot) {
-			botManager.updateBot(key, currentPlayer, deltaTime);
-		} else {
-			if (currentPlayer.alive) {
-				currentPlayer.regenStartTimer += deltaTime;
-				if (currentPlayer.regenStartTimer > REGEN_START_TIME) {
-					currentPlayer.health += deltaTime * 5; //5 health per second
-					if (currentPlayer.health > currentPlayer.maxHealth) currentPlayer.health = currentPlayer.maxHealth;
+		if (currentPlayer.alive) {
+			if (currentPlayer.bot) {
+				botManager.updateBot(key, currentPlayer, deltaTime);
+			}
+			currentPlayer.regenStartTimer += deltaTime;
+			if (currentPlayer.regenStartTimer > REGEN_START_TIME) {
+				currentPlayer.health += deltaTime * 5; //5 health per second
+				if (currentPlayer.health > currentPlayer.maxHealth) currentPlayer.health = currentPlayer.maxHealth;
+			}
+
+			//Get powerup mods
+			let velocityMod = 1;
+			if (isPowerupActive(powerups.powerups.superSpeed, currentPlayer)) velocityMod += 0.8;
+			velocityMod += currentPlayer.upgrades[upgrades.UPGRADE_TYPES.speed] * 0.25;
+
+			//Update old positions
+			currentPlayer.oldX = currentPlayer.x;
+			currentPlayer.oldY = currentPlayer.y;
+
+			currentPlayer.x += currentPlayer.xVel * deltaTime * velocityMod;
+			currentPlayer.y += currentPlayer.yVel * deltaTime * velocityMod;
+
+			let shotTimeMod = 1;
+			if (isPowerupActive(powerups.powerups.overcharge, currentPlayer)) {
+				shotTimeMod *= 2;
+			}
+			shotTimeMod += 0.2 * currentPlayer.upgrades[upgrades.UPGRADE_TYPES.fire_rate];
+
+			//Handle player shooting
+			if (currentPlayer.gun.shotsRequested > 0 && currentPlayer.gun.shotTimer >= currentPlayer.gun.shotTimeNeeded / shotTimeMod - 0.03) {
+				if (isPowerupActive(powerups.powerups.triShot, currentPlayer)) {
+					//TRI shot powerup is active
+					let spreadAngle = 0.44; //radians
+					bullets.set(bulletNum, {
+						x: currentPlayer.x + currentPlayer.w / 2 - 5, y: currentPlayer.y + (currentPlayer.h / 2) - 5,
+						r: 5,
+						xVel: Math.cos(currentPlayer.gun.rotation) * 500 + currentPlayer.xVel / 2,
+						yVel: Math.sin(currentPlayer.gun.rotation) * 500 + currentPlayer.yVel / 2,
+						damage: 10,
+						color: currentPlayer.color,
+						timeAlive: 0,
+						playerEmitId: key
+					});
+					bulletNum++;
+					bullets.set(bulletNum, {
+						x: currentPlayer.x + currentPlayer.w / 2 - 5, y: currentPlayer.y + (currentPlayer.h / 2) - 5,
+						r: 5,
+						xVel: Math.cos(currentPlayer.gun.rotation + spreadAngle) * 500 + currentPlayer.xVel / 2,
+						yVel: Math.sin(currentPlayer.gun.rotation + spreadAngle) * 500 + currentPlayer.yVel / 2,
+						damage: 10,
+						color: currentPlayer.color,
+						timeAlive: 0,
+						playerEmitId: key
+					});
+					bulletNum++;
+					bullets.set(bulletNum, {
+						x: currentPlayer.x + currentPlayer.w / 2 - 5, y: currentPlayer.y + (currentPlayer.h / 2) - 5,
+						r: 5,
+						xVel: Math.cos(currentPlayer.gun.rotation - spreadAngle) * 500 + currentPlayer.xVel / 2,
+						yVel: Math.sin(currentPlayer.gun.rotation - spreadAngle) * 500 + currentPlayer.yVel / 2,
+						damage: 10,
+						color: currentPlayer.color,
+						timeAlive: 0,
+						playerEmitId: key
+					});
+					bulletNum++;
+					currentPlayer.gun.shotTimer = 0;
+					currentPlayer.gun.shotsRequested--;
+				} else {
+					//NO trishot
+					bullets.set(bulletNum, {
+						x: currentPlayer.x + currentPlayer.w / 2 - 5, y: currentPlayer.y + (currentPlayer.h / 2) - 5,
+						r: 5,
+						xVel: Math.cos(currentPlayer.gun.rotation) * 500 + currentPlayer.xVel / 2,
+						yVel: Math.sin(currentPlayer.gun.rotation) * 500 + currentPlayer.yVel / 2,
+						damage: 10,
+						color: currentPlayer.color,
+						timeAlive: 0,
+						playerEmitId: key
+					});
+					bulletNum++;
+					currentPlayer.gun.shotTimer = 0;
+					currentPlayer.gun.shotsRequested--;
 				}
+			} else currentPlayer.gun.shotTimer += deltaTime;
 
-				//Get powerup mods
-				let velocityMod = 1;
-				if (isPowerupActive(powerups.powerups.superSpeed, currentPlayer)) velocityMod += 0.8;
-				velocityMod += currentPlayer.upgrades[upgrades.UPGRADE_TYPES.speed] * 0.25;
-
-				//Update old positions
-				currentPlayer.oldX = currentPlayer.x;
-				currentPlayer.oldY = currentPlayer.y;
-
-				currentPlayer.x += currentPlayer.xVel * deltaTime * velocityMod;
-				currentPlayer.y += currentPlayer.yVel * deltaTime * velocityMod;
-
-				let shotTimeMod = 1;
-				if (isPowerupActive(powerups.powerups.overcharge, currentPlayer)) {
-					shotTimeMod *= 2;
-				}
-				shotTimeMod += 0.2 * currentPlayer.upgrades[upgrades.UPGRADE_TYPES.fire_rate];
-
-				//Handle player shooting
-				if (currentPlayer.gun.shotsRequested > 0 && currentPlayer.gun.shotTimer >= currentPlayer.gun.shotTimeNeeded / shotTimeMod - 0.03) {
-					if (isPowerupActive(powerups.powerups.triShot, currentPlayer)) {
-						//TRI shot powerup is active
-						let spreadAngle = 0.44; //radians
-						bullets.set(bulletNum, {
-							x: currentPlayer.x + currentPlayer.w / 2 - 5, y: currentPlayer.y + (currentPlayer.h / 2) - 5,
-							r: 5,
-							xVel: Math.cos(currentPlayer.gun.rotation) * 500 + currentPlayer.xVel / 2,
-							yVel: Math.sin(currentPlayer.gun.rotation) * 500 + currentPlayer.yVel / 2,
-							damage: 10,
-							color: currentPlayer.color,
-							timeAlive: 0,
-							playerEmitId: key
-						});
-						bulletNum++;
-						bullets.set(bulletNum, {
-							x: currentPlayer.x + currentPlayer.w / 2 - 5, y: currentPlayer.y + (currentPlayer.h / 2) - 5,
-							r: 5,
-							xVel: Math.cos(currentPlayer.gun.rotation + spreadAngle) * 500 + currentPlayer.xVel / 2,
-							yVel: Math.sin(currentPlayer.gun.rotation + spreadAngle) * 500 + currentPlayer.yVel / 2,
-							damage: 10,
-							color: currentPlayer.color,
-							timeAlive: 0,
-							playerEmitId: key
-						});
-						bulletNum++;
-						bullets.set(bulletNum, {
-							x: currentPlayer.x + currentPlayer.w / 2 - 5, y: currentPlayer.y + (currentPlayer.h / 2) - 5,
-							r: 5,
-							xVel: Math.cos(currentPlayer.gun.rotation - spreadAngle) * 500 + currentPlayer.xVel / 2,
-							yVel: Math.sin(currentPlayer.gun.rotation - spreadAngle) * 500 + currentPlayer.yVel / 2,
-							damage: 10,
-							color: currentPlayer.color,
-							timeAlive: 0,
-							playerEmitId: key
-						});
-						bulletNum++;
-						currentPlayer.gun.shotTimer = 0;
-						currentPlayer.gun.shotsRequested--;
-					} else {
-						//NO trishot
-						bullets.set(bulletNum, {
-							x: currentPlayer.x + currentPlayer.w / 2 - 5, y: currentPlayer.y + (currentPlayer.h / 2) - 5,
-							r: 5,
-							xVel: Math.cos(currentPlayer.gun.rotation) * 500 + currentPlayer.xVel / 2,
-							yVel: Math.sin(currentPlayer.gun.rotation) * 500 + currentPlayer.yVel / 2,
-							damage: 10,
-							color: currentPlayer.color,
-							timeAlive: 0,
-							playerEmitId: key
-						});
-						bulletNum++;
-						currentPlayer.gun.shotTimer = 0;
-						currentPlayer.gun.shotsRequested--;
-					}
-				} else currentPlayer.gun.shotTimer += deltaTime;
-
-				//Remove old powerups
-				for (let i = currentPlayer.activePowerups.length - 1; i >= 0; i--) {
-					let currentPowerup = currentPlayer.activePowerups[i];
-					currentPowerup.timeLeft -= deltaTime;
-					if (currentPowerup.timeLeft <= 0) {
-						currentPlayer.activePowerups.splice(i, 1);
-					}
-				}
-
-				if (currentPlayer.health <= 0) {
-					currentPlayer.alive = false;
-
-					//Reward killing player
-					let killingPlayer = players.get(currentPlayer.lastDamagedBy);
-					if (killingPlayer != undefined) {
-						killingPlayer.kills++;
-					}
-
-					//Remove items/powerups
-					currentPlayer.activePowerups = [];
+			//Remove old powerups
+			for (let i = currentPlayer.activePowerups.length - 1; i >= 0; i--) {
+				let currentPowerup = currentPlayer.activePowerups[i];
+				currentPowerup.timeLeft -= deltaTime;
+				if (currentPowerup.timeLeft <= 0) {
+					currentPlayer.activePowerups.splice(i, 1);
 				}
 			}
 
-			//Determine if player should be leveled up
-			if (!currentPlayer.levelUpInProgress) {
-				if (currentPlayer.orbs >= upgrades.AMOUNT_TO_UPGRADE[currentPlayer.level]) {
-					//Level up!
-					currentPlayer.levelUpInProgress = true;
-					currentPlayer.availableUpgrades = upgrades.getUpgradeSet(currentPlayer);
+			if (currentPlayer.health <= 0) {
+				currentPlayer.alive = false;
+
+				//Reward killing player
+				let killingPlayer = players.get(currentPlayer.lastDamagedBy);
+				if (killingPlayer != undefined) {
+					killingPlayer.kills++;
 				}
+
+				//Remove items/powerups
+				currentPlayer.activePowerups = [];
+			}
+		}
+
+		//Determine if player should be leveled up
+		if (!currentPlayer.levelUpInProgress) {
+			if (currentPlayer.orbs >= upgrades.AMOUNT_TO_UPGRADE[currentPlayer.level]) {
+				//Level up!
+				currentPlayer.levelUpInProgress = true;
+				currentPlayer.availableUpgrades = upgrades.getUpgradeSet(currentPlayer);
 			}
 		}
 	}); //END update player positions

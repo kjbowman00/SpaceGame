@@ -163,7 +163,7 @@ var update = function (deltaTime) {
 	orbs.update(deltaTime);
 
 	//Handle collisions
-	collisions.updateCollisions(players, bullets, bulletsMarkedForExplosion, orbs.orbs, deltaTime);
+	collisions.updateCollisions(players, bullets, bulletsMarkedForExplosion, orbs.orbs, deltaTime, botManager);
 
 	//Handle powerup obj
 	powerups.updatePowerup(middlePowerup, players, deltaTime);

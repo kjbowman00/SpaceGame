@@ -1,6 +1,6 @@
 var staticWorldObjs = require('./staticWorldObjs').staticWorldObjs;
 
-function handleStaticObjsCollision(players, bullets, deltaTime) {
+function handleStaticObjsCollision(players, bullets, deltaTime, botManager) {
 	players.forEach((player, id, map) => {
 		let bounds = { x: player.x, y: player.y, w: player.w, h: player.h };
 		//Naive approach. test each object with each player
@@ -15,18 +15,22 @@ function handleStaticObjsCollision(players, bullets, deltaTime) {
 					if (player.x - player.oldX > 0) {
 						player.x = currentBox.x - player.w;
 						player.oldX = player.x; //Prevents other boxes from handling the same collision
+						if (player.bot) botManager.bounceBot(player, botManager.SIDES.LEFT);
 					} else if (player.x - player.oldX < 0){
 						player.x = currentBox.x + currentBox.w;
 						player.oldX = player.x; //Prevents other boxes from handling the same collision
+						if (player.bot) botManager.bounceBot(player, botManager.SIDES.RIGHT);
 					}
 				}
 				if (doesCollide(yBounds, currentBox)) {
 					if (player.y - player.oldY > 0) {
 						player.y = currentBox.y - player.h;
 						player.oldY = player.y; //Prevents other boxes from handling the same collision
+						if (player.bot) botManager.bounceBot(player, botManager.SIDES.TOP);
 					} else if (player.y - player.oldY < 0){
 						player.y = currentBox.y + currentBox.h;
 						player.oldY = player.y; //Prevents other boxes from handling the same collision
+						if (player.bot) botManager.bounceBot(player, botManager.SIDES.BOTTOM);
 					}
 				}
 			}
@@ -125,8 +129,8 @@ function handleOrbCollision(players, orbs) {
 	}
 }
 
-function updateCollisions(players, bullets, bulletsMarkedForExplosion, orbs, deltaTime) {
-	handleStaticObjsCollision(players, bullets, deltaTime);
+function updateCollisions(players, bullets, bulletsMarkedForExplosion, orbs, deltaTime, botManager) {
+	handleStaticObjsCollision(players, bullets, deltaTime, botManager);
 	handleBulletCollision(players, bullets, bulletsMarkedForExplosion, deltaTime);
 	handleOrbCollision(players, orbs);
 }

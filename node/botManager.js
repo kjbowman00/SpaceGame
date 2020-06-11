@@ -27,6 +27,9 @@ const colorPalette = [
 	"#660000", "#783f04", "#7f6000", "#274e13", "#0c343d", "#073763", "#20124d", "#4c1130"
 ];
 
+const SIDES = { RIGHT: 0, BOTTOM: 1, LEFT: 2, TOP: 3 };
+
+
 var staticWorldObjs;
 var addPlayerFunc;
 var bots = []; // Stores the id to retrieve from player map
@@ -38,6 +41,21 @@ const LAST_TIME_RANDOMNESS = 600; // 10 minutes random change
 
 var botNum = 0;
 
+
+function bounceBot(bot, sideHit) { //Side hit represents which side of the block the bot is on
+	if (sideHit == SIDES.RIGHT) {
+		bot.rotation = Math.atan2(Math.sin(bot.rotation), -Math.cos(bot.rotation));
+	} else if (sideHit == SIDES.BOTTOM) {
+		bot.rotation = Math.atan2( -Math.sin(bot.rotation), Math.cos(bot.rotation));
+	} else if (sideHit == SIDES.LEFT) {
+		bot.rotation = Math.atan2(Math.sin(bot.rotation), -Math.cos(bot.rotation));
+	} else if (sideHit == SIDES.TOP) {
+		bot.rotation = Math.atan2(-Math.sin(bot.rotation), Math.cos(bot.rotation));
+	}
+	let dist = Math.random() * 50 + 30;
+	bot.xToGo = bot.x + Math.cos(bot.rotation) * dist;
+	bot.yToGo = bot.y + Math.sin(bot.rotation) * dist;
+}
 
 function addBot() {
 	//Get random color
@@ -110,9 +128,9 @@ function findRandomPosNear(bot, count) {
 	}
 
 	//Check collision
-	if (hitsBox({ x: pos.x, y: pos.y, w: bot.w, h: bot.h })) {
+	/*if (hitsBox({ x: pos.x, y: pos.y, w: bot.w, h: bot.h })) {
 		return findRandomPosNear(bot, count+1);
-	}
+	}*/
 	return pos;
 }
 
@@ -125,6 +143,8 @@ function updateBot(botNum, bot, deltaTime) {
 		bot.yToGo = newPos.y;
 	}
 	//Move towards new position
+	bot.oldX = bot.x;
+	bot.oldY = bot.y;
 	if (Math.abs(bot.x - bot.xToGo) > 2) {
 		bot.x += deltaTime * 250 * Math.cos(bot.rotation);
 	}
@@ -148,3 +168,5 @@ function generateStartingBots(addPlayerFunc2, players2, staticWorldObjs2) {
 
 exports.generateStartingBots = generateStartingBots;
 exports.updateBot = updateBot;
+exports.SIDES = SIDES;
+exports.bounceBot = bounceBot;

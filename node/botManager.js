@@ -29,7 +29,7 @@ const colorPalette = [
 
 const SIDES = { RIGHT: 0, BOTTOM: 1, LEFT: 2, TOP: 3 };
 
-
+var upgradeManager;
 var staticWorldObjs;
 var addPlayerFunc;
 var bots = []; // Stores the id to retrieve from player map
@@ -41,6 +41,16 @@ const LAST_TIME_RANDOMNESS = 600; // 10 minutes random change
 
 var botNum = 0;
 
+function updateBotNumbers() {
+	let botsToAdd = 0;
+	if (players.size < startingBots) {
+		botsToAdd = startingBots - players.size;
+	}
+
+	for (let i = 0; i < botsToAdd; i++) {
+		addBot();
+	}
+}
 
 function bounceBot(bot, sideHit) { //Side hit represents which side of the block the bot is on
 	if (sideHit == SIDES.RIGHT) {
@@ -143,6 +153,12 @@ function sqDist(p1, p2) {
 function updateBot(botNum, bot, deltaTime) {
 	bot.shotTimer += deltaTime;
 
+	//upgrade bot
+	if (bot.levelUpInProgress) {
+		bot.levelUpInProgress = false;
+		upgradeManager.upgradePlayer(bot, 0);
+	}
+
 	//If near position to head to, find new position
 	//otherwise move
 	if (Math.abs(bot.x - bot.xToGo) < 5 && Math.abs(bot.y - bot.yToGo) < 5) {
@@ -200,8 +216,8 @@ function updateBot(botNum, bot, deltaTime) {
 	}
 }
 
-function generateStartingBots(addPlayerFunc2, players2, staticWorldObjs2) {
-	console.log(staticWorldObjs2);
+function generateStartingBots(addPlayerFunc2, players2, staticWorldObjs2, upgradeManager2) {
+	upgradeManager = upgradeManager2;
 	staticWorldObjs = staticWorldObjs2;
 	addPlayerFunc = addPlayerFunc2;
 	players = players2;
@@ -214,3 +230,4 @@ exports.generateStartingBots = generateStartingBots;
 exports.updateBot = updateBot;
 exports.SIDES = SIDES;
 exports.bounceBot = bounceBot;
+exports.updateBotNumbers = updateBotNumbers;

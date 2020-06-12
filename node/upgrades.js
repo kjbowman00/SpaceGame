@@ -11,16 +11,32 @@ const UPGRADE_TYPES = {
 };
 
 const AMOUNT_TO_UPGRADE = [
-	3, 50, 50, 75, 75, "N/A"
+	2, 2, 2, 75, 75, 75, 75, 100, 100, 100, 100, 100, 100, 100, 100, 100,
+	500, 500, 500, 500, 500, 500, 500, 500, 500, 500, 500, 500, 500, 500, 500
 ];
 
 const UPGRADE_PROBABILITIES = [ //Should add to 1
-	0.3, 0.2, 0.2, 0.1, 0.1, 0.1
+	0.3, 0.2, 0.2, 0.1, 0.2
 ];
 
 //Get what types of upgrades are available to the player on levelup
 function getUpgradeSet(player) {
-	return [0, 1, 2];
+	let set = [];
+	for (let i = 0; i < 3; i++) {
+		let randomNum = Math.random();
+		let currentProb = 0;
+		for (let j = 0; j < UPGRADE_PROBABILITIES.length; j++) {
+			currentProb += UPGRADE_PROBABILITIES[j];
+			if (randomNum <= currentProb) {
+				set.push(j);
+				if (player.bot == false) {
+					console.log(set);
+				}
+				break;
+			}
+		}
+	}
+	return set;
 }
 
 function upgradePlayer(player, selection) {

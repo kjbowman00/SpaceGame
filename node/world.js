@@ -29,7 +29,7 @@ const REGEN_START_TIME = 5; //5 seconds of not being hit
 const PLAYER_SPEED = 250;
 
 var update = function (deltaTime) {
-
+	botManager.updateBotNumbers();
 	let botsToRemove = [];
 	//Update player positions
 	players.forEach((currentPlayer, key, map) => {
@@ -169,7 +169,7 @@ var update = function (deltaTime) {
 	//Move bullets
 	bullets.forEach((bullet, id, map) => {
 		bullet.timeAlive += deltaTime;
-		if (bullet.timeAlive >= 5) bulletsMarkedForDelete.push(id);
+		if (bullet.timeAlive >= 1.5) bulletsMarkedForDelete.push(id);
 		bullet.x += bullet.xVel * deltaTime;
 		bullet.y += bullet.yVel * deltaTime;
 	});
@@ -257,7 +257,6 @@ function getRandomSpawn() {
 	if (side == 0) { // top
 		position.x = Math.random() * (w - 50) - halfW;
 		position.y = Math.random() * (smallH - 50) - halfH;
-		console.log(position);
 	} else if (side == 1) { // right
 		position.x = halfW - smallW + (Math.random() * (smallW - 50));
 		position.y = Math.random() * (h - 50) - halfH;
@@ -370,7 +369,7 @@ var upgradePlayer = function (socketID, upgradeNum) {
 	}
 }
 
-botManager.generateStartingBots(addPlayer, players, staticWorldObjs);
+botManager.generateStartingBots(addPlayer, players, staticWorldObjs, upgrades);
 
 exports.requestRespawn = requestRespawn;
 exports.playerShot = playerShot;

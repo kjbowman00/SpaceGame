@@ -32,9 +32,9 @@ var player = {
 	upgrades: [0, 0, 0, 0, 0, 0, 0],
 	availableUpgrades:[0,0,0]
 };
-var playerSpeed = 250;
+var playerSpeed = 150;
 var playerFireTimer = 0;
-const playerFireTimeNeeded = 0.1;
+const playerFireTimeNeeded = 0.5;
 
 const fadeTime = 0.5; //Amount in seconds to fade screen on death
 var fadeTimer = 0;

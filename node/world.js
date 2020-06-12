@@ -26,7 +26,7 @@ var botManager = require('./botManager.js');
 
 const REGEN_START_TIME = 5; //5 seconds of not being hit
 
-const PLAYER_SPEED = 250;
+const PLAYER_SPEED = 150;
 
 var update = function (deltaTime) {
 	botManager.updateBotNumbers();
@@ -136,6 +136,7 @@ var update = function (deltaTime) {
 				let killingPlayer = players.get(currentPlayer.lastDamagedBy);
 				if (killingPlayer != undefined) {
 					killingPlayer.kills++;
+					killingPlayer.orbs += 15 * currentPlayer.level;
 				}
 
 				//Remove items/powerups
@@ -320,7 +321,7 @@ function Player(name, x, y, color) {
 	this.gun.h = 10;
 	this.gun.shotsRequested = 0;
 	this.gun.shotTimer = 0;
-	this.gun.shotTimeNeeded = 0.1; //Default fire rate
+	this.gun.shotTimeNeeded = 0.5; //Default fire rate
 	this.activePowerups = [];
 	this.kills = 0;
 	this.orbs = 0;

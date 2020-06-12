@@ -20,6 +20,10 @@ const BOT_NAMES = [
 	"EEEEEE", "Jeroo", "Jerboa", "Upgrade", "Stealer", "Nose", "Cant", "Burp", "Juicy",
 	"Bent", "Spine"
 ];
+const BOT_NAME_DELIMITERS = ["", "", "", "", "", " ", " ", " ", " "," ", ".", "_", "-", "~", "#", "+"];
+const BOT_NAME_PREFIX = ["#", "@", "$", "[", "~"];
+const BOT_NAME_SUFFIX = ["!", "]", "+", "$", "_:D", "*"];
+
 const colorPalette = [
 	"#ff0000", "#ff9900", "#ffff00", "#00ff00", "#00ffff", "#0000ff", "#9900ff", "#ff00ff",
 	"#cc0000", "#e69138", "#f1c232", "#6aa84f", "#45818e", "#3d85c6", "#674ea7", "#a64d79",
@@ -34,7 +38,7 @@ var staticWorldObjs;
 var addPlayerFunc;
 var bots = []; // Stores the id to retrieve from player map
 var players;
-let startingBots = 50;
+let startingBots = 20;
 
 const NORMAL_LAST_TIME = 900; // 15 minutes to delete bot
 const LAST_TIME_RANDOMNESS = 600; // 10 minutes random change
@@ -72,9 +76,37 @@ function addBot() {
 	let color = colorPalette[Math.floor(Math.random() * colorPalette.length)];
 
 	//Get random name
-	let name1 = BOT_NAMES[Math.floor(Math.random() * BOT_NAMES.length)];
-	let name2 = BOT_NAMES[Math.floor(Math.random() * BOT_NAMES.length)];
-	let name = name1 + name2;
+	let name = "";
+	let nameSize = Math.random();
+	if (nameSize < 0.15) {
+		//One name
+		name = BOT_NAMES[Math.floor(Math.random() * BOT_NAMES.length)];
+	} else {
+		//Double name
+		let name1 = BOT_NAMES[Math.floor(Math.random() * BOT_NAMES.length)];
+		let name2 = BOT_NAMES[Math.floor(Math.random() * BOT_NAMES.length)];
+		let delim = BOT_NAME_DELIMITERS[Math.floor(Math.random() * BOT_NAME_DELIMITERS.length)];
+		name = name1 + delim + name2;
+	}
+	//Symbols at beginning or end?
+	let symbolRand = Math.random();
+	if (symbolRand < 0.1) {
+		//Put symbol at the beginning
+		let symbol = BOT_NAME_PREFIX[Math.floor(Math.random() * BOT_NAME_PREFIX.length)];
+		name = symbol + name;
+	}
+	symbolRand = Math.random();
+	if (symbolRand < 0.1) {
+		// Put symbol or numbers at end
+		let symbolOrNum = Math.random();
+		if (symbolOrNum < 0.3) {
+			let symbol = BOT_NAME_SUFFIX[Math.floor(Math.random() * BOT_NAME_SUFFIX.length)];
+			name = name + symbol;
+		} else {
+			name = name + Math.floor(Math.random() * 103);
+		}
+	}
+
 
 	addPlayerFunc(botNum, name, color);
 	let bot = players.get(botNum);
@@ -170,10 +202,10 @@ function updateBot(botNum, bot, deltaTime) {
 	bot.oldX = bot.x;
 	bot.oldY = bot.y;
 	if (Math.abs(bot.x - bot.xToGo) > 2) {
-		bot.x += deltaTime * 250 * Math.cos(bot.rotation);
+		bot.x += deltaTime * 150 * Math.cos(bot.rotation);
 	}
 	if (Math.abs(bot.y - bot.yToGo) > 2) {
-		bot.y += deltaTime * 250 * Math.sin(bot.rotation);
+		bot.y += deltaTime * 150 * Math.sin(bot.rotation);
 	}
 
 	//other player nearby, target them and shoot at them

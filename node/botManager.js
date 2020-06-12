@@ -70,6 +70,8 @@ function addBot() {
 	let bot = players.get(botNum);
 	bot.bot = true;
 	bot.rotation = Math.random() * 3;
+	bot.target = null;
+	bot.shotTimer = 0;
 	let pos = findRandomPosNear(bot, 0);
 	bot.xToGo = pos.x;
 	bot.yToGo = pos.y;
@@ -134,7 +136,13 @@ function findRandomPosNear(bot, count) {
 	return pos;
 }
 
+function sqDist(p1, p2) {
+	return (p1.x - p2.x) * (p1.x - p2.x) + (p1.y - p2.y) * (p1.y - p2.y);
+}
+
 function updateBot(botNum, bot, deltaTime) {
+	bot.shotTimer += deltaTime;
+
 	//If near position to head to, find new position
 	//otherwise move
 	if (Math.abs(bot.x - bot.xToGo) < 5 && Math.abs(bot.y - bot.yToGo) < 5) {
@@ -153,7 +161,43 @@ function updateBot(botNum, bot, deltaTime) {
 	}
 
 	//other player nearby, target them and shoot at them
+	if (bot.target == null || players.get(bot.target) == undefined) {
+		//Find new target
+		let closest = { dist: 9999999999999, id: -1 };
+		players.forEach((player, id, map) => {
+			if (id != botNum) {
+				let dist2 = sqDist(player, bot);
+				if (dist2 < closest.dist) {
+					closest.dist = dist2;
+					closest.id = id;
+				}
+			}
+		});
+		//Is the closest player within a certain distance?
+		if (closest.dist < 100000) {
+			bot.target = closest.id;
+		}
+	}
+	//Determine if target is too far away
+	if (bot.target != null) {
+		let target = players.get(bot.target);
+		if (target == undefined) {
+			bot.target = null;
+		} else if (sqDist(bot, target) > 1000000) bot.target = null;
+	}
 
+	//Shoot at target
+	if (bot.target != null) {
+		let target = players.get(bot.target);
+		let xDiff = target.x - bot.x;
+		let yDiff = target.y - bot.y;
+		bot.gun.rotation = Math.atan2(yDiff, xDiff);
+
+		if (bot.shotTimer > bot.gun.shotTimeNeeded) {
+			bot.shotTimer = 0;
+			bot.gun.shotsRequested++;
+		}
+	}
 }
 
 function generateStartingBots(addPlayerFunc2, players2, staticWorldObjs2) {

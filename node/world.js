@@ -29,6 +29,8 @@ const REGEN_START_TIME = 5; //5 seconds of not being hit
 const PLAYER_SPEED = 250;
 
 var update = function (deltaTime) {
+
+	let botsToRemove = [];
 	//Update player positions
 	players.forEach((currentPlayer, key, map) => {
 		if (currentPlayer.alive) {
@@ -139,6 +141,18 @@ var update = function (deltaTime) {
 				//Remove items/powerups
 				currentPlayer.activePowerups = [];
 			}
+
+			if (currentPlayer.bot) {
+				if (!currentPlayer.alive) {
+					botsToRemove.push(key);
+				}
+			}
+		}
+
+		//Delete dead bots and bots who have stayed too long
+		for (let i = botsToRemove.length - 1; i >= 0; i--) {
+			let removeID = botsToRemove.pop();
+			players.delete(removeID);
 		}
 
 		//Determine if player should be leveled up

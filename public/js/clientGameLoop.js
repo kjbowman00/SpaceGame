@@ -99,7 +99,7 @@ function update() {
 		if (player.trail != undefined) {
 			player.trail.update(player.x, player.y, player.w/2, deltaTime);
 		} else {
-			player.trail = new Trail(player.x, player.y, player.color, 25, 30);
+			player.trail = new Trail(player.x, player.y, player.color, 25, 20);
 		}
 	} //END IF ALIVE
 
@@ -181,11 +181,16 @@ function draw() {
 	for (var i in world.staticWorldObjs) {
 		item = world.staticWorldObjs[i];
 		if (doesCollide(item, camera)) {
-			ctx.fillRect(Math.floor(item.x - camera.x), Math.floor(item.y - camera.y), item.w, item.h);
+			let dx = Math.floor(item.x - camera.x);
+			let dy = Math.floor(item.y - camera.y);
+			ctx.fillRect(dx, dy, item.w, item.h);
 
 			//Fill sides with color
 			bCtx.fillStyle = "red";
-			bCtx.fillRect(Math.floor(item.x - camera.x) - 1, Math.floor(item.y - camera.y) - 1, item.w + 2, item.h + 2);
+			bCtx.fillRect(dx - 1, dy - 1, item.w + 2, 1);
+			bCtx.fillRect(dx - 1, dy - 1, 1, item.h + 2);
+			bCtx.fillRect(dx + item.w, dy, 1, item.h + 1);
+			bCtx.fillRect(dx - 1, dy + item.h, item.w + 2, 1);
 		}
 	}
 

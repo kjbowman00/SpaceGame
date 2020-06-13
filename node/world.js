@@ -197,6 +197,20 @@ function isPowerupActive(type, player) {
 	return false;
 }
 
+function getStrippedPlayer(player) {
+	let stripped = {};
+	stripped.x = player.x;
+	stripped.y = player.y;
+	stripped.w = player.w;
+	stripped.h = player.h;
+	stripped.health = player.health;
+	stripped.maxHealth = player.maxHealth;
+	stripped.gun = player.gun;
+	stripped.color = player.color;
+	stripped.name = player.name;
+	return stripped;
+}
+
 var sendUpdates = function (io) {
 	let leaderboardToSend = leaderboard.getTop10(players);
 
@@ -212,7 +226,7 @@ var sendUpdates = function (io) {
 					var distSq = (value.x - value2.x) * (value.x - value2.x);
 					distSq += (value.y - value.y) * (value.y - value2.y);
 					if (distSq <= DIST_NEEDED) {
-						objectsToSend.players.set(key2, value2);
+						objectsToSend.players.set(key2, getStrippedPlayer(value2));
 					}
 				}
 			});

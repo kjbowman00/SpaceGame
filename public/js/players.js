@@ -7,12 +7,12 @@ function drawPlayer(player, ctx, bCtx) {
 	let xRound = Math.round(player.x);
 	let yRound = Math.round(player.y);
 	ctx.fillStyle = player.color;
-	ctx.fillRect(xRound - camera.x, yRound - camera.y, 50, 50);
+	ctx.fillRect(Math.floor(xRound - camera.x), Math.floor(yRound - camera.y), 50, 50);
 	ctx.fillStyle = "#000000";
-	ctx.fillRect(xRound - camera.x + borderThickness, yRound - camera.y + borderThickness, 50 - borderThickness * 2, 50 - borderThickness * 2);
+	ctx.fillRect(Math.floor(xRound - camera.x + borderThickness), Math.floor(yRound - camera.y + borderThickness), 50 - borderThickness * 2, 50 - borderThickness * 2);
 	//Draw player gun
-	let centerX = xRound - camera.x + player.w / 2;
-	let centerY = yRound - camera.y + player.h / 2;
+	let centerX = Math.floor(xRound - camera.x + player.w / 2);
+	let centerY = Math.floor(yRound - camera.y + player.h / 2);
 	let xGun = centerX;
 	let yGun = centerY - player.gun.h / 2;
 	ctx.fillStyle = player.color;

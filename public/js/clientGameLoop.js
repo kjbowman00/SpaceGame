@@ -180,11 +180,13 @@ function draw() {
 	//Draw world objects where the camera is
 	for (var i in world.staticWorldObjs) {
 		item = world.staticWorldObjs[i];
-		ctx.fillRect(Math.floor(item.x - camera.x), Math.floor(item.y - camera.y), item.w, item.h);
+		if (doesCollide(item, camera)) {
+			ctx.fillRect(Math.floor(item.x - camera.x), Math.floor(item.y - camera.y), item.w, item.h);
 
-		//Fill sides with color
-		bCtx.fillStyle = "red";
-		bCtx.fillRect(Math.floor(item.x - camera.x) - 1, Math.floor(item.y - camera.y) - 1, item.w + 2, item.h + 2);
+			//Fill sides with color
+			bCtx.fillStyle = "red";
+			bCtx.fillRect(Math.floor(item.x - camera.x) - 1, Math.floor(item.y - camera.y) - 1, item.w + 2, item.h + 2);
+		}
 	}
 
 	if (alive) {
@@ -199,23 +201,23 @@ function draw() {
 	});
 	ctx.fillStyle = "#FF0000";
 	worldObjsOld.bullets.forEach((bullet, id, map) => {
-		var grd = bCtx.createRadialGradient(bullet.x - camera.x + 5, bullet.y - camera.y + 5, 1, bullet.x - camera.x + 5, bullet.y - camera.y + 5, 7);
+		var grd = bCtx.createRadialGradient(Math.floor(bullet.x - camera.x + 5), Math.floor(bullet.y - camera.y + 5), 1, Math.floor(bullet.x - camera.x + 5), Math.floor(bullet.y - camera.y + 5), 7);
 		let c = hexToRGB(bullet.color);
 		grd.addColorStop(0, 'rgba(' + c.r + ', ' + c.g + ', ' + c.b + ', 1.0)');
 		grd.addColorStop(1, 'rgba(' + c.r + ', ' + c.g + ', ' + c.b + ', 0)');
 		bCtx.fillStyle = grd;
 		bCtx.globalCompositeOperation = "lighter";
-		bCtx.fillRect(bullet.x - camera.x, bullet.y - camera.y, 2 * 5, 2 * 5);
+		bCtx.fillRect(Math.floor(bullet.x - camera.x), Math.floor(bullet.y - camera.y), 2 * 5, 2 * 5);
 	});
 	worldObjsOld.orbs.forEach((elem, id, map) => {
-		var grd = bCtx.createRadialGradient(elem.x - camera.x + 10, elem.y - camera.y + 10, 3, elem.x - camera.x + 10, elem.y - camera.y + 10, 10);
+		var grd = bCtx.createRadialGradient(Math.floor(elem.x - camera.x + 10), Math.floor(elem.y - camera.y + 10), 3, Math.floor(elem.x - camera.x + 10), Math.floor(elem.y - camera.y + 10), 10);
 		let c = hexToRGB(elem.color);
 		grd.addColorStop(0, 'rgba(255,255,255, 0.8)');
 		grd.addColorStop(0.5, 'rgba(' + c.r + ', ' + c.g + ', ' + c.b + ', 0.5)');
 		grd.addColorStop(1, 'rgba(' + c.r + ', ' + c.g + ', ' + c.b + ', 0.0)');
 		bCtx.fillStyle = grd;
 		bCtx.globalCompositeOperation = "lighter";
-		bCtx.fillRect(elem.x - camera.x, elem.y - camera.y, 20, 20);
+		bCtx.fillRect(Math.floor(elem.x - camera.x), Math.floor(elem.y - camera.y), 20, 20);
 
 		//Render trail
 		if (elem.trail != undefined) {

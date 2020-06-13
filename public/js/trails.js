@@ -22,13 +22,13 @@ function _TrailNode(x, y, startColor, startR) { // Each individual circle object
 		let y = this.y;
 		let r = this.radius;
 		let c = this.color;
-		var grd = ctx.createRadialGradient(x - camera.x, y - camera.y, r / 25, x - camera.x, y - camera.y, r);
+		var grd = ctx.createRadialGradient(Math.floor(x - camera.x), Math.floor(y - camera.y), Math.floor(r / 25), Math.floor(x - camera.x), Math.floor(y - camera.y), Math.floor(r));
 		let colorStr = makeStringyBoy(c);
 		grd.addColorStop(0, colorStr);
 		grd.addColorStop(1, 'rgba(' + c.r + ', ' + c.g + ', ' + c.b + ', 0)');
 		ctx.fillStyle = grd;
 		ctx.globalCompositeOperation = "lighter";
-		ctx.fillRect(x - r - camera.x, y - r - camera.y, 2 * r, 2 * r);
+		ctx.fillRect(Math.floor(x - r - camera.x), Math.floor(y - r - camera.y), Math.floor(2 * r), Math.floor(2 * r));
 	}
 }
 

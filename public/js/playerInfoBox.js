@@ -1,6 +1,6 @@
 function drawPlayerInfo(player, ctx) {
-	let drawX = player.x - camera.x;
-	let drawY = player.y - camera.y;
+	let drawX = Math.floor(player.x - camera.x);
+	let drawY = Math.floor(player.y - camera.y);
 
 	//Draw player name box
 	let tW = 8; //Text width

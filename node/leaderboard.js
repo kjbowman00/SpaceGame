@@ -1,7 +1,9 @@
 function getTop10(players) {
 	let strippedPlayers = [];
 	players.forEach((currentPlayer, id, map) => {
-		strippedPlayers.push({ name: currentPlayer.name, kills: currentPlayer.kills });
+		if (currentPlayer.alive) {
+			strippedPlayers.push({ name: currentPlayer.name, kills: currentPlayer.kills });
+		}
 	});
 
 	strippedPlayers.sort(comparePlayers);

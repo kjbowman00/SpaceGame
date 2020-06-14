@@ -40,6 +40,8 @@ function respawnSuccess(pos) {
 	//Reset player attributes
 	player.x = pos.x;
 	player.y = pos.y;
+	player.oldX = pos.x;
+	player.oldY = pos.y;
 	player.health = 100;
 	alive = true;
 

@@ -1,13 +1,30 @@
 const UPGRADE_TYPES = {
+	//Common
 	health: 0,
 	speed: 1,
 	fire_rate: 2,
 	armor: 3,
 	health_regen: 4,
-	armor_piercing: 5,
-	bleed: 6,
-	splash_damage: 7,
+	damage: 5,
 
+	//Rare
+	armor_piercing: 6,
+	life_steal: 7,
+
+
+	//Legendary
+	pet: 8,
+	repulser: 9,
+	cryo_rounds: 10,
+	acidic_rounds: 11,
+
+	//Specializations
+	//Lvl 5
+	tank: 12,
+	speedster: 13,
+	//Level 10
+	sniper: 14,
+	bullet_hose: 15
 };
 
 const AMOUNT_TO_UPGRADE = [
@@ -15,8 +32,10 @@ const AMOUNT_TO_UPGRADE = [
 	500, 500, 500, 500, 500, 500, 500, 500, 500, 500, 500, 500, 500, 500, 500
 ];
 
-const UPGRADE_PROBABILITIES = [ //Should add to 1
-	0.3, 0.2, 0.2, 0.1, 0.2
+const UPGRADE_PROBABILITIES = [
+	0.155833333, 0.155833333, 0.155833333, 0.155833333, 0.155833333, 0.155833333, //Common
+	0.025, 0.025, //Rare
+	0.00375, 0.00375, 0.00375, 1 //Legendary. 1 at the end to ensure an upgrade happens from rounding errors
 ];
 
 //Get what types of upgrades are available to the player on levelup

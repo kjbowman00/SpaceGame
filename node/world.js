@@ -31,6 +31,7 @@ const PLAYER_SPEED = 150;
 var update = function (deltaTime) {
 	botManager.updateBotNumbers();
 	let botsToRemove = [];
+	let playersToReset = [];
 	//Update player positions
 	players.forEach((currentPlayer, key, map) => {
 		if (currentPlayer.alive) {
@@ -138,9 +139,6 @@ var update = function (deltaTime) {
 					killingPlayer.kills++;
 					killingPlayer.orbs += 15 * currentPlayer.level;
 				}
-
-				//Remove items/powerups
-				currentPlayer.activePowerups = [];
 			}
 
 			if (currentPlayer.bot) {
@@ -148,12 +146,6 @@ var update = function (deltaTime) {
 					botsToRemove.push(key);
 				}
 			}
-		}
-
-		//Delete dead bots and bots who have stayed too long
-		for (let i = botsToRemove.length - 1; i >= 0; i--) {
-			let removeID = botsToRemove.pop();
-			players.delete(removeID);
 		}
 
 		//Determine if player should be leveled up
@@ -165,6 +157,12 @@ var update = function (deltaTime) {
 			}
 		}
 	}); //END update player positions
+
+	//Delete dead bots and bots who have stayed too long
+	for (let i = botsToRemove.length - 1; i >= 0; i--) {
+		let removeID = botsToRemove.pop();
+		players.delete(removeID);
+	}
 
 	let bulletsMarkedForDelete = [];
 	//Move bullets
@@ -301,12 +299,8 @@ var requestRespawn = function (socketID) {
 	if (player.alive) return req;
 
 	req.success = true;
-	let position = getRandomSpawn();
-	player.x = position.x;
-	player.y = position.y;
-	req.position = position;
-	player.alive = true;
-	player.health = 100;
+	addPlayer(socketID, player.name, player.color);
+	req.position = { x: player.x, y: player.y };
 	return req;
 }
 

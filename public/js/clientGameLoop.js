@@ -145,6 +145,8 @@ function update() {
 
 function draw() {
 	var ctx = canvas.getContext('2d');
+	var uiCtx = UICanvas.getContext('2d');
+	uiCtx.clearRect(0, 0, canvas.width, canvas.height);
 	ctx.fillStyle = "#000000";
 	//Clear canvas
 	ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -235,9 +237,9 @@ function draw() {
 		displayPowerupObj(powerupObjs[i], bCtx);
 	}
 
-	displayLeaderboard(ctx);
-	drawTopInfoBar(ctx);
-	drawUpgrades(ctx);
+	displayLeaderboard(uiCtx);
+	drawTopInfoBar(uiCtx);
+	drawUpgrades(uiCtx);
 
 	//Draw gray overlay if dead
 	if (!alive) {

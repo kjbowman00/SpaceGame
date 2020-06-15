@@ -23,6 +23,12 @@ const UPGRADE_TEXT = [
 	"Bullet Hose"
 ];
 
+const UPGRADE_LEVELS = {
+	rare: 6,
+	legendary: 8,
+	specialized: 12
+};
+
 function drawTopInfoBar(ctx) {
 	ctx.fillStyle = "rgba(255, 255, 255, 0.8)";
 	ctx.font = "12px Arial";
@@ -59,10 +65,19 @@ function drawUpgrades(ctx) {
 			//Draw button
 			ctx.fillStyle = "rgba(100, 100, 100, 0.8)";
 			ctx.fillRect(x, y, width, height);
-			drawShimmer(upgradeButtons[i], ctx);
+
+			if (upgradeNum >= UPGRADE_LEVELS.specialized) {
+				ctx.fillStyle = "yellow";
+			} else if (upgradeNum >= UPGRADE_LEVELS.legendary) {
+				ctx.fillStyle = "red";
+			} else if (upgradeNum >= UPGRADE_LEVELS.rare) {
+				drawShimmer(upgradeButtons[i], ctx);
+				ctx.fillStyle = "purple";
+			} else {
+				ctx.fillStyle = "rgba(255, 255, 255, 0.8)"; // Common gray color
+			}
 
 			//Draw text
-			ctx.fillStyle = "rgba(255, 255, 255, 0.8)";
 			ctx.font = "15px Arial";
 			ctx.textAlign = "center";
 			ctx.fillText(UPGRADE_TEXT[upgradeNum], x + width / 2, y - textVertOffset);
@@ -93,35 +108,33 @@ function checkUpgradeClick(pos) {
 }
 
 
-let shimmerStart = -2 * (upgradeButtons[0].width / 4);
-let shimmerPos = shimmerStart;
+//let shimmerStart = -2 * (upgradeButtons[0].width / 4) - 12.5 * 6;
+let shimmerWidth = 150; //How wide i want my gradient
+//let shimmerJump = (-2 * shimmerStart + upgradeButtons[0].width) / 4;
+let shimmerOffset = -shimmerWidth + upgradeButtons[0].width;
 
 let iMTEST = false;
 function drawShimmer(button, ctx) {
 	// Create gradient
-	let x = button.x + shimmerPos;
-	let y = button.y + shimmerPos;
-	var grd = ctx.createLinearGradient(x, y, x + button.width - 2*shimmerStart, y + button.height - 2*shimmerStart);
-	grd.addColorStop(0, "purple");
-	grd.addColorStop(0.125, "white");
-	grd.addColorStop(0.25, "purple");
-	grd.addColorStop(0.375, "white");
-	grd.addColorStop(0.5, "purple");
-	grd.addColorStop(0.625, "white");
-	grd.addColorStop(0.75, "purple");
-	grd.addColorStop(0.875, "white");
-	grd.addColorStop(1, "purple");
+	let x = button.x + shimmerOffset;
+	let y = button.y + shimmerOffset;
+	var grd = ctx.createLinearGradient(x, y, x + shimmerWidth, y + shimmerWidth);
+	let col1 = "rgba(80, 25, 250, 0.6)";
+	let col2 = "rgba(150, 100, 250, 0.3)";
+	grd.addColorStop(0, col1);
+	grd.addColorStop(0.25, col2);
+	grd.addColorStop(0.5, col1);
+	grd.addColorStop(0.75, col2);
+	grd.addColorStop(1, col1);
 
 	// Fill with gradient
 	ctx.fillStyle = grd;
-	ctx.globalCompositeoperation = "lighter";
+	ctx.globalCompositeOperation = 'lighter';
 	ctx.fillRect(button.x, button.y, button.width, button.height);
+	ctx.globalCompositeOperation = 'source-over';
 
-
-	shimmerPos += 0.17 * 1;
-	if (shimmerPos >= 0) {
-		console.log(shimmerPos);
-		shimmerPos += shimmerStart;
-		console.log(shimmerPos);
+	shimmerOffset += 0.17 * 1;
+	if (shimmerOffset >= 0) {
+		shimmerOffset -= shimmerWidth/2;
 	}
 }

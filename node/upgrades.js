@@ -41,6 +41,19 @@ const UPGRADE_PROBABILITIES = [
 //Get what types of upgrades are available to the player on levelup
 function getUpgradeSet(player) {
 	let set = [];
+	if (player.level == 5) {
+		set.push(UPGRADE_TYPES.tank);
+		set.push(UPGRADE_TYPES.speedster);
+		set.push(-1);
+		return set;
+	}
+	if (player.level == 10) {
+		set.push(UPGRADE_TYPES.sniper);
+		set.push(UPGRADE_TYPES.bullet_hose);
+		set.push(-1);
+		return set;
+	}
+
 	for (let i = 0; i < 3; i++) {
 		let randomNum = Math.random();
 		let currentProb = 0;

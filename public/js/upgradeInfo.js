@@ -1,3 +1,32 @@
+const UPGRADE_TYPES = {
+	//Common
+	health: 0,
+	speed: 1,
+	fire_rate: 2,
+	armor: 3,
+	health_regen: 4,
+	damage: 5,
+
+	//Rare
+	armor_piercing: 6,
+	life_steal: 7,
+
+
+	//Legendary
+	pet: 8,
+	repulser: 9,
+	cryo_rounds: 10,
+	acidic_rounds: 11,
+
+	//Specializations
+	//Lvl 5
+	tank: 12,
+	speedster: 13,
+	//Level 10
+	sniper: 14,
+	bullet_hose: 15
+};
+
 const UPGRADE_TEXT = [
 	["+20% Health (Common)"],
 	["+20% Speed (Common)"],

@@ -13,6 +13,7 @@ orbs.initializeOrbs(worldObj, staticWorldObjs);
 var leaderboard = require('./leaderboard.js');
 
 var upgrades = require('./upgrades.js');
+const UPGRADE_TYPES = upgrades.UPGRADE_TYPES;
 
 var powerups = require('./powerups.js');
 var middlePowerup = new powerups.powerupObj(-50, -50, 100, 100);
@@ -44,7 +45,7 @@ var update = function (deltaTime) {
 			//Get powerup mods
 			let velocityMod = 1;
 			if (isPowerupActive(powerups.powerups.superSpeed, currentPlayer)) velocityMod += 0.8;
-			velocityMod += currentPlayer.upgrades[upgrades.UPGRADE_TYPES.speed] * 0.25;
+			velocityMod += currentPlayer.upgrades[UPGRADE_TYPES.speed] * 0.25;
 
 			//Update old positions
 			if (currentPlayer.bot) {
@@ -61,11 +62,11 @@ var update = function (deltaTime) {
 			if (isPowerupActive(powerups.powerups.overcharge, currentPlayer)) {
 				shotTimeMod *= 2;
 			}
-			shotTimeMod += 0.2 * currentPlayer.upgrades[upgrades.UPGRADE_TYPES.fire_rate];
+			shotTimeMod += 0.2 * currentPlayer.upgrades[UPGRADE_TYPES.fire_rate];
 
 			//Handle player shooting
-			let bulletDmg = 10 * (1 + 0.05 * currentPlayer.upgrades[upgrades.UPGRADE_TYPES.damage]);
-			let armorPiercing = 0.05 * currentPlayer.upgrades[upgrades.UPGRADE_TYPES.armor_piercing];
+			let bulletDmg = 10 * (1 + 0.05 * currentPlayer.upgrades[UPGRADE_TYPES.damage]);
+			let armorPiercing = 0.05 * currentPlayer.upgrades[UPGRADE_TYPES.armor_piercing];
 			if (currentPlayer.gun.shotsRequested > 0 && currentPlayer.gun.shotTimer >= currentPlayer.gun.shotTimeNeeded / shotTimeMod - 0.03) {
 				if (isPowerupActive(powerups.powerups.triShot, currentPlayer)) {
 					//TRI shot powerup is active
@@ -340,7 +341,7 @@ function Player(name, x, y, color) {
 	this.kills = 0;
 	this.orbs = 0;
 	this.lastDamagedBy = undefined;
-	this.upgrades = new Array(Object.keys(upgrades.UPGRADE_TYPES).length).fill(0); //[0, 0, 0, ...]
+	this.upgrades = new Array(Object.keys(UPGRADE_TYPES).length).fill(0); //[0, 0, 0, ...]
 	this.levelUpInProgress = false;
 	this.level = 0;
 	this.availableUpgrades = [];

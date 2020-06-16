@@ -61,7 +61,7 @@ function update() {
 		//Get powerup for superspeed
 		let velocityMod = 1;
 		if (isPowerupActive(powerups.superSpeed, player)) velocityMod += .8;
-		velocityMod += player.upgrades[1] * 0.25;
+		velocityMod += player.upgrades[UPGRADE_TYPES.speed] * 0.25;
 
 		player.oldX = player.x;
 		player.oldY = player.y;
@@ -86,7 +86,7 @@ function update() {
 
 		let fireTimeMod = 1;
 		if (isPowerupActive(powerups.overcharge, player)) fireTimeMod *= 2;
-		fireTimeMod += 0.2 * player.upgrades[2];
+		fireTimeMod += 0.2 * player.upgrades[UPGRADE_TYPES.fire_rate];
 
 		//Fire gun
 		playerFireTimer += deltaTime;

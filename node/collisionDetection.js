@@ -1,4 +1,5 @@
 var staticWorldObjs = require('./staticWorldObjs').staticWorldObjs;
+const UPGRADE_TYPES = require('./upgrades.js').UPGRADE_TYPES;
 
 function handleStaticObjsCollision(players, bullets, deltaTime, botManager) {
 	players.forEach((player, id, map) => {
@@ -83,8 +84,8 @@ function handleBulletCollision(players, bullets, bulletsMarkedForExplosion, delt
 				if (isPowerupActive(2, player)) { //CHECK if juggernaut enabled
 					armor += 0.5;
 				}
-				armor += 0.05 * player.upgrades[4]; //Armor
-				armor -= (0.05 * player.upgrades[6]);
+				armor += 0.05 * player.upgrades[UPGRADE_TYPES.armor]; //Armor
+				armor -= (0.05 * player.upgrades[UPGRADE_TYPES.armor_piercing]);
 				if (armor < 0) armor = 0;
 				if (armor > 1) armor = 1;
 
@@ -93,7 +94,7 @@ function handleBulletCollision(players, bullets, bulletsMarkedForExplosion, delt
 
 				let damagingPlayer = players.get(bullet.playerEmitId);
 				if (damagingPlayer.health > 0) { //This ensures they aren't already dead
-					let lifeSteal = damagingPlayer.upgrades[7] * 0.05;
+					let lifeSteal = damagingPlayer.upgrades[UPGRADE_TYPES.life_steal] * 0.05;
 					let lifeStolen = lifeSteal * damage;
 					damagingPlayer.health += lifeStolen;
 					if (damagingPlayer.health > damagingPlayer.maxHealth) damagingPlayer.health = damagingPlayer.maxHealth;

@@ -10,7 +10,6 @@ function drawPlayer(player, ctx, bCtx) {
 	ctx.fillRect(Math.floor(xRound - camera.x), Math.floor(yRound - camera.y), 50, 50);
 	//Draw armor if tank
 	if (player.upgrades[UPGRADE_TYPES.tank] > 0) {
-		console.log("YUH");
 		let offset = 3;
 		let coverage = 15;
 		let x = Math.floor(xRound - camera.x);
@@ -39,6 +38,23 @@ function drawPlayer(player, ctx, bCtx) {
 		ctx.fillRect(x + player.w + offset, y + player.h - coverage + offset + borderThickness, borderThickness, coverage);
 		ctx.fillRect(x + player.w - coverage + offset + borderThickness, y + player.h + offset, coverage, borderThickness);
 	}
+
+	//Draw repulsion shield
+	if (player.upgrades[UPGRADE_TYPES.repulser] > 0) {
+		let x = Math.floor(xRound - camera.x + player.w / 2);
+		let y = Math.floor(yRound - camera.y + player.h / 2);
+		let grd = ctx.createRadialGradient(x, y, player.w / 2 + 10, x, y, 45);
+		grd.addColorStop(0, "rgba(255, 255, 255, 0.1)");
+		grd.addColorStop(1, player.color);
+
+		ctx.beginPath();
+		ctx.arc(x, y, Math.floor(player.w / 2) + 20, 0, 2 * Math.PI);
+
+		ctx.fillStyle = grd;
+		ctx.fill();
+		ctx.closePath();
+	}
+
 	ctx.fillStyle = "#000000";
 	ctx.fillRect(Math.floor(xRound - camera.x + borderThickness), Math.floor(yRound - camera.y + borderThickness), 50 - borderThickness * 2, 50 - borderThickness * 2);
 

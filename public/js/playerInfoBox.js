@@ -5,7 +5,7 @@ function drawPlayerInfo(player, ctx) {
 	//Draw player name box
 	let tW = 8; //Text width
 	let tH = 12; //Text Height
-	let vertOffset = 26;
+	let vertOffset = 32;
 	ctx.fillStyle = 'rgba(124, 124, 124, 0.5)';
 	let nameLength = player.name.length;
 	ctx.fillRect(drawX + (player.w / 2) - (tW * nameLength / 2), drawY - vertOffset - tH, nameLength * tW, tH + 5);

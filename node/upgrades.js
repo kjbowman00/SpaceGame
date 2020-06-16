@@ -33,10 +33,13 @@ const UPGRADE_TYPES = {
 ];*/
 const AMOUNT_TO_UPGRADE = new Array(50).fill(1);
 
-const UPGRADE_PROBABILITIES = [
+/*const UPGRADE_PROBABILITIES = [
 	0.155833333, 0.155833333, 0.155833333, 0.155833333, 0.155833333, 0.155833333, //Common
 	0.025, 0.025, //Rare
 	0.00375, 0.00375, 0.00375, 1 //Legendary. 1 at the end to ensure an upgrade happens from rounding errors
+];*/
+const UPGRADE_PROBABILITIES = [
+	0.08, 0.08, 0.08, 0.08, 0.08, 0.08, 0.08, 0.08, 0.08, 0.08, 0.08, 1
 ];
 
 //Get what types of upgrades are available to the player on levelup

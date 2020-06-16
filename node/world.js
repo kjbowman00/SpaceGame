@@ -213,6 +213,7 @@ function getStrippedPlayer(player) {
 	stripped.gun = player.gun;
 	stripped.color = player.color;
 	stripped.name = player.name;
+	stripped.upgrades = player.upgrades;
 	return stripped;
 }
 

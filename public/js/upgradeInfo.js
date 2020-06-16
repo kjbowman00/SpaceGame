@@ -1,26 +1,26 @@
 const UPGRADE_TEXT = [
-	"+20% Health (Common)",
-	"+20% Speed (Common)",
-	"+20% Fire-Rate (Common)",
-	"+5% Armor (Common)",
-	"+5% Health Regen (Common)",
-	"+ X Damage (IDK YET)",
+	["+20% Health (Common)"],
+	["+20% Speed (Common)"],
+	["+20% Fire-Rate (Common)"],
+	["+5% Armor (Common)"],
+	["+5% Health Regen (Common)"],
+	["+ X Damage (IDK YET)"],
 
 	//Rare
-	"+5% Armor Piercing (Rare)",
-	"+5% Life Steal (Rare)",
+	["+5% Armor Piercing (Rare)"],
+	["+5% Life Steal (Rare)"],
 
 	//LEGENDARY
-	"Pet Bot (LEGENDARY)",
-	"Repulser Shield (LEGENDARY)",
-	"Cryo Rounds (LEGENDARY)",
-	"Acidic Rounds (LEGENDARY)",
+	["Pet Bot (LEGENDARY)", "Pet bot follows and helps you"],
+	["Repulser Shield (LEGENDARY)", "Bounce bullets sometimes"],
+	["Cryo Rounds (LEGENDARY)", "Sometimes bullets slow enemies"],
+	["Acidic Rounds (LEGENDARY)", "Bullets hurt even after hit"],
 
 	//Specializations
-	"Tank",
-	"Speedster",
-	"Sniper",
-	"Bullet Hose"
+	["Tank (Specialization)", "+X Health", "+X Armor", "-X Speed"],
+	["Speedster", "-X Health", "+X Speed", "-X Damage"],
+	["Sniper", "+X Damage", "-X Fire-Rate"],
+	["Bullet Hose", "+X Fire-Rate", "-X Damage"]
 ];
 
 const UPGRADE_IMAGES = new Array(16);
@@ -78,6 +78,7 @@ function drawUpgrades(ctx) {
 	}
 
 	if (player.levelUpInProgress) {
+		let largestOffset = 0;
 		let textVertOffset = 7;
 		for (let i = 0; i < upgradeButtons.length; i++) {
 			let upgradeNum = player.availableUpgrades[i];
@@ -100,6 +101,7 @@ function drawUpgrades(ctx) {
 			}
 
 			if (upgradeNum >= UPGRADE_LEVELS.specialized) {
+				drawShimmer(upgradeButtons[i], ctx, "rgba(150, 150, 0, 0.5)", "rgba(100, 100, 0, 0.5)");
 				ctx.fillStyle = "yellow";
 			} else if (upgradeNum >= UPGRADE_LEVELS.legendary) {
 				drawShimmer(upgradeButtons[i], ctx, "rgba(200, 00, 0, 0.6)", "rgba(200, 50, 0, 0.6)");
@@ -114,11 +116,22 @@ function drawUpgrades(ctx) {
 			//Draw text
 			ctx.font = "15px Arial";
 			ctx.textAlign = "center";
-			ctx.fillText(UPGRADE_TEXT[upgradeNum], x + width / 2, y - textVertOffset);
+			let textArray;
+			if (upgradeNum == -1) {
+				textArray = ["Don't Specialize", "(Boooorrrrinnggg)"];
+			} else {
+				textArray = UPGRADE_TEXT[upgradeNum];
+			}
+			let movingOffset = 0;
+			for (let j = textArray.length - 1; j >= 0; j--) {
+				if (movingOffset > largestOffset) largestOffset = movingOffset;
+				ctx.fillText(textArray[j], x + width / 2, y - textVertOffset - movingOffset);
+				movingOffset += 25;
+			}
 		}
 
 		ctx.fillStyle = "rgba(255, 255, 255, 0.8)";
-		ctx.fillText("Choose an upgrade:", upgradeButtons[1].x + width / 2, upgradeButtons[1].y - textVertOffset - 30);
+		ctx.fillText("Choose an upgrade:", upgradeButtons[1].x + width / 2, upgradeButtons[1].y - textVertOffset - 30 - largestOffset);
 	}
 }
 

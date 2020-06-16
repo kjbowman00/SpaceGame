@@ -23,6 +23,28 @@ const UPGRADE_TEXT = [
 	"Bullet Hose"
 ];
 
+const UPGRADE_IMAGES = new Array(16);
+for (let i = 0; i < UPGRADE_IMAGES.length; i++) {
+	UPGRADE_IMAGES[i] = new Image(100, 100);
+}
+UPGRADE_IMAGES[0].src = "/images/upgrades/health.png";
+UPGRADE_IMAGES[1].src = "/images/upgrades/speed.png";
+UPGRADE_IMAGES[2].src = "/images/upgrades/fire_rate.png";
+UPGRADE_IMAGES[3].src = "/images/upgrades/armor.png";
+UPGRADE_IMAGES[4].src = "/images/upgrades/health_regen.png";
+UPGRADE_IMAGES[5].src = "/images/upgrades/damage.png";
+UPGRADE_IMAGES[6].src = "/images/upgrades/armor_piercing.png";
+UPGRADE_IMAGES[7].src = "/images/upgrades/life_steal.png";
+UPGRADE_IMAGES[8].src = "/images/upgrades/NOT_DONE.png";
+UPGRADE_IMAGES[9].src = "/images/upgrades/repulser_shield.png";
+UPGRADE_IMAGES[10].src = "/images/upgrades/cryo_rounds.png";
+UPGRADE_IMAGES[11].src = "/images/upgrades/acidic_rounds.png";
+UPGRADE_IMAGES[12].src = "/images/upgrades/tank.png";
+UPGRADE_IMAGES[13].src = "/images/upgrades/NOT_DONE.png";
+UPGRADE_IMAGES[14].src = "/images/upgrades/NOT_DONE.png";
+UPGRADE_IMAGES[15].src = "/images/upgrades/NOT_DONE.png";
+
+
 const UPGRADE_LEVELS = {
 	rare: 6,
 	legendary: 8,
@@ -40,9 +62,9 @@ function drawTopInfoBar(ctx) {
 
 
 var upgradeButtons = [
-	{ x: 0, y: 0, width: 50, height: 50 },
-	{ x: 0, y: 0, width: 50, height: 50 },
-	{ x: 0, y: 0, width: 50, height: 50 }];
+	{ x: 0, y: 0, width: 50, height: 50, image: null },
+	{ x: 0, y: 0, width: 50, height: 50, image: null },
+	{ x: 0, y: 0, width: 50, height: 50, image: null }];
 
 
 function drawUpgrades(ctx) {
@@ -64,14 +86,26 @@ function drawUpgrades(ctx) {
 
 			//Draw button
 			ctx.fillStyle = "rgba(100, 100, 100, 0.8)";
-			ctx.fillRect(x, y, width, height);
+			if (upgradeNum == -1) {
+			} else {
+				ctx.drawImage(UPGRADE_IMAGES[upgradeNum], x, y, width, height);
+			}
+
+			//Lighten if mouse hover
+			if (Mouse.cameraX >= x && Mouse.cameraX <= x + width) {
+				if (Mouse.cameraY >= y && Mouse.cameraY <= y + height) {
+					ctx.fillStyle = "rgba(150, 150, 150, 0.4)";
+					ctx.fillRect(x, y, width, height);
+				}
+			}
 
 			if (upgradeNum >= UPGRADE_LEVELS.specialized) {
 				ctx.fillStyle = "yellow";
 			} else if (upgradeNum >= UPGRADE_LEVELS.legendary) {
-				ctx.fillStyle = "red";
+				drawShimmer(upgradeButtons[i], ctx, "rgba(200, 00, 0, 0.6)", "rgba(200, 50, 0, 0.6)");
+				ctx.fillStyle = "orange";
 			} else if (upgradeNum >= UPGRADE_LEVELS.rare) {
-				drawShimmer(upgradeButtons[i], ctx);
+				drawShimmer(upgradeButtons[i], ctx, "rgba(80, 25, 250, 0.3)", "rgba(120, 80, 250, 0.3)");
 				ctx.fillStyle = "purple";
 			} else {
 				ctx.fillStyle = "rgba(255, 255, 255, 0.8)"; // Common gray color
@@ -114,13 +148,11 @@ let shimmerWidth = 150; //How wide i want my gradient
 let shimmerOffset = -shimmerWidth + upgradeButtons[0].width;
 
 let iMTEST = false;
-function drawShimmer(button, ctx) {
+function drawShimmer(button, ctx, col1, col2) {
 	// Create gradient
 	let x = button.x + shimmerOffset;
 	let y = button.y + shimmerOffset;
 	var grd = ctx.createLinearGradient(x, y, x + shimmerWidth, y + shimmerWidth);
-	let col1 = "rgba(80, 25, 250, 0.6)";
-	let col2 = "rgba(150, 100, 250, 0.3)";
 	grd.addColorStop(0, col1);
 	grd.addColorStop(0.25, col2);
 	grd.addColorStop(0.5, col1);
@@ -133,7 +165,7 @@ function drawShimmer(button, ctx) {
 	ctx.fillRect(button.x, button.y, button.width, button.height);
 	ctx.globalCompositeOperation = 'source-over';
 
-	shimmerOffset += 0.17 * 1;
+	shimmerOffset += 0.17 * 2;
 	if (shimmerOffset >= 0) {
 		shimmerOffset -= shimmerWidth/2;
 	}

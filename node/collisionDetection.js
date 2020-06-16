@@ -78,7 +78,25 @@ function handleBulletCollision(players, bullets, bulletsMarkedForExplosion, delt
 	//Naive solution for now
 	//TODO: Make this not a naive solution if it's too slow (sweep and prune probably)
 	players.forEach((player, playerId, playerMap) => {
+		let repulser = false;
+		if (player.upgrades[UPGRADE_TYPES.repulser] > 0) repulser = true;
 		bullets.forEach((bullet, bulletId, bulletMap) => {
+			if (bullet.repulseChecked != true && bullet.playerEmitId != playerId) {
+				let xsq = (bullet.x - (player.x + player.w/2)) * (bullet.x - (player.x + player.w/2));
+				let ysq = (bullet.y - (player.y + player.h/2)) * (bullet.y - (player.y + player.h/2));
+				let dist = xsq + ysq;
+				let repulseRadius = 50 * 50;
+				if (dist <= repulseRadius) {
+					bullet.repulseChecked = true;
+					//Repulse the bullet
+					let shouldRepulseRand = Math.random();
+					if (shouldRepulseRand < 0.25) { // 1/4 chance to repulse
+						let rotation = Math.atan2(bullet.y - (player.y + player.h / 2), bullet.x - (player.x + player.h / 2));
+						bullet.xVel = Math.cos(rotation) * bullet.baseSpeed;
+						bullet.yVel = Math.sin(rotation) * bullet.baseSpeed;
+					}
+				}
+			}
 			if (bulletCollide(player, bullet) && bullet.playerEmitId != playerId) {
 				let armor = 0;
 				if (isPowerupActive(2, player)) { //CHECK if juggernaut enabled

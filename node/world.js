@@ -74,6 +74,7 @@ var update = function (deltaTime) {
 					bullets.set(bulletNum, {
 						x: currentPlayer.x + currentPlayer.w / 2 - 5, y: currentPlayer.y + (currentPlayer.h / 2) - 5,
 						r: 5,
+						baseSpeed: 500,
 						xVel: Math.cos(currentPlayer.gun.rotation) * 500 + currentPlayer.xVel / 2,
 						yVel: Math.sin(currentPlayer.gun.rotation) * 500 + currentPlayer.yVel / 2,
 						damage: bulletDmg,
@@ -86,6 +87,7 @@ var update = function (deltaTime) {
 					bullets.set(bulletNum, {
 						x: currentPlayer.x + currentPlayer.w / 2 - 5, y: currentPlayer.y + (currentPlayer.h / 2) - 5,
 						r: 5,
+						baseSpeed: 500,
 						xVel: Math.cos(currentPlayer.gun.rotation + spreadAngle) * 500 + currentPlayer.xVel / 2,
 						yVel: Math.sin(currentPlayer.gun.rotation + spreadAngle) * 500 + currentPlayer.yVel / 2,
 						damage: bulletDmg,
@@ -98,6 +100,7 @@ var update = function (deltaTime) {
 					bullets.set(bulletNum, {
 						x: currentPlayer.x + currentPlayer.w / 2 - 5, y: currentPlayer.y + (currentPlayer.h / 2) - 5,
 						r: 5,
+						baseSpeed:500,
 						xVel: Math.cos(currentPlayer.gun.rotation - spreadAngle) * 500 + currentPlayer.xVel / 2,
 						yVel: Math.sin(currentPlayer.gun.rotation - spreadAngle) * 500 + currentPlayer.yVel / 2,
 						damage: bulletDmg,
@@ -114,6 +117,7 @@ var update = function (deltaTime) {
 					bullets.set(bulletNum, {
 						x: currentPlayer.x + currentPlayer.w / 2 - 5, y: currentPlayer.y + (currentPlayer.h / 2) - 5,
 						r: 5,
+						baseSpeed: 500,
 						xVel: Math.cos(currentPlayer.gun.rotation) * 500 + currentPlayer.xVel / 2,
 						yVel: Math.sin(currentPlayer.gun.rotation) * 500 + currentPlayer.yVel / 2,
 						damage: bulletDmg,
@@ -266,6 +270,7 @@ var sendUpdates = function (io) {
 }
 
 function getRandomSpawn() {
+	return { x: 0, y: 0 };
 	const smallW = worldObj.width / 4;
 	const smallH = worldObj.height / 4;
 	const halfW = worldObj.width / 2;

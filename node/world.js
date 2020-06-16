@@ -37,7 +37,7 @@ var update = function (deltaTime) {
 		if (currentPlayer.alive) {
 			currentPlayer.regenStartTimer += deltaTime;
 			if (currentPlayer.regenStartTimer > REGEN_START_TIME) {
-				currentPlayer.health += deltaTime * 5; //5 health per second
+				currentPlayer.health += deltaTime * 5 * (1 + 0.05 * currentPlayer.upgrades[UPGRADE_TYPES.health_regen]); //5 health per second
 				if (currentPlayer.health > currentPlayer.maxHealth) currentPlayer.health = currentPlayer.maxHealth;
 			}
 
@@ -64,6 +64,8 @@ var update = function (deltaTime) {
 			shotTimeMod += 0.2 * currentPlayer.upgrades[upgrades.UPGRADE_TYPES.fire_rate];
 
 			//Handle player shooting
+			let bulletDmg = 10 * (1 + 0.05 * currentPlayer.upgrades[upgrades.UPGRADE_TYPES.damage]);
+			let armorPiercing = 0.05 * currentPlayer.upgrades[upgrades.UPGRADE_TYPES.armor_piercing];
 			if (currentPlayer.gun.shotsRequested > 0 && currentPlayer.gun.shotTimer >= currentPlayer.gun.shotTimeNeeded / shotTimeMod - 0.03) {
 				if (isPowerupActive(powerups.powerups.triShot, currentPlayer)) {
 					//TRI shot powerup is active
@@ -73,9 +75,10 @@ var update = function (deltaTime) {
 						r: 5,
 						xVel: Math.cos(currentPlayer.gun.rotation) * 500 + currentPlayer.xVel / 2,
 						yVel: Math.sin(currentPlayer.gun.rotation) * 500 + currentPlayer.yVel / 2,
-						damage: 10,
+						damage: bulletDmg,
 						color: currentPlayer.color,
 						timeAlive: 0,
+						armorPiercing: armorPiercing,
 						playerEmitId: key
 					});
 					bulletNum++;
@@ -84,9 +87,10 @@ var update = function (deltaTime) {
 						r: 5,
 						xVel: Math.cos(currentPlayer.gun.rotation + spreadAngle) * 500 + currentPlayer.xVel / 2,
 						yVel: Math.sin(currentPlayer.gun.rotation + spreadAngle) * 500 + currentPlayer.yVel / 2,
-						damage: 10,
+						damage: bulletDmg,
 						color: currentPlayer.color,
 						timeAlive: 0,
+						armorPiercing: armorPiercing,
 						playerEmitId: key
 					});
 					bulletNum++;
@@ -95,9 +99,10 @@ var update = function (deltaTime) {
 						r: 5,
 						xVel: Math.cos(currentPlayer.gun.rotation - spreadAngle) * 500 + currentPlayer.xVel / 2,
 						yVel: Math.sin(currentPlayer.gun.rotation - spreadAngle) * 500 + currentPlayer.yVel / 2,
-						damage: 10,
+						damage: bulletDmg,
 						color: currentPlayer.color,
 						timeAlive: 0,
+						armorPiercing: armorPiercing,
 						playerEmitId: key
 					});
 					bulletNum++;
@@ -110,9 +115,10 @@ var update = function (deltaTime) {
 						r: 5,
 						xVel: Math.cos(currentPlayer.gun.rotation) * 500 + currentPlayer.xVel / 2,
 						yVel: Math.sin(currentPlayer.gun.rotation) * 500 + currentPlayer.yVel / 2,
-						damage: 10,
+						damage: bulletDmg,
 						color: currentPlayer.color,
 						timeAlive: 0,
+						armorPiercing: armorPiercing,
 						playerEmitId: key
 					});
 					bulletNum++;

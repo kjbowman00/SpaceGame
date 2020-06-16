@@ -84,9 +84,20 @@ function handleBulletCollision(players, bullets, bulletsMarkedForExplosion, delt
 					armor += 0.5;
 				}
 				armor += 0.05 * player.upgrades[4]; //Armor
+				armor -= (0.05 * player.upgrades[6]);
+				if (armor < 0) armor = 0;
+				if (armor > 1) armor = 1;
 
 				let damage = bullet.damage - bullet.damage * armor;
 				player.health -= damage;
+
+				let damagingPlayer = players.get(bullet.playerEmitId);
+				if (damagingPlayer.health > 0) { //This ensures they aren't already dead
+					let lifeSteal = damagingPlayer.upgrades[7] * 0.05;
+					let lifeStolen = lifeSteal * damage;
+					damagingPlayer.health += lifeStolen;
+					if (damagingPlayer.health > damagingPlayer.maxHealth) damagingPlayer.health = damagingPlayer.maxHealth;
+				}
 
 				player.lastDamagedBy = bullet.playerEmitId;
 				player.regenStartTimer = 0;

@@ -30,6 +30,11 @@ function socketStuff(formData) {
         world = data.world;
         player.x = data.startPos.x;
         player.y = data.startPos.y;
+        console.log(data.startPos);
+        player.oldX = player.x;
+        player.oldY = player.y;
+        serverPlayerState.x = player.x;
+        serverPlayerState.y = player.y;
         player.name = formData.get("username");
         gameStart();
     });

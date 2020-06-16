@@ -8,8 +8,8 @@ function gameStart() {
 
 	gameRunning = true;
 	resizeCanvas();
-	camera.x = player.x + 50 - camera.w / 2;
-	camera.y = player.y + 50 - camera.h / 2;
+	camera.x = player.x + 25 - camera.w / 2;
+	camera.y = player.y + 25 - camera.h / 2;
 
 	//Enable animation frame updating
 	loopID = requestAnimationFrame(mainLoop);

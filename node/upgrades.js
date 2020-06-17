@@ -85,7 +85,11 @@ function upgradePlayer(player, selection) {
 	let upgradeType = player.availableUpgrades[selection];
 
 	//Handle things that need to be changed once
-	if (upgradeType == UPGRADE_TYPES.health) player.maxHealth += 20;
+	if (upgradeType == UPGRADE_TYPES.health) {
+		player.maxHealth = 100 + 25 * (player.upgrades[upgradeType] + 1);
+		if (player.upgrades[UPGRADE_TYPES.tank] > 0) player.maxHealth *= 2;
+	}
+	if (upgradeType == UPGRADE_TYPES.tank) player.maxHealth *= 2;
 
 	player.upgrades[upgradeType] += 1;
 }

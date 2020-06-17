@@ -28,12 +28,12 @@ const UPGRADE_TYPES = {
 };
 
 const UPGRADE_TEXT = [
-	["+20% Health (Common)"],
-	["+20% Speed (Common)"],
-	["+20% Fire-Rate (Common)"],
+	["+25% Health (Common)"],
+	["+10% Speed (Common)"],
+	["+15% Fire-Rate (Common)"],
 	["+5% Armor (Common)"],
-	["+5% Health Regen (Common)"],
-	["+ X Damage (IDK YET)"],
+	["+25% Health Regen (Common)"],
+	["+5% Damage (Common)"],
 
 	//Rare
 	["+5% Armor Piercing (Rare)"],
@@ -46,7 +46,7 @@ const UPGRADE_TEXT = [
 	["Acidic Rounds (LEGENDARY)", "Bullets hurt even after hit"],
 
 	//Specializations
-	["Tank (Specialization)", "+X Health", "+X Armor", "-X Speed"],
+	["Tank (Specialization)", "2x All Health", "+30% Armor", "-40% Total Speed"],
 	["Speedster", "-X Health", "+X Speed", "-X Damage"],
 	["Sniper", "+X Damage", "-X Fire-Rate"],
 	["Bullet Hose", "+X Fire-Rate", "-X Damage"]

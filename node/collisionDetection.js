@@ -92,8 +92,8 @@ function handleBulletCollision(players, bullets, bulletsMarkedForExplosion, delt
 					let shouldRepulseRand = Math.random();
 					if (shouldRepulseRand < 0.25) { // 1/4 chance to repulse
 						let rotation = Math.atan2(bullet.y - (player.y + player.h / 2), bullet.x - (player.x + player.h / 2));
-						bullet.xVel = Math.cos(rotation) * bullet.baseSpeed;
-						bullet.yVel = Math.sin(rotation) * bullet.baseSpeed;
+						bullet.xVel = Math.cos(rotation) * (bullet.baseSpeed * 1.4); //the 1.4 gives a stronger repulse effect
+						bullet.yVel = Math.sin(rotation) * (bullet.baseSpeed * 1.4);
 					}
 				}
 			}
@@ -103,6 +103,7 @@ function handleBulletCollision(players, bullets, bulletsMarkedForExplosion, delt
 					armor += 0.5;
 				}
 				armor += 0.05 * player.upgrades[UPGRADE_TYPES.armor]; //Armor
+				armor += 0.30 * player.upgrades[UPGRADE_TYPES.tank];
 				armor -= (0.05 * player.upgrades[UPGRADE_TYPES.armor_piercing]);
 				if (armor < 0) armor = 0;
 				if (armor > 1) armor = 1;

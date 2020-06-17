@@ -38,14 +38,16 @@ var update = function (deltaTime) {
 		if (currentPlayer.alive) {
 			currentPlayer.regenStartTimer += deltaTime;
 			if (currentPlayer.regenStartTimer > REGEN_START_TIME) {
-				currentPlayer.health += deltaTime * 5 * (1 + 0.05 * currentPlayer.upgrades[UPGRADE_TYPES.health_regen]); //5 health per second
+				currentPlayer.health += deltaTime * 5 * (1 + 0.25 * currentPlayer.upgrades[UPGRADE_TYPES.health_regen]); //5 health per second
 				if (currentPlayer.health > currentPlayer.maxHealth) currentPlayer.health = currentPlayer.maxHealth;
 			}
 
 			//Get powerup mods
 			let velocityMod = 1;
 			if (isPowerupActive(powerups.powerups.superSpeed, currentPlayer)) velocityMod += 0.8;
-			velocityMod += currentPlayer.upgrades[UPGRADE_TYPES.speed] * 0.25;
+			velocityMod += currentPlayer.upgrades[UPGRADE_TYPES.speed] * 0.1;
+			let velMod2 = 1;
+			if (currentPlayer.upgrades[UPGRADE_TYPES.tank] > 0) velMod2 = 0.60;
 
 			//Update old positions
 			if (currentPlayer.bot) {
@@ -54,15 +56,15 @@ var update = function (deltaTime) {
 				currentPlayer.oldX = currentPlayer.x;
 				currentPlayer.oldY = currentPlayer.y;
 
-				currentPlayer.x += currentPlayer.xVel * deltaTime * velocityMod;
-				currentPlayer.y += currentPlayer.yVel * deltaTime * velocityMod;
+				currentPlayer.x += currentPlayer.xVel * deltaTime * velocityMod * velMod2;
+				currentPlayer.y += currentPlayer.yVel * deltaTime * velocityMod * velMod2;
 			}
 
 			let shotTimeMod = 1;
 			if (isPowerupActive(powerups.powerups.overcharge, currentPlayer)) {
 				shotTimeMod *= 2;
 			}
-			shotTimeMod += 0.2 * currentPlayer.upgrades[UPGRADE_TYPES.fire_rate];
+			shotTimeMod += 0.15 * currentPlayer.upgrades[UPGRADE_TYPES.fire_rate];
 
 			//Handle player shooting
 			let bulletDmg = 10 * (1 + 0.05 * currentPlayer.upgrades[UPGRADE_TYPES.damage]);

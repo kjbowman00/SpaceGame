@@ -61,13 +61,15 @@ function update() {
 		//Get powerup for superspeed
 		let velocityMod = 1;
 		if (isPowerupActive(powerups.superSpeed, player)) velocityMod += .8;
-		velocityMod += player.upgrades[UPGRADE_TYPES.speed] * 0.25;
+		velocityMod += player.upgrades[UPGRADE_TYPES.speed] * 0.1;
+		let velMod2 = 1;
+		if (player.upgrades[UPGRADE_TYPES.tank] > 0) velMod2 = 0.6;
 
 		player.oldX = player.x;
 		player.oldY = player.y;
 		//Update player position
-		player.x += deltaTime * xDir * playerSpeed;
-		player.y += deltaTime * yDir * playerSpeed;
+		player.x += deltaTime * xDir * playerSpeed * velocityMod * velMod2;
+		player.y += deltaTime * yDir * playerSpeed * velocityMod * velMod2;
 
 		//Lerp to predicted server state
 		var predictX = serverPlayerState.x + lastInput.xVel * deltaServer;
@@ -86,7 +88,7 @@ function update() {
 
 		let fireTimeMod = 1;
 		if (isPowerupActive(powerups.overcharge, player)) fireTimeMod *= 2;
-		fireTimeMod += 0.2 * player.upgrades[UPGRADE_TYPES.fire_rate];
+		fireTimeMod += 0.15 * player.upgrades[UPGRADE_TYPES.fire_rate];
 
 		//Fire gun
 		playerFireTimer += deltaTime;

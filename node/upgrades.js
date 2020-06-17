@@ -42,6 +42,12 @@ const UPGRADE_PROBABILITIES = [
 	0.08, 0.08, 0.08, 0.08, 0.08, 0.08, 0.08, 0.08, 0.08, 0.08, 0.08, 1
 ];
 
+const MAX_UPGRADE_LEVELS = [
+	10, 5, 6, 7, 6, 10,
+	6, 6,
+	1,1,1,1
+];
+
 //Get what types of upgrades are available to the player on levelup
 function getUpgradeSet(player) {
 	let set = [];
@@ -59,19 +65,40 @@ function getUpgradeSet(player) {
 	}
 
 	for (let i = 0; i < 3; i++) {
-		let randomNum = Math.random();
+		let randomNum;
 		let currentProb = 0;
-		for (let j = 0; j < UPGRADE_PROBABILITIES.length; j++) {
-			currentProb += UPGRADE_PROBABILITIES[j];
-			if (randomNum <= currentProb) {
-				set.push(j);
-				if (player.bot == false) {
-					console.log(set);
+
+		let selectedUpgrade;
+		let MAX_ITER = 5;
+		let iter = 0;
+		do { // Iterates a few times if we hit a max upgrade by random chance
+			randomNum = Math.random();
+			iter++;
+			for (let j = 0; j < UPGRADE_PROBABILITIES.length; j++) {
+				currentProb += UPGRADE_PROBABILITIES[j];
+				if (randomNum <= currentProb) {
+					selectedUpgrade = j;
+					break;
 				}
-				break;
+			}
+		} while (iter < MAX_ITER && player.upgrades[selectedUpgrade] >= MAX_UPGRADE_LEVELS[selectedUpgrade]);
+		if (player.upgrades[selectedUpgrade] >= MAX_UPGRADE_LEVELS[selectedUpgrade]) {
+			//If the player still hasn't gotten an upgrade from random, just apply the next available upgrade
+			let noUpgradeAvailable = true;
+			for (let j = 0; j < UPGRADE_PROBABILITIES.length; j++) {
+				if (player.upgrades[j] < MAX_UPGRADE_LEVELS[j]) {
+					noUpgradeAvailable = false;
+					selectedUpgrade = j;
+				}
+			}
+			//No upgrades available? notify the player with -2
+			if (noUpgradeAvailable) {
+				selectedUpgrade = -2;
 			}
 		}
+		set.push(selectedUpgrade);
 	}
+
 	return set;
 }
 

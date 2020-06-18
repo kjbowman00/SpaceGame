@@ -81,7 +81,7 @@ function handleBulletCollision(players, bullets, bulletsMarkedForExplosion, delt
 		let repulser = false;
 		if (player.upgrades[UPGRADE_TYPES.repulser] > 0) repulser = true;
 		bullets.forEach((bullet, bulletId, bulletMap) => {
-			if (bullet.repulseChecked != true && bullet.playerEmitId != playerId) {
+			if (repulser && bullet.repulseChecked != true && bullet.playerEmitId != playerId) {
 				let xsq = (bullet.x - (player.x + player.w/2)) * (bullet.x - (player.x + player.w/2));
 				let ysq = (bullet.y - (player.y + player.h/2)) * (bullet.y - (player.y + player.h/2));
 				let dist = xsq + ysq;
@@ -117,6 +117,18 @@ function handleBulletCollision(players, bullets, bulletsMarkedForExplosion, delt
 					let lifeStolen = lifeSteal * damage;
 					damagingPlayer.health += lifeStolen;
 					if (damagingPlayer.health > damagingPlayer.maxHealth) damagingPlayer.health = damagingPlayer.maxHealth;
+				}
+
+				if (damagingPlayer.upgrades[UPGRADE_TYPES.cryo_rounds] > 0) {
+					let rand = Math.random();
+					if (rand < 1) {
+						//Slow effect
+						player.cryoSlowedTimer = 0.5;
+					}
+				}
+				if (damagingPlayer.upgrades[UPGRADE_TYPES.acidic_rounds] > 0) {
+					player.acidDamage += 1 + 0.05 * damagingPlayer.upgrades[UPGRADE_TYPES.damage];
+					if (player.acidDamage > 5) player.acidDamage = 5;
 				}
 
 				player.lastDamagedBy = bullet.playerEmitId;

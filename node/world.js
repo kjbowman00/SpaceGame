@@ -42,10 +42,25 @@ var update = function (deltaTime) {
 				if (currentPlayer.health > currentPlayer.maxHealth) currentPlayer.health = currentPlayer.maxHealth;
 			}
 
+			if (currentPlayer.acidDamage > 0) {
+				currentPlayer.health -= deltaTime;
+				currentPlayer.acidDamage -= deltaTime;
+				if (currentPlayer.acidDamage < 0) {
+					currentPlayer.health -= currentPlayer.acidDamage;
+					currentPlayer.acidDamage = 0;
+				}
+			}
+
 			//Get powerup mods
 			let velocityMod = 1;
 			if (isPowerupActive(powerups.powerups.superSpeed, currentPlayer)) velocityMod += 0.8;
 			velocityMod += currentPlayer.upgrades[UPGRADE_TYPES.speed] * 0.1;
+
+			if (currentPlayer.cryoSlowTimer > 0) {
+				currentPlayer.cryoSlowTimer -= deltaTime;
+				velocityMod *= 0.65;
+			}
+
 			let velMod2 = 1;
 			if (currentPlayer.upgrades[UPGRADE_TYPES.tank] > 0) velMod2 = 0.60;
 			if (currentPlayer.upgrades[UPGRADE_TYPES.speedster] > 0) {
@@ -366,6 +381,8 @@ function Player(name, x, y, color) {
 	this.availableUpgrades = [];
 	this.regenStartTimer = 0;
 	this.orbsToUpgrade = upgrades.AMOUNT_TO_UPGRADE[0];
+	this.cryoSlowTimer = 0;
+	this.acidDamage = 0;
 }
 
 var playerInput = function (socketID, input) {

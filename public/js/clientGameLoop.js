@@ -65,6 +65,7 @@ function update() {
 		let velMod2 = 1;
 		if (player.upgrades[UPGRADE_TYPES.tank] > 0) velMod2 = 0.6;
 		if (player.upgrades[UPGRADE_TYPES.speedster] > 0) velMod2 = 2;
+		if (player.cryoSlowTimer > 0) velocityMod *= 0.65;
 
 		player.oldX = player.x;
 		player.oldY = player.y;

@@ -77,6 +77,7 @@ function socketStuff(formData) {
         player.maxHealth = serverPlayerState.maxHealth;
         player.levelUpInProgress = serverPlayerState.levelUpInProgress;
         player.availableUpgrades = serverPlayerState.availableUpgrades;
+        player.cryoSlowTimer = serverPlayerState.cryoSlowTimer;
         player.upgrades = serverPlayerState.upgrades; //Remove later so we're not constantly sending this same with above
 
         handleInitialPowerup(serverPlayerState);

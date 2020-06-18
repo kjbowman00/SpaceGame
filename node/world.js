@@ -298,7 +298,6 @@ var sendUpdates = function (io) {
 }
 
 function getRandomSpawn() {
-	return { x: 0, y: 0 };
 	const smallW = worldObj.width / 4;
 	const smallH = worldObj.height / 4;
 	const halfW = worldObj.width / 2;

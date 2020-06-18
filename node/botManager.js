@@ -188,7 +188,8 @@ function updateBot(botNum, bot, deltaTime) {
 	//upgrade bot
 	if (bot.levelUpInProgress) {
 		bot.levelUpInProgress = false;
-		upgradeManager.upgradePlayer(bot, 0);
+		let choice = Math.floor(Math.random() * 3);
+		upgradeManager.upgradePlayer(bot, choice);
 	}
 
 	//If near position to head to, find new position

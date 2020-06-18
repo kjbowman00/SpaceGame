@@ -51,3 +51,4 @@ function respawnSuccess(pos) {
 
 document.getElementById("respawn_form_box").children[0].onclick = respawnRequest;
 document.getElementById("respawn_form_box").children[1].onclick = toMenu;
+console.log("WE LOADED");

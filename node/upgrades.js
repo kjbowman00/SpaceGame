@@ -27,21 +27,16 @@ const UPGRADE_TYPES = {
 	bullet_hose: 15
 };
 
-/*const AMOUNT_TO_UPGRADE = [
-	5, 10, 20, 25, 50, 50, 50, 50, 75, 75, 75, 75, 75, 100, 100, 100,
-	500, 500, 500, 500, 500, 500, 500, 500, 500, 500, 500, 500, 500, 500, 500
-];*/
-const AMOUNT_TO_UPGRADE = new Array(50).fill(1);
+const AMOUNT_TO_UPGRADE = [
+	25, 25, 25, 25, 50, 50, 50, 50, 75, 75, 75, 75, 75, 100, 100, 100,
+	100, 100, 100, 200, 200, 200, 200, 200, 200, 200, 200, 200, 200, 500, 500
+];
 
-/*const UPGRADE_PROBABILITIES = [
+const UPGRADE_PROBABILITIES = [
 	0.155833333, 0.155833333, 0.155833333, 0.155833333, 0.155833333, 0.155833333, //Common (93.5%)
 	0.025, 0.025, //Rare (5%)
 	0, 0.005, 0.005, 1 //Legendary (1.5%). 1 at the end to ensure an upgrade happens from rounding errors
-];*/
-const UPGRADE_PROBABILITIES = [
-	0.08, 0.08, 0.08, 0.08, 0.08, 0.08, 0.08, 0.08, 0.08, 0.08, 0.08, 1
 ];
-
 const MAX_UPGRADE_LEVELS = [
 	10, 5, 6, 7, 6, 10,
 	6, 6,

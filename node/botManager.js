@@ -38,7 +38,7 @@ var staticWorldObjs;
 var addPlayerFunc;
 var bots = []; // Stores the id to retrieve from player map
 var players;
-let startingBots = 0;
+let startingBots = 25;
 
 const NORMAL_LAST_TIME = 900; // 15 minutes to delete bot
 const LAST_TIME_RANDOMNESS = 600; // 10 minutes random change

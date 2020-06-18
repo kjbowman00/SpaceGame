@@ -112,23 +112,25 @@ function handleBulletCollision(players, bullets, bulletsMarkedForExplosion, delt
 				player.health -= damage;
 
 				let damagingPlayer = players.get(bullet.playerEmitId);
-				if (damagingPlayer.health > 0) { //This ensures they aren't already dead
-					let lifeSteal = damagingPlayer.upgrades[UPGRADE_TYPES.life_steal] * 0.05;
-					let lifeStolen = lifeSteal * damage;
-					damagingPlayer.health += lifeStolen;
-					if (damagingPlayer.health > damagingPlayer.maxHealth) damagingPlayer.health = damagingPlayer.maxHealth;
-				}
-
-				if (damagingPlayer.upgrades[UPGRADE_TYPES.cryo_rounds] > 0) {
-					let rand = Math.random();
-					if (rand < 1) {
-						//Slow effect
-						player.cryoSlowedTimer = 0.5;
+				if (damagingPlayer != undefined) {
+					if (damagingPlayer.health > 0) { //This ensures they aren't already dead
+						let lifeSteal = damagingPlayer.upgrades[UPGRADE_TYPES.life_steal] * 0.05;
+						let lifeStolen = lifeSteal * damage;
+						damagingPlayer.health += lifeStolen;
+						if (damagingPlayer.health > damagingPlayer.maxHealth) damagingPlayer.health = damagingPlayer.maxHealth;
 					}
-				}
-				if (damagingPlayer.upgrades[UPGRADE_TYPES.acidic_rounds] > 0) {
-					player.acidDamage += 1 + 0.05 * damagingPlayer.upgrades[UPGRADE_TYPES.damage];
-					if (player.acidDamage > 5) player.acidDamage = 5;
+
+					if (damagingPlayer.upgrades[UPGRADE_TYPES.cryo_rounds] > 0) {
+						let rand = Math.random();
+						if (rand < 1) {
+							//Slow effect
+							player.cryoSlowedTimer = 0.5;
+						}
+					}
+					if (damagingPlayer.upgrades[UPGRADE_TYPES.acidic_rounds] > 0) {
+						player.acidDamage += 1 + 0.05 * damagingPlayer.upgrades[UPGRADE_TYPES.damage];
+						if (player.acidDamage > 5) player.acidDamage = 5;
+					}
 				}
 
 				player.lastDamagedBy = bullet.playerEmitId;

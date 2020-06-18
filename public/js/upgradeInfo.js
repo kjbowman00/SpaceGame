@@ -46,10 +46,10 @@ const UPGRADE_TEXT = [
 	["Acidic Rounds (LEGENDARY)", "Bullets hurt even after hit"],
 
 	//Specializations
-	["Tank (Specialization)", "2x All Health", "+30% Armor", "-40% Total Speed"],
-	["Speedster", "-X Health", "+X Speed", "-X Damage"],
-	["Sniper", "+X Damage", "-X Fire-Rate"],
-	["Bullet Hose", "+X Fire-Rate", "-X Damage"]
+	["Tank (Specialization)", "2x Total Health", "+30% Armor", "-40% Total Speed"],
+	["Speedster (Specialization)", "0.5x Total Health", "2x Total Speed", "-25% Total Damage"],
+	["Sniper (Specialization)", "2x Total Damage", "0.25x Total Fire-Rate"],
+	["Bullet Hose (Specialization)", "+3x Total Fire-Rate", "0.2x Total Damage"]
 ];
 
 const UPGRADE_IMAGES = new Array(16);

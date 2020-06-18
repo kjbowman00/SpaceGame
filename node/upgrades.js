@@ -34,9 +34,9 @@ const UPGRADE_TYPES = {
 const AMOUNT_TO_UPGRADE = new Array(50).fill(1);
 
 /*const UPGRADE_PROBABILITIES = [
-	0.155833333, 0.155833333, 0.155833333, 0.155833333, 0.155833333, 0.155833333, //Common
-	0.025, 0.025, //Rare
-	0.00375, 0.00375, 0.00375, 1 //Legendary. 1 at the end to ensure an upgrade happens from rounding errors
+	0.155833333, 0.155833333, 0.155833333, 0.155833333, 0.155833333, 0.155833333, //Common (93.5%)
+	0.025, 0.025, //Rare (5%)
+	0, 0.005, 0.005, 1 //Legendary (1.5%). 1 at the end to ensure an upgrade happens from rounding errors
 ];*/
 const UPGRADE_PROBABILITIES = [
 	0.08, 0.08, 0.08, 0.08, 0.08, 0.08, 0.08, 0.08, 0.08, 0.08, 0.08, 1
@@ -110,15 +110,22 @@ function upgradePlayer(player, selection) {
 
 	//Add to their upgrades
 	let upgradeType = player.availableUpgrades[selection];
+	player.upgrades[upgradeType] += 1;
 
 	//Handle things that need to be changed once
 	if (upgradeType == UPGRADE_TYPES.health) {
-		player.maxHealth = 100 + 25 * (player.upgrades[upgradeType] + 1);
+		player.maxHealth = 100 + 25 * (player.upgrades[upgradeType]);
 		if (player.upgrades[UPGRADE_TYPES.tank] > 0) player.maxHealth *= 2;
+		if (player.upgrades[UPGRADE_TYPES.speedster] > 0) {
+			player.maxHealth /= 2;
+			if (player.health > player.maxHealth) player.health = player.maxHealth;
+		}
 	}
 	if (upgradeType == UPGRADE_TYPES.tank) player.maxHealth *= 2;
-
-	player.upgrades[upgradeType] += 1;
+	if (upgradeType == UPGRADE_TYPES.speedster) {
+		player.maxHealth /= 2;
+		if (player.health > player.maxHealth) player.health = player.maxHealth;
+	}
 }
 
 

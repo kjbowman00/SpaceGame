@@ -64,6 +64,7 @@ function update() {
 		velocityMod += player.upgrades[UPGRADE_TYPES.speed] * 0.1;
 		let velMod2 = 1;
 		if (player.upgrades[UPGRADE_TYPES.tank] > 0) velMod2 = 0.6;
+		if (player.upgrades[UPGRADE_TYPES.speedster] > 0) velMod2 = 2;
 
 		player.oldX = player.x;
 		player.oldY = player.y;
@@ -89,6 +90,8 @@ function update() {
 		let fireTimeMod = 1;
 		if (isPowerupActive(powerups.overcharge, player)) fireTimeMod *= 2;
 		fireTimeMod += 0.15 * player.upgrades[UPGRADE_TYPES.fire_rate];
+		if (player.upgrades[UPGRADE_TYPES.sniper] > 0) fireTimeMod /= 4;
+		if (player.upgrades[UPGRADE_TYPES.bullet_hose] > 0) fireTimeMod *= 3;
 
 		//Fire gun
 		playerFireTimer += deltaTime;

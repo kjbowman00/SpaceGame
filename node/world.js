@@ -48,6 +48,10 @@ var update = function (deltaTime) {
 			velocityMod += currentPlayer.upgrades[UPGRADE_TYPES.speed] * 0.1;
 			let velMod2 = 1;
 			if (currentPlayer.upgrades[UPGRADE_TYPES.tank] > 0) velMod2 = 0.60;
+			if (currentPlayer.upgrades[UPGRADE_TYPES.speedster] > 0) {
+				velMod2 = 2;
+				console.log("YUH");
+			}
 
 			//Update old positions
 			if (currentPlayer.bot) {
@@ -65,9 +69,16 @@ var update = function (deltaTime) {
 				shotTimeMod *= 2;
 			}
 			shotTimeMod += 0.15 * currentPlayer.upgrades[UPGRADE_TYPES.fire_rate];
+			if (currentPlayer.upgrades[UPGRADE_TYPES.bullet_hose]) shotTimeMod *= 3;
+			let sniperShotTimeAdjuster = 1;
+			if (currentPlayer.upgrades[UPGRADE_TYPES.sniper] > 0) sniperShotTimeAdjuster = 4;
+			shotTimeMod /= sniperShotTimeAdjuster;
 
 			//Handle player shooting
 			let bulletDmg = 10 * (1 + 0.05 * currentPlayer.upgrades[UPGRADE_TYPES.damage]);
+			if (currentPlayer.upgrades[UPGRADE_TYPES.speedster] > 0) bulletDmg = 0.75 * bulletDmg;
+			if (currentPlayer.upgrades[UPGRADE_TYPES.sniper] > 0) bulletDmg *= 2;
+			if (currentPlayer.upgrades[UPGRADE_TYPES.bullet_hose] > 0) bulletDmg *= 0.2;
 			let armorPiercing = 0.05 * currentPlayer.upgrades[UPGRADE_TYPES.armor_piercing];
 			if (currentPlayer.gun.shotsRequested > 0 && currentPlayer.gun.shotTimer >= currentPlayer.gun.shotTimeNeeded / shotTimeMod - 0.03) {
 				if (isPowerupActive(powerups.powerups.triShot, currentPlayer)) {

@@ -16,7 +16,7 @@ worldObjsUpdated.orbs = new Map();
 
 var powerupObjs = [];
 
-var serverPlayerState = { x: 0, y: 0, xVel: 0, yVel: 0, activePowerups: [] };
+var serverPlayerState = {};
 var lastInput = { xVel: 0, yVel: 0 };
 var lastInputTime = performance.now();
 
@@ -24,20 +24,31 @@ var lastUpdateTime = 0;
 
 var trailTimer = 0;
 
-var player = {
-	x: 0, y: 0, w: 50, h: 50, oldX: 0, oldY: 0, xVel: 0, yVel: 0, name: "None", health: 100, maxHealth:100,
-	gun: { w: 50, h: 10, rotation: 0 },
-	activePowerups: [],
-	orbs: 0, kills: 0,
-	upgrades: [0, 0, 0, 0, 0, 0, 0],
-	availableUpgrades:[0,0,0]
-};
+var player = {};
 var playerSpeed = 150;
 var playerFireTimer = 0;
 const playerFireTimeNeeded = 0.5;
 
 const fadeTime = 0.5; //Amount in seconds to fade screen on death
 var fadeTimer = 0;
+
+function initializeWorldObjects() {
+	worldObjsOld = {};
+	worldObjsOld.players = new Map();
+	worldObjsOld.bullets = new Map();
+	worldObjsOld.orbs = new Map();
+	worldObjsUpdated = {};
+	worldObjsUpdated.players = new Map();
+	worldObjsUpdated.bullets = new Map();
+	worldObjsUpdated.orbs = new Map();
+	powerupObjs = [];
+	serverPlayerState = {};
+	lastInput = { xVel: 0, yVel: 0 };
+	lastUpdateTime = 0;
+	trailTimer = 0;
+	player = {};
+	playerFireTimer = 0;
+}
 
 function lerp(n1, n2, amt) {
 	if (n2 - n1 == 0) return n1;

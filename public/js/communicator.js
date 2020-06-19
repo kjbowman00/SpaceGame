@@ -4,20 +4,19 @@ var socket;
 function onPlay() {
     var form = document.getElementById("name_form");
     console.log('play');
-    document.getElementById('form_box').style.display = 'none';
 	var formData = new FormData(form);
 	socketStuff(formData);
 	return false;
 }
-
+console.log("kms");
 document.getElementById("name_form").onsubmit = onPlay;
 
 function socketStuff(formData) {
     var gameName = formData.get('server');
 
     let playerColor = "#" + $('#color_picker').spectrum("get").toHex();
-    player.color = playerColor;
-    playerColor = getColorIndexFromPalette(playerColor);
+    let pColor = playerColor;
+    playerColor = getColorIndexFromPalette(playerColor); //For sending to the server in weird form
 
 	var path = '/' + gameName + '/socket.io';
     socket = io('/', {
@@ -27,6 +26,20 @@ function socketStuff(formData) {
     });
 
     socket.on('join_game_success', function (data) {
+        //Initialize player attributes
+        initializeWorldObjects();
+        player = {
+            x: 0, y: 0, w: 50, h: 50, oldX: 0, oldY: 0, xVel: 0, yVel: 0, name: "None", health: 100, maxHealth: 100,
+            gun: { w: 50, h: 10, rotation: 0 },
+            activePowerups: [],
+            orbs: 0, kills: 0,
+            upgrades: [0, 0, 0, 0, 0, 0, 0],
+            availableUpgrades: [0, 0, 0],
+            color: pColor,
+            name : formData.get("username")
+        };
+        serverPlayerState = { x: 0, y: 0, xVel: 0, yVel: 0, activePowerups: [] };
+
         world = data.world;
         player.x = data.startPos.x;
         player.y = data.startPos.y;
@@ -35,7 +48,6 @@ function socketStuff(formData) {
         player.oldY = player.y;
         serverPlayerState.x = player.x;
         serverPlayerState.y = player.y;
-        player.name = formData.get("username");
         gameStart();
     });
     socket.on('state', function (data) {

@@ -11,6 +11,7 @@ function gameStart() {
 	camera.x = player.x + 25 - camera.w / 2;
 	camera.y = player.y + 25 - camera.h / 2;
 
+
 	//Enable animation frame updating
 	loopID = requestAnimationFrame(mainLoop);
 }
@@ -18,9 +19,14 @@ function gameStart() {
 function toMenu() {
 	//Disable animation frame updating
 	cancelAnimationFrame(loopID);
-	//Turn off canvas
+
+	//Tell server bye
 	gameRunning = false;
+	socket.close();
+
+	//Turn off canvas
 	document.getElementById('canvas_holder').style.display = 'none';
+	document.getElementById('respawn_form_box').style.display = 'none';
 	document.getElementById('main_menu').style.display = 'block';
 }
 

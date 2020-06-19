@@ -180,6 +180,7 @@ var update = function (deltaTime) {
 			}
 
 			if (currentPlayer.bot) {
+				if (currentPlayer.timeToDelete < 0) currentPlayer.alive = false;
 				if (!currentPlayer.alive) {
 					botsToRemove.push(key);
 				}

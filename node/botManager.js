@@ -117,6 +117,8 @@ function addBot() {
 	let pos = findRandomPosNear(bot, 0);
 	bot.xToGo = pos.x;
 	bot.yToGo = pos.y;
+	bot.timeToDelete = NORMAL_LAST_TIME + Math.random() * LAST_TIME_RANDOMNESS;
+
 	bots.push(botNum);
 	botNum++;
 }
@@ -184,6 +186,7 @@ function sqDist(p1, p2) {
 
 function updateBot(botNum, bot, deltaTime) {
 	bot.shotTimer += deltaTime;
+	bot.timeToDelete -= deltaTime;
 
 	//upgrade bot
 	if (bot.levelUpInProgress) {

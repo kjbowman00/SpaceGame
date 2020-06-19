@@ -227,12 +227,17 @@ function updateBot(botNum, bot, deltaTime) {
 			bot.target = closest.id;
 		}
 	}
-	//Determine if target is too far away
+	//Determine if target is too far away or dead
 	if (bot.target != null) {
 		let target = players.get(bot.target);
 		if (target == undefined) {
 			bot.target = null;
-		} else if (sqDist(bot, target) > 1000000) bot.target = null;
+		} else if (sqDist(bot, target) > 1000000) {
+			bot.target = null;
+		}
+		else if (!target.alive) {
+			bot.target = null;
+		}
 	}
 
 	//Shoot at target

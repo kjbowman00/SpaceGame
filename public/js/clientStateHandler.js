@@ -43,6 +43,12 @@ function respawnSuccess(pos) {
 	player.oldX = pos.x;
 	player.oldY = pos.y;
 	player.health = 100;
+	serverPlayerState.x = pos.x;
+	serverPlayerState.y = pos.y;
+	serverPlayerState.oldX = pos.x;
+	serverPlayerState.oldY = pos.y;
+	camera.x = player.x - camera.w / 2 + 25;
+	camera.y = player.y - camera.h / 2 + 25;
 	alive = true;
 
 	//Hide respawn box
@@ -51,4 +57,3 @@ function respawnSuccess(pos) {
 
 document.getElementById("respawn_form_box").children[0].onclick = respawnRequest;
 document.getElementById("respawn_form_box").children[1].onclick = toMenu;
-console.log("WE LOADED");

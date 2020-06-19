@@ -65,7 +65,6 @@ var update = function (deltaTime) {
 			if (currentPlayer.upgrades[UPGRADE_TYPES.tank] > 0) velMod2 = 0.60;
 			if (currentPlayer.upgrades[UPGRADE_TYPES.speedster] > 0) {
 				velMod2 = 2;
-				console.log("YUH");
 			}
 
 			//Update old positions

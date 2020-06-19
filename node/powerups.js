@@ -45,7 +45,7 @@ function updatePowerup(powerup, players, deltaTime) {
 		let player = iterator.next();
 		let playerCount = 0;
 		while (player.value != undefined) {
-			if (player.value.alive && intersects(player.value[1], powerup)) {
+			if (player.value[1].alive && intersects(player.value[1], powerup)) {
 				playerCount++;
 				powerup.playerInside = player.value[0];
 				if (playerCount > 1) {

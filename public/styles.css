@@ -68,14 +68,16 @@ html, body {
 }
 
 #form_box {
-	width:20%;
-	height:40%;
-	position:absolute;
-	top:20%;
-	left:40%;
-	margin:auto;
-	background-color:black;
-	text-align:center;
+	width: 20%;
+	height: 40%;
+	position: absolute;
+	top: 20%;
+	left: 40%;
+	margin: auto;
+	background-color: rgba(150,150,150,0.35);
+	border: 2px solid;
+	border-color: rgba(150,150,150,0.5);
+	text-align: center;
 }
 #name_form {
 	position:relative;
@@ -90,10 +92,18 @@ html, body {
 	top: 30%;
 	left: 40%;
 	margin: auto;
-	background-color: gray;
+	background-color: rgba(150,150,150,0.35);
+	border: 2px solid;
+	border-color: rgba(150,150,150,0.5);
 	text-align: center;
 }
-
+#respawn_form_box button {
+	padding: 5px;
+	margin: 5px;
+	background-color: black;
+	border: solid 2px red;
+	color: white;
+}
 
 
 .fade-in {

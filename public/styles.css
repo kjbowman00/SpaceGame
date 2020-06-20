@@ -32,6 +32,9 @@ html, body {
 	border:solid 2px red;
 	color:white;
 }
+	#name_form_submit:hover {
+		background-color: rgba(30,30,30,1);
+	}
 
 #main_menu_canvas {
 	z-index: -1;
@@ -103,6 +106,41 @@ html, body {
 	background-color: black;
 	border: solid 2px red;
 	color: white;
+}
+	#respawn_form_box button:hover {
+		background-color: rgba(30,30,30,1);
+	}
+
+#open_options {
+	position:absolute;
+	top: 7px;
+	left: 7px;
+	width:50px;
+	height:50px;
+	margin:0px;
+	padding:0px;
+	border:none;
+	background-color:transparent;
+}
+	#open_options:hover {
+		background-color: rgba(150,150,150,0.35);
+	}
+	#open_options img {
+		height:100%;
+	}
+#close_options {
+}
+
+#options_box {
+	position: absolute;
+	display:none;
+	top: 7px;
+	left: 7px;
+	width: 20%;
+	height: 30%;
+	background-color: rgba(150,150,150,0.35);
+	border: 2px solid;
+	border-color: rgba(150,150,150,0.5);
 }
 
 

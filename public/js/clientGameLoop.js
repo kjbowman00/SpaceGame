@@ -254,7 +254,7 @@ function draw() {
 		displayPowerupObj(powerupObjs[i], bCtx);
 	}
 
-	//displayLeaderboard(uiCtx);
+	displayLeaderboard(uiCtx);
 	drawTopInfoBar(uiCtx);
 	drawUpgrades(uiCtx);
 

@@ -3,6 +3,8 @@ var canvas = document.getElementById('canvas');
 var backgroundCanvas = document.getElementById('background_canvas');
 var UICanvas = document.getElementById('UI_canvas');
 function resizeCanvas() {
+	mainMenuCanvas.width = window.innerWidth;
+	mainMenuCanvas.height = window.innerHeight;
 	if (gameRunning) {
 		canvas.width = window.innerWidth;
 		canvas.height = window.innerHeight;
@@ -13,5 +15,7 @@ function resizeCanvas() {
 		UICanvas.width = canvas.width;
 		UICanvas.height = canvas.height;
 	}
+
+
 }
 window.addEventListener('resize', resizeCanvas);

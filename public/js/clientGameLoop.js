@@ -97,8 +97,8 @@ function update() {
 		player.y += deltaTime * yDir * playerSpeed * velocityMod * velMod2;
 
 		//Lerp to predicted server state
-		var predictX = serverPlayerState.x + lastInput.xVel * deltaServer;
-		var predictY = serverPlayerState.y + lastInput.yVel * deltaServer;
+		var predictX = serverPlayerState.x + lastInput.xVel * deltaServer * velocityMod * velMod2;
+		var predictY = serverPlayerState.y + lastInput.yVel * deltaServer * velocityMod * velMod2;
 
 		if (Math.abs(player.x - predictX) > 2) player.x = lerp(player.x, predictX, 0.2);
 		if (Math.abs(player.y - predictY) > 2) player.y = lerp(player.y, predictY, 0.2);

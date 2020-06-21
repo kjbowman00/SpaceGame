@@ -44,9 +44,21 @@ function initializeWorldObjects() {
 	powerupObjs = [];
 	serverPlayerState = {};
 	lastInput = { xVel: 0, yVel: 0 };
-	lastUpdateTime = 0;
+	lastUpdateTime = performance.now();
 	trailTimer = 0;
-	player = {};
+	player.x = 0;
+	player.y = 0;
+	player.w = 50;
+	player.h = 50;
+	player.oldX = 0;
+	player.oldY = 0;
+	player.xVel = 0;
+	player.yVel = 0;
+	player.heatlh = 100;
+	player.maxHealth = 100;
+	player.activePowerups = [];
+	player.upgrades = new Array(20).fill(0);
+	player.availableUpgrades = [0, 0, 0];
 	playerFireTimer = 0;
 }
 
@@ -65,10 +77,10 @@ function isPowerupActive(type, player) {
 
 function update() {
 	if (alive && player.health <= 0) died();
-	updateCamera();
 	var deltaServer = (performance.now() - lastInputTime) / 1000;
 
 	if (alive) {
+		updateCamera();
 		//Get powerup for superspeed
 		let velocityMod = 1;
 		if (isPowerupActive(powerups.superSpeed, player)) velocityMod += .8;

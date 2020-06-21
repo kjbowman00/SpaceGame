@@ -339,8 +339,7 @@ var requestRespawn = function (socketID) {
 	if (player.alive) return req;
 
 	req.success = true;
-	addPlayer(socketID, player.name, player.color);
-	req.position = { x: player.x, y: player.y };
+	req.position = addPlayer(socketID, player.name, player.color);
 	return req;
 }
 

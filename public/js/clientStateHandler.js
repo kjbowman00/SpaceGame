@@ -43,6 +43,7 @@ function respawnRequest() {
 }
 
 function respawnSuccess(pos) {
+	initializeWorldObjects();
 	//Reset player attributes
 	player.x = pos.x;
 	player.y = pos.y;

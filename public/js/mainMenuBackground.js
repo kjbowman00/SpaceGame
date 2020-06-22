@@ -131,8 +131,8 @@ function menuDraw() {
 	for (let i = 0; i < fakeOrbs.length; i++) {
 		let elem = fakeOrbs[i];
 		//Render trail
-		if (elem.trail != undefined) {
-			elem.trail.render(ctx);
+		if (OPTIONS.orbTrailQuality > 0 && elem.trail != undefined) {
+			elem.trail.render(ctx, OPTIONS.orbTrailQuality);
 		}
 		var grd = ctx.createRadialGradient(Math.floor(elem.x + 10), Math.floor(elem.y + 10), 3, Math.floor(elem.x + 10), Math.floor(elem.y + 10), 10);
 		let c = hexToRGB(elem.color);
@@ -149,8 +149,8 @@ function menuDraw() {
 		let fakeP = fakePlayers[i];
 
 		//Render trail
-		if (fakeP.trail != undefined) {
-			fakeP.trail.render(ctx);
+		if (OPTIONS.playerTrailQuality > 0 && fakeP.trail != undefined) {
+			fakeP.trail.render(ctx, OPTIONS.playerTrailQuality);
 		}
 
 		ctx.globalCompositeOperation = "source-over";

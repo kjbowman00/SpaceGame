@@ -256,8 +256,8 @@ function draw() {
 		bCtx.fillRect(Math.floor(elem.x - camera.x), Math.floor(elem.y - camera.y), 20, 20);
 
 		//Render trail
-		if (elem.trail != undefined) {
-			elem.trail.render(bCtx);
+		if (OPTIONS.orbTrailQuality > 0 && elem.trail != undefined) {
+			elem.trail.render(bCtx, OPTIONS.orbTrailQuality);
 		}
 	});
 

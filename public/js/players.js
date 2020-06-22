@@ -76,7 +76,7 @@ function drawPlayer(player, ctx, bCtx) {
 	drawPlayerInfo(player, ctx);
 
 	//Draw trail
-	if (player.trail != undefined) {
-		player.trail.render(bCtx);
+	if (OPTIONS.playerTrailQuality > 0 && player.trail != undefined) {
+		player.trail.render(bCtx, OPTIONS.playerTrailQuality);
 	}
 }

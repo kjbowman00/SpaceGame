@@ -36,6 +36,16 @@
 
 	<div id="options_box">
 		<button id="close_options" onclick="closeOptions();"></button>
+		<div id="player_trail_options">
+			<input type="radio" name="playerTrailQuality" value="0" onclick="changePlayerTrailQuality(0);"> None
+			<input type="radio" name="playerTrailQuality" value="1" onclick="changePlayerTrailQuality(1);"> Basic
+			<input type="radio" name="playerTrailQuality" value="2" onclick="changePlayerTrailQuality(2);" checked="checked"> Best
+		</div><br />
+		<div id="orb_trail_options">
+			<input type="radio" name="orbTrailQuality" onclick="changeOrbTrailQuality(0);" value="0"> None
+			<input type="radio" name="orbTrailQuality" onclick="changeOrbTrailQuality(1);" value="1"> Basic
+			<input type="radio" name="orbTrailQuality" value="2" onclick="changeOrbTrailQuality(2);" checked="checked"> Best
+		</div>
 	</div>
 	<button id="open_options" onclick="openOptions();"><img src="images/gear.png"/></button>
 

@@ -17,18 +17,25 @@ function _TrailNode(x, y, startColor, startR) { // Each individual circle object
 		this.color.a = lerp(this.color.a, 0, p);
 	}
 
-	this.render = function(ctx) {
+	this.render = function (ctx, quality) {
 		let x = this.x;
 		let y = this.y;
 		let r = this.radius;
 		let c = this.color;
-		var grd = ctx.createRadialGradient(Math.floor(x - camera.x), Math.floor(y - camera.y), Math.floor(r / 25), Math.floor(x - camera.x), Math.floor(y - camera.y), Math.floor(r));
-		let colorStr = makeStringyBoy(c);
-		grd.addColorStop(0, colorStr);
-		grd.addColorStop(1, 'rgba(' + c.r + ', ' + c.g + ', ' + c.b + ', 0)');
-		ctx.fillStyle = grd;
-		ctx.globalCompositeOperation = "lighter";
-		ctx.fillRect(Math.floor(x - r - camera.x), Math.floor(y - r - camera.y), Math.floor(2 * r), Math.floor(2 * r));
+		if (quality == 1) {
+			ctx.fillStyle = 'rgba(' + c.r + ', ' + c.g + ', ' + c.b + ', 0.2)';
+			ctx.beginPath();
+			ctx.arc(Math.floor(x - camera.x), Math.floor(y - camera.y), Math.floor(r), 0, 2 * Math.PI);
+			ctx.fill();
+		} else {
+			var grd = ctx.createRadialGradient(Math.floor(x - camera.x), Math.floor(y - camera.y), Math.floor(r / 25), Math.floor(x - camera.x), Math.floor(y - camera.y), Math.floor(r));
+			let colorStr = makeStringyBoy(c);
+			grd.addColorStop(0, colorStr);
+			grd.addColorStop(1, 'rgba(' + c.r + ', ' + c.g + ', ' + c.b + ', 0)');
+			ctx.fillStyle = grd;
+			ctx.globalCompositeOperation = "lighter";
+			ctx.fillRect(Math.floor(x - r - camera.x), Math.floor(y - r - camera.y), Math.floor(2 * r), Math.floor(2 * r));
+		}
 	}
 }
 
@@ -107,10 +114,10 @@ function Trail(x, y, color, maxRadius, spawnRate) {
 		}
 	}
 
-	this.render = function (ctx) {
+	this.render = function (ctx, quality) {
 		for (let i = this.nodes.length - 1; i >= 0; i--) {
 			let currentNode = this.nodes[i];
-			currentNode.render(ctx);
+			currentNode.render(ctx, quality);
 		}
 	}
 

@@ -36,15 +36,31 @@
 
 	<div id="options_box">
 		<button id="close_options" onclick="closeOptions();"></button>
-		<div id="player_trail_options">
-			<input type="radio" name="playerTrailQuality" value="0" onclick="changePlayerTrailQuality(0);"> None
-			<input type="radio" name="playerTrailQuality" value="1" onclick="changePlayerTrailQuality(1);"> Basic
-			<input type="radio" name="playerTrailQuality" value="2" onclick="changePlayerTrailQuality(2);" checked="checked"> Best
-		</div><br />
-		<div id="orb_trail_options">
-			<input type="radio" name="orbTrailQuality" onclick="changeOrbTrailQuality(0);" value="0"> None
-			<input type="radio" name="orbTrailQuality" onclick="changeOrbTrailQuality(1);" value="1"> Basic
-			<input type="radio" name="orbTrailQuality" value="2" onclick="changeOrbTrailQuality(2);" checked="checked"> Best
+		<h5>Player Trail Quality</h5>
+		<div id="player_trail_options" class="trail_quality">
+			<input type="radio" name="playerTrailQuality" id="playerTrailQualityNone" onclick="changePlayerTrailQuality(0);">
+			<label for="playerTrailQualityNone">None</label>
+			<input type="radio" name="playerTrailQuality" id="playerTrailQualityBasic" onclick="changePlayerTrailQuality(1);">
+			<label for="playerTrailQualityBasic">Basic</label>
+			<input type="radio" name="playerTrailQuality" id="playerTrailQualityBest" onclick="changePlayerTrailQuality(2);" checked="checked" />
+			<label for="playerTrailQualityBest">Best</label>
+		</div>
+		<h5>Orb Trail Quality</h5>
+		<div id="orb_trail_options" class="trail_quality">
+			<input type="radio" name="orbTrailQuality" id="orbTrailQualityNone" onclick="changeOrbTrailQuality(0);">
+			<label for="orbTrailQualityNone">None</label>
+			<input type="radio" name="orbTrailQuality" id="orbTrailQualityBasic" onclick="changeOrbTrailQuality(1);">
+			<label for="orbTrailQualityBasic">Basic</label>
+			<input type="radio" name="orbTrailQuality" id="orbTrailQualityBest" onclick="changeOrbTrailQuality(2);" checked="checked" />
+			<label for="orbTrailQualityBest">Best</label>
+		</div>
+		<h5>Music Volume</h5>
+		<div id="music_options">
+			<input type="range" id="music_volume" name="music_volume" onchange="changeMusicVolume();">
+		</div>
+		<h5>Volume</h5>
+		<div id="sound_options">
+			<input type="range" id="sound_volume" name="sound_volume" onchange="changeSoundVolume();">
 		</div>
 	</div>
 	<button id="open_options" onclick="openOptions();"><img src="images/gear.png"/></button>

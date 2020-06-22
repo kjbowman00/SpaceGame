@@ -20,3 +20,10 @@ function changePlayerTrailQuality(num) {
 function changeOrbTrailQuality(num) {
 	OPTIONS.orbTrailQuality = num;
 }
+
+function changeMusicVolume() {
+	OPTIONS.musicVolume = document.getElementById("music_volume").value / 100;
+}
+function changeSoundVolume() {
+	OPTIONS.volume = document.getElementById("sound_volume").value / 100;
+}

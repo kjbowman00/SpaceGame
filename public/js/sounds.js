@@ -1,8 +1,10 @@
+let startVol = 0.5;
+
 function _Sounds() {
     var laserSound = new Howl({
         src: ['sounds/laser.mp3'],
         buffer: true,
-        volume:0.2
+        volume: 0.2
     });
 
     var powerupSounds = [
@@ -33,8 +35,18 @@ function _Sounds() {
     }
 
     this.playPowerup = function (powerupType) {
-        console.log(powerupType);
         powerupSounds[powerupType].play();
+    }
+
+    this.changeVolume = function (vol) {
+        vol = vol / 0.5;
+        laserSound.volume(vol);
+        for (let i = 0; i < powerupSounds.length; i++) {
+            powerupSounds[i].volume(vol);
+        }
+    }
+    this.changeMusicVolume = function (vol) {
+        vol = vol / 0.5;
     }
 }
 

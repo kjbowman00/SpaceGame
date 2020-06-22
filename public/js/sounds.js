@@ -39,14 +39,12 @@ function _Sounds() {
     }
 
     this.changeVolume = function (vol) {
-        vol = vol / 0.5;
-        laserSound.volume(vol);
+        laserSound.volume(vol * 0.4);
         for (let i = 0; i < powerupSounds.length; i++) {
-            powerupSounds[i].volume(vol);
+            powerupSounds[i].volume(vol * 1.6);
         }
     }
     this.changeMusicVolume = function (vol) {
-        vol = vol / 0.5;
     }
 }
 

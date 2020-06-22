@@ -23,7 +23,9 @@ function changeOrbTrailQuality(num) {
 
 function changeMusicVolume() {
 	OPTIONS.musicVolume = document.getElementById("music_volume").value / 100;
+	Sounds.changeMusicVolume(OPTIONS.musicVolume);
 }
 function changeSoundVolume() {
 	OPTIONS.volume = document.getElementById("sound_volume").value / 100;
+	Sounds.changeVolume(OPTIONS.volume);
 }

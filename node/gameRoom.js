@@ -97,9 +97,9 @@ http.on("request", function (req, res) {
             thing.playerCount = gameLoop.world.players.size;
             thing.MAX_PLAYERS = gameLoop.world.MAX_PLAYERS;
             res.write(JSON.stringify(thing));
+            res.end();
         }
     }
-    res.end();
 });
 http.listen(portNum, function() {
     console.log('listening on localhost:3000');

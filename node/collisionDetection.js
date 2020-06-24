@@ -3,35 +3,37 @@ const UPGRADE_TYPES = require('./upgrades.js').UPGRADE_TYPES;
 
 function handleStaticObjsCollision(players, bullets, deltaTime, botManager) {
 	players.forEach((player, id, map) => {
-		let bounds = { x: player.x, y: player.y, w: player.w, h: player.h };
-		//Naive approach. test each object with each player
-		for (let i = staticWorldObjs.length - 1; i >= 0; i--) {
-			let currentBox = staticWorldObjs[i];
-			if (doesCollide(bounds, currentBox)) {
-				//Get the bounds and move the player
-				//Check x direction
-				let xBounds = { x: player.x, y: player.oldY, w: player.w, h: player.h };
-				let yBounds = { x: player.oldX, y: player.y, w: player.w, h: player.h };
-				if (doesCollide(xBounds, currentBox)) {
-					if (player.x - player.oldX > 0) {
-						player.x = currentBox.x - player.w;
-						player.oldX = player.x; //Prevents other boxes from handling the same collision
-						if (player.bot) botManager.bounceBot(player, botManager.SIDES.LEFT);
-					} else if (player.x - player.oldX < 0){
-						player.x = currentBox.x + currentBox.w;
-						player.oldX = player.x; //Prevents other boxes from handling the same collision
-						if (player.bot) botManager.bounceBot(player, botManager.SIDES.RIGHT);
+		if (player.alive) {
+			let bounds = { x: player.x, y: player.y, w: player.w, h: player.h };
+			//Naive approach. test each object with each player
+			for (let i = staticWorldObjs.length - 1; i >= 0; i--) {
+				let currentBox = staticWorldObjs[i];
+				if (doesCollide(bounds, currentBox)) {
+					//Get the bounds and move the player
+					//Check x direction
+					let xBounds = { x: player.x, y: player.oldY, w: player.w, h: player.h };
+					let yBounds = { x: player.oldX, y: player.y, w: player.w, h: player.h };
+					if (doesCollide(xBounds, currentBox)) {
+						if (player.x - player.oldX > 0) {
+							player.x = currentBox.x - player.w;
+							player.oldX = player.x; //Prevents other boxes from handling the same collision
+							if (player.bot) botManager.bounceBot(player, botManager.SIDES.LEFT);
+						} else if (player.x - player.oldX < 0) {
+							player.x = currentBox.x + currentBox.w;
+							player.oldX = player.x; //Prevents other boxes from handling the same collision
+							if (player.bot) botManager.bounceBot(player, botManager.SIDES.RIGHT);
+						}
 					}
-				}
-				if (doesCollide(yBounds, currentBox)) {
-					if (player.y - player.oldY > 0) {
-						player.y = currentBox.y - player.h;
-						player.oldY = player.y; //Prevents other boxes from handling the same collision
-						if (player.bot) botManager.bounceBot(player, botManager.SIDES.TOP);
-					} else if (player.y - player.oldY < 0){
-						player.y = currentBox.y + currentBox.h;
-						player.oldY = player.y; //Prevents other boxes from handling the same collision
-						if (player.bot) botManager.bounceBot(player, botManager.SIDES.BOTTOM);
+					if (doesCollide(yBounds, currentBox)) {
+						if (player.y - player.oldY > 0) {
+							player.y = currentBox.y - player.h;
+							player.oldY = player.y; //Prevents other boxes from handling the same collision
+							if (player.bot) botManager.bounceBot(player, botManager.SIDES.TOP);
+						} else if (player.y - player.oldY < 0) {
+							player.y = currentBox.y + currentBox.h;
+							player.oldY = player.y; //Prevents other boxes from handling the same collision
+							if (player.bot) botManager.bounceBot(player, botManager.SIDES.BOTTOM);
+						}
 					}
 				}
 			}
@@ -78,67 +80,69 @@ function handleBulletCollision(players, bullets, bulletsMarkedForExplosion, delt
 	//Naive solution for now
 	//TODO: Make this not a naive solution if it's too slow (sweep and prune probably)
 	players.forEach((player, playerId, playerMap) => {
-		let repulser = false;
-		if (player.upgrades[UPGRADE_TYPES.repulser] > 0) repulser = true;
-		bullets.forEach((bullet, bulletId, bulletMap) => {
-			if (repulser && bullet.repulseChecked != true && bullet.playerEmitId != playerId) {
-				let xsq = (bullet.x - (player.x + player.w/2)) * (bullet.x - (player.x + player.w/2));
-				let ysq = (bullet.y - (player.y + player.h/2)) * (bullet.y - (player.y + player.h/2));
-				let dist = xsq + ysq;
-				let repulseRadius = 50 * 50;
-				if (dist <= repulseRadius) {
-					bullet.repulseChecked = true;
-					//Repulse the bullet
-					let shouldRepulseRand = Math.random();
-					if (shouldRepulseRand < 0.25) { // 1/4 chance to repulse
-						let rotation = Math.atan2(bullet.y - (player.y + player.h / 2), bullet.x - (player.x + player.h / 2));
-						bullet.xVel = Math.cos(rotation) * (bullet.baseSpeed * 1.4); //the 1.4 gives a stronger repulse effect
-						bullet.yVel = Math.sin(rotation) * (bullet.baseSpeed * 1.4);
-					}
-				}
-			}
-			if (bulletCollide(player, bullet) && bullet.playerEmitId != playerId) {
-				let armor = 0;
-				if (isPowerupActive(2, player)) { //CHECK if juggernaut enabled
-					armor += 0.5;
-				}
-				armor += 0.05 * player.upgrades[UPGRADE_TYPES.armor]; //Armor
-				armor += 0.30 * player.upgrades[UPGRADE_TYPES.tank];
-				armor -= (0.05 * player.upgrades[UPGRADE_TYPES.armor_piercing]);
-				if (armor < 0) armor = 0;
-				if (armor > 1) armor = 1;
-
-				let damage = bullet.damage - bullet.damage * armor;
-				player.health -= damage;
-
-				let damagingPlayer = players.get(bullet.playerEmitId);
-				if (damagingPlayer != undefined) {
-					if (damagingPlayer.health > 0) { //This ensures they aren't already dead
-						let lifeSteal = damagingPlayer.upgrades[UPGRADE_TYPES.life_steal] * 0.05;
-						let lifeStolen = lifeSteal * damage;
-						damagingPlayer.health += lifeStolen;
-						if (damagingPlayer.health > damagingPlayer.maxHealth) damagingPlayer.health = damagingPlayer.maxHealth;
-					}
-
-					if (damagingPlayer.upgrades[UPGRADE_TYPES.cryo_rounds] > 0) {
-						let rand = Math.random();
-						if (rand < 1) {
-							//Slow effect
-							player.cryoSlowedTimer = 0.5;
+		if (player.alive) {
+			let repulser = false;
+			if (player.upgrades[UPGRADE_TYPES.repulser] > 0) repulser = true;
+			bullets.forEach((bullet, bulletId, bulletMap) => {
+				if (repulser && bullet.repulseChecked != true && bullet.playerEmitId != playerId) {
+					let xsq = (bullet.x - (player.x + player.w / 2)) * (bullet.x - (player.x + player.w / 2));
+					let ysq = (bullet.y - (player.y + player.h / 2)) * (bullet.y - (player.y + player.h / 2));
+					let dist = xsq + ysq;
+					let repulseRadius = 50 * 50;
+					if (dist <= repulseRadius) {
+						bullet.repulseChecked = true;
+						//Repulse the bullet
+						let shouldRepulseRand = Math.random();
+						if (shouldRepulseRand < 0.25) { // 1/4 chance to repulse
+							let rotation = Math.atan2(bullet.y - (player.y + player.h / 2), bullet.x - (player.x + player.h / 2));
+							bullet.xVel = Math.cos(rotation) * (bullet.baseSpeed * 1.4); //the 1.4 gives a stronger repulse effect
+							bullet.yVel = Math.sin(rotation) * (bullet.baseSpeed * 1.4);
 						}
 					}
-					if (damagingPlayer.upgrades[UPGRADE_TYPES.acidic_rounds] > 0) {
-						player.acidDamage += 1 + 0.05 * damagingPlayer.upgrades[UPGRADE_TYPES.damage];
-						if (player.acidDamage > 5) player.acidDamage = 5;
-					}
 				}
+				if (bulletCollide(player, bullet) && bullet.playerEmitId != playerId) {
+					let armor = 0;
+					if (isPowerupActive(2, player)) { //CHECK if juggernaut enabled
+						armor += 0.5;
+					}
+					armor += 0.05 * player.upgrades[UPGRADE_TYPES.armor]; //Armor
+					armor += 0.30 * player.upgrades[UPGRADE_TYPES.tank];
+					armor -= (0.05 * player.upgrades[UPGRADE_TYPES.armor_piercing]);
+					if (armor < 0) armor = 0;
+					if (armor > 1) armor = 1;
 
-				player.lastDamagedBy = bullet.playerEmitId;
-				player.regenStartTimer = 0;
-				//Blow up and damage player
-				bulletsMarkedForExplosion.push(bulletId); //used so the player can make animation
-			}
-		});
+					let damage = bullet.damage - bullet.damage * armor;
+					player.health -= damage;
+
+					let damagingPlayer = players.get(bullet.playerEmitId);
+					if (damagingPlayer != undefined) {
+						if (damagingPlayer.health > 0) { //This ensures they aren't already dead
+							let lifeSteal = damagingPlayer.upgrades[UPGRADE_TYPES.life_steal] * 0.05;
+							let lifeStolen = lifeSteal * damage;
+							damagingPlayer.health += lifeStolen;
+							if (damagingPlayer.health > damagingPlayer.maxHealth) damagingPlayer.health = damagingPlayer.maxHealth;
+						}
+
+						if (damagingPlayer.upgrades[UPGRADE_TYPES.cryo_rounds] > 0) {
+							let rand = Math.random();
+							if (rand < 1) {
+								//Slow effect
+								player.cryoSlowedTimer = 0.5;
+							}
+						}
+						if (damagingPlayer.upgrades[UPGRADE_TYPES.acidic_rounds] > 0) {
+							player.acidDamage += 1 + 0.05 * damagingPlayer.upgrades[UPGRADE_TYPES.damage];
+							if (player.acidDamage > 5) player.acidDamage = 5;
+						}
+					}
+
+					player.lastDamagedBy = bullet.playerEmitId;
+					player.regenStartTimer = 0;
+					//Blow up and damage player
+					bulletsMarkedForExplosion.push(bulletId); //used so the player can make animation
+				}
+			});
+		}
 	});
 	//Remove the bullets from our bullets list
 	for (let i = 0; i < bulletsMarkedForExplosion.length; i++) {
@@ -158,15 +162,17 @@ function handleOrbCollision(players, orbs) {
 	//Naive solution temporairly
 	let orbsToRemove = [];
 	players.forEach((player, playerId, map) => {
-		orbs.forEach((orb, orbId, map) => {
-			if (doesCollide(player, orb)) {
-				//Mark orb for deletion
-				orbsToRemove.push(orbId);
+		if (player.alive) {
+			orbs.forEach((orb, orbId, map) => {
+				if (doesCollide(player, orb)) {
+					//Mark orb for deletion
+					orbsToRemove.push(orbId);
 
-				//Add to player energy/cash points
-				player.orbs += 1;
-			}
-		});
+					//Add to player energy/cash points
+					player.orbs += 1;
+				}
+			});
+		}
 	});
 	//Remove the orbs that are marked
 	for (let i = orbsToRemove.length - 1; i >= 0; i--) {

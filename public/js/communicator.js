@@ -120,3 +120,13 @@ function sendBullet() {
 function sendUpgradeRequest(upgradeNum) {
     socket.emit('upgrade_request', upgradeNum);
 }
+
+
+//Grab player count of server
+window.fetch("/game1/playerCount").then(function (response) {
+    return response.json();
+}).then(function (data) {
+    let playerInfo = document.getElementById("server_selection_input").children[0];
+    playerInfo.innerHTML = "Game 1: " + data.playerCount + " / " + data.MAX_PLAYERS + " Players";
+}).catch(function () {
+});

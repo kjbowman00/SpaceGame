@@ -36,6 +36,8 @@ io.on('connection', function(socket) {
 
             if (gameLoop.world.players.get(socket.id) != undefined) throw "Player already exists";
 
+            if (gameLoop.world.players.size >= gameLoop.world.MAX_PLAYERS) throw "Max Players";
+
             //Add to game server
             let startPos = gameLoop.world.addPlayer(socket.id, name, color);
             socket.emit('join_game_success', { world: gameLoop.world.worldObj, startPos: startPos });
@@ -88,6 +90,17 @@ io.on('connection', function(socket) {
     });
 });
 
+http.on("request", function (req, res) {
+    if (req.method == "GET") {
+        if (req.url == "/game1/playerCount") {
+            let thing = {};
+            thing.playerCount = gameLoop.world.players.size;
+            thing.MAX_PLAYERS = gameLoop.world.MAX_PLAYERS;
+            res.write(JSON.stringify(thing));
+        }
+    }
+    res.end();
+});
 http.listen(portNum, function() {
     console.log('listening on localhost:3000');
 });

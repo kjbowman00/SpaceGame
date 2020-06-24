@@ -18,6 +18,8 @@ const UPGRADE_TYPES = upgrades.UPGRADE_TYPES;
 var powerups = require('./powerups.js');
 var middlePowerup = new powerups.powerupObj(-50, -50, 100, 100);
 
+const MAX_PLAYERS = 50;
+
 var players = new Map();
 var bullets = new Map();
 var bulletNum = 0; //Used to communicate to player what bullet to delete when it hits
@@ -431,3 +433,4 @@ exports.playerInput = playerInput;
 exports.worldObj = worldObj;
 exports.upgradePlayer = upgradePlayer;
 exports.players = players;
+exports.MAX_PLAYERS = MAX_PLAYERS;

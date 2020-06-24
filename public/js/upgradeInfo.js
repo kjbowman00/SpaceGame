@@ -69,10 +69,12 @@ UPGRADE_IMAGES[9].src = "/images/upgrades/repulser_shield.png";
 UPGRADE_IMAGES[10].src = "/images/upgrades/cryo_rounds.png";
 UPGRADE_IMAGES[11].src = "/images/upgrades/acidic_rounds.png";
 UPGRADE_IMAGES[12].src = "/images/upgrades/tank.png";
-UPGRADE_IMAGES[13].src = "/images/upgrades/NOT_DONE.png";
-UPGRADE_IMAGES[14].src = "/images/upgrades/NOT_DONE.png";
-UPGRADE_IMAGES[15].src = "/images/upgrades/NOT_DONE.png";
+UPGRADE_IMAGES[13].src = "/images/upgrades/speedster.png";
+UPGRADE_IMAGES[14].src = "/images/upgrades/sniper.png";
+UPGRADE_IMAGES[15].src = "/images/upgrades/bullet_hose.png";
 
+const NO_UPGRADE_IMAGE = new Image(100, 100);
+NO_UPGRADE_IMAGE.src = "/images/upgrades/none.png";
 
 const UPGRADE_LEVELS = {
 	rare: 6,
@@ -117,6 +119,7 @@ function drawUpgrades(ctx) {
 			//Draw button
 			ctx.fillStyle = "rgba(100, 100, 100, 0.8)";
 			if (upgradeNum == -1) {
+				ctx.drawImage(NO_UPGRADE_IMAGE, x, y, width, height);
 			} else {
 				ctx.drawImage(UPGRADE_IMAGES[upgradeNum], x, y, width, height);
 			}

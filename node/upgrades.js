@@ -27,8 +27,12 @@ const UPGRADE_TYPES = {
 	bullet_hose: 15
 };
 
-const AMOUNT_TO_UPGRADE = [
+/*const AMOUNT_TO_UPGRADE = [
 	25, 25, 25, 25, 50, 50, 50, 50, 75, 75, 75, 75, 75, 100, 100, 100,
+	100, 100, 100, 200, 200, 200, 200, 200, 200, 200, 200, 200, 200, 500, 500
+];*/
+const AMOUNT_TO_UPGRADE = [
+	1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 100, 100,
 	100, 100, 100, 200, 200, 200, 200, 200, 200, 200, 200, 200, 200, 500, 500
 ];
 
@@ -105,7 +109,9 @@ function upgradePlayer(player, selection) {
 
 	//Add to their upgrades
 	let upgradeType = player.availableUpgrades[selection];
-	player.upgrades[upgradeType] += 1;
+	if (upgradeType >= 0) {
+		player.upgrades[upgradeType] += 1;
+	}
 
 	//Handle things that need to be changed once
 	if (upgradeType == UPGRADE_TYPES.health) {

@@ -59,6 +59,17 @@ function drawPlayer(player, ctx, bCtx) {
 	ctx.fillRect(Math.floor(xRound - camera.x + borderThickness), Math.floor(yRound - camera.y + borderThickness), 50 - borderThickness * 2, 50 - borderThickness * 2);
 
 	//Draw player gun
+	//Draw fat gun if bullet hose
+	if (player.upgrades[UPGRADE_TYPES.bullet_hose] > 0) {
+		player.gun.w = 50;
+		player.gun.h = 20;
+	} else if (player.upgrades[UPGRADE_TYPES.sniper] > 0) {
+		player.gun.w = 80;
+		player.gun.h = 10;
+	} else {
+		player.gun.w = 50;
+		player.gun.h = 10;
+	}
 	let centerX = Math.floor(xRound - camera.x + player.w / 2);
 	let centerY = Math.floor(yRound - camera.y + player.h / 2);
 	let xGun = centerX;

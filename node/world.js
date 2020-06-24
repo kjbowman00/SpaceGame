@@ -430,3 +430,4 @@ exports.sendUpdates = sendUpdates;
 exports.playerInput = playerInput;
 exports.worldObj = worldObj;
 exports.upgradePlayer = upgradePlayer;
+exports.players = players;

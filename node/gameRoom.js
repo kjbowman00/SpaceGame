@@ -26,17 +26,19 @@ io.on('connection', function(socket) {
     socket.on('play_game', function (data) {
         try {
             //Input checking
+            if (data == undefined) throw "Undefined data";
+
             let name = data.name.substring(0, 15);
             if (name == undefined) throw "Name not a string";
 
             let color = colorPalette[data.color.i][data.color.j];
-            console.log(color);
             if (color == undefined) throw "Color not known";
 
+            if (gameLoop.world.players.get(socket.id) != undefined) throw "Player already exists";
 
             //Add to game server
             let startPos = gameLoop.world.addPlayer(socket.id, name, color);
-            socket.emit('join_game_success', { world:gameLoop.world.worldObj, startPos: startPos });
+            socket.emit('join_game_success', { world: gameLoop.world.worldObj, startPos: startPos });
         }
         catch (error) {
             console.log("PLAYER FAILED TO JOIN SERVER:");
@@ -44,7 +46,15 @@ io.on('connection', function(socket) {
         }
     });
     socket.on('player_input', function (data) {
-        gameLoop.world.playerInput(socket.id, data);
+        try {
+            if (data == undefined) throw "Undefined data";
+            if (gameLoop.world.players.get(socket.id) == undefined) throw "Not a player";
+            gameLoop.world.playerInput(socket.id, data);
+        }
+        catch (error) {
+            console.log("Input Error:");
+            console.log(error);
+        }
     });
     socket.on('player_respawn_request', function () {
         let resReq = gameLoop.world.requestRespawn(socket.id);
@@ -59,16 +69,22 @@ io.on('connection', function(socket) {
     socket.on('upgrade_request', function (data) {
         //Check if integer
         //Check if valid upgrade int
-        console.log(data);
-        if (Number.isInteger(data)) {
-            if (data >= 0 && data < 3) {
-                gameLoop.world.upgradePlayer(socket.id, data);
-            }
+        try {
+            if (Number.isInteger(data)) {
+                if (data >= 0 && data < 3) {
+                    gameLoop.world.upgradePlayer(socket.id, data);
+                }
+            } else throw "Not a number";
+        } catch (error) {
+            console.log("Upgrade Request error:");
+            console.log(error);
         }
     });
 
     socket.on('disconnect', function () {
-        gameLoop.world.removePlayer(socket.id);
+        if (gameLoop.world.players.get(socket.id) != undefined) {
+            gameLoop.world.removePlayer(socket.id);
+        }
     });
 });
 

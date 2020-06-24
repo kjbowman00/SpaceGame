@@ -82,6 +82,7 @@ function socketStuff(formData) {
         }*/
 
         serverPlayerState = data.player;
+        if (serverPlayerState.health < player.health) Sounds.playDamageSound();
         player.health = serverPlayerState.health;
         player.orbs = serverPlayerState.orbs;
         player.orbsToUpgrade = serverPlayerState.orbsToUpgrade;

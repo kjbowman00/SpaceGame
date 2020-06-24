@@ -30,6 +30,25 @@ function _Sounds() {
         })
     ];
 
+    var damageSounds = new Howl({
+        src: ['sounds/hitSounds.mp3'],
+        sprite: {
+            0: [100, 250],
+            1: [500, 650],
+            2: [1000, 1150],
+            3: [1500, 1650],
+            4: [2050, 2200],
+            5: [2550, 2700],
+            6: [3125, 3300],
+            7: [3525, 3700]
+        }
+    });
+
+    this.playDamageSound = function () {
+        //let rand = Math.floor(Math.random() * 8);
+        //damageSounds.play("1");
+    }
+
     this.playLaser = function () {
         laserSound.play();
     }

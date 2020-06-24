@@ -47,8 +47,8 @@ const UPGRADE_TEXT = [
 
 	//Specializations
 	["Tank (Specialization)", "2x Total Health", "+30% Armor", "-40% Total Speed"],
-	["Speedster (Specialization)", "0.5x Total Health", "2x Total Speed", "-25% Total Damage"],
-	["Sniper (Specialization)", "2x Total Damage", "0.25x Total Fire-Rate"],
+	["Speedster (Specialization)", "0.5x Total Health", "1.5x Total Speed", "-25% Total Damage"],
+	["Sniper (Specialization)", "2.5x Total Damage", "0.5x Total Fire-Rate"],
 	["Bullet Hose (Specialization)", "+3x Total Fire-Rate", "0.2x Total Damage"]
 ];
 
@@ -118,7 +118,7 @@ function drawUpgrades(ctx) {
 
 			//Draw button
 			ctx.fillStyle = "rgba(100, 100, 100, 0.8)";
-			if (upgradeNum == -1) {
+			if (upgradeNum < 0) {
 				ctx.drawImage(NO_UPGRADE_IMAGE, x, y, width, height);
 			} else {
 				ctx.drawImage(UPGRADE_IMAGES[upgradeNum], x, y, width, height);

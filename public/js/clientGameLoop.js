@@ -87,7 +87,7 @@ function update() {
 		velocityMod += player.upgrades[UPGRADE_TYPES.speed] * 0.1;
 		let velMod2 = 1;
 		if (player.upgrades[UPGRADE_TYPES.tank] > 0) velMod2 = 0.6;
-		if (player.upgrades[UPGRADE_TYPES.speedster] > 0) velMod2 = 2;
+		if (player.upgrades[UPGRADE_TYPES.speedster] > 0) velMod2 = 1.5;
 		if (player.cryoSlowTimer > 0) velocityMod *= 0.65;
 
 		player.oldX = player.x;
@@ -239,7 +239,9 @@ function draw() {
 	worldObjsOld.bullets.forEach((bullet, id, map) => {
 		var grd = bCtx.createRadialGradient(Math.floor(bullet.x - camera.x + 5), Math.floor(bullet.y - camera.y + 5), 1, Math.floor(bullet.x - camera.x + 5), Math.floor(bullet.y - camera.y + 5), 7);
 		let c = hexToRGB(bullet.color);
-		grd.addColorStop(0, 'rgba(' + c.r + ', ' + c.g + ', ' + c.b + ', 1.0)');
+		grd.addColorStop(0, 'rgba(' + Math.floor(lerp(c.r, 255, 0.5)) +
+			', ' + Math.floor(lerp(c.g, 255, 0.5)) +
+			', ' + Math.floor(lerp(c.b, 255, 0.5)) + ', 1.0)');
 		grd.addColorStop(1, 'rgba(' + c.r + ', ' + c.g + ', ' + c.b + ', 0)');
 		bCtx.fillStyle = grd;
 		bCtx.globalCompositeOperation = "lighter";

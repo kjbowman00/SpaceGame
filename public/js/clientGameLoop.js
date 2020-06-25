@@ -16,6 +16,8 @@ worldObjsUpdated.orbs = new Map();
 
 var powerupObjs = [];
 
+const PLAYER_W = 50;
+
 var serverPlayerState = {};
 var lastInput = { xVel: 0, yVel: 0 };
 var lastInputTime = performance.now();
@@ -107,8 +109,8 @@ function update() {
 		updateCollisions()
 
 		//Update gun rotation
-		let centerX = Math.round(player.x) - camera.x + player.w / 2;
-		let centerY = Math.round(player.y) - camera.y + player.h / 2;
+		let centerX = Math.round(player.x) - camera.x + PLAYER_W/2;
+		let centerY = Math.round(player.y) - camera.y + PLAYER_W/2;
 		player.gun.rotation = Math.atan2(Mouse.cameraY - centerY, Mouse.cameraX - centerX);
 
 		let fireTimeMod = 1;
@@ -126,7 +128,7 @@ function update() {
 		}
 
 		if (player.trail != undefined) {
-			player.trail.update(player.x, player.y, player.w/2, deltaTime);
+			player.trail.update(player.x, player.y, PLAYER_W/2, deltaTime);
 		} else {
 			player.trail = new Trail(player.x, player.y, player.color, 25, 20);
 		}
@@ -144,7 +146,7 @@ function update() {
 		}
 
 		if (obj.trail != undefined) {
-			obj.trail.update(obj.x, obj.y, obj.w/2, deltaTime);
+			obj.trail.update(obj.x, obj.y, PLAYER_W/2, deltaTime);
 		} else {
 			obj.trail = new Trail(obj.x, obj.y, obj.color, 25, 20);
 		}

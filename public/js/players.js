@@ -23,32 +23,32 @@ function drawPlayer(player, ctx, bCtx) {
 			borderThickness, coverage);
 
 		//Top right
-		ctx.fillRect(x + player.w + offset, y - offset - borderThickness,
+		ctx.fillRect(x + PLAYER_W + offset, y - offset - borderThickness,
 			borderThickness, coverage);
-		ctx.fillRect(x + player.w - coverage + offset, y - offset - borderThickness,
+		ctx.fillRect(x + PLAYER_W - coverage + offset, y - offset - borderThickness,
 			coverage, borderThickness);
 
 		//Bottom left
-		ctx.fillRect(x - offset - borderThickness, y + player.h - coverage + offset,
+		ctx.fillRect(x - offset - borderThickness, y + PLAYER_W - coverage + offset,
 			borderThickness, coverage);
-		ctx.fillRect(x - offset - borderThickness, y + player.h + offset,
+		ctx.fillRect(x - offset - borderThickness, y + PLAYER_W + offset,
 			coverage, borderThickness);
 
 		//Bottom right
-		ctx.fillRect(x + player.w + offset, y + player.h - coverage + offset + borderThickness, borderThickness, coverage);
-		ctx.fillRect(x + player.w - coverage + offset + borderThickness, y + player.h + offset, coverage, borderThickness);
+		ctx.fillRect(x + PLAYER_W + offset, y + PLAYER_W - coverage + offset + borderThickness, borderThickness, coverage);
+		ctx.fillRect(x + PLAYER_W - coverage + offset + borderThickness, y + PLAYER_W + offset, coverage, borderThickness);
 	}
 
 	//Draw repulsion shield
 	if (player.upgrades[UPGRADE_TYPES.repulser] > 0) {
-		let x = Math.floor(xRound - camera.x + player.w / 2);
-		let y = Math.floor(yRound - camera.y + player.h / 2);
-		let grd = ctx.createRadialGradient(x, y, player.w / 2 + 10, x, y, 45);
+		let x = Math.floor(xRound - camera.x + PLAYER_W / 2);
+		let y = Math.floor(yRound - camera.y + PLAYER_W / 2);
+		let grd = ctx.createRadialGradient(x, y, PLAYER_W / 2 + 10, x, y, 45);
 		grd.addColorStop(0, "rgba(255, 255, 255, 0.1)");
 		grd.addColorStop(1, player.color);
 
 		ctx.beginPath();
-		ctx.arc(x, y, Math.floor(player.w / 2) + 20, 0, 2 * Math.PI);
+		ctx.arc(x, y, Math.floor(PLAYER_W / 2) + 20, 0, 2 * Math.PI);
 
 		ctx.fillStyle = grd;
 		ctx.fill();
@@ -70,8 +70,8 @@ function drawPlayer(player, ctx, bCtx) {
 		player.gun.w = 50;
 		player.gun.h = 10;
 	}
-	let centerX = Math.floor(xRound - camera.x + player.w / 2);
-	let centerY = Math.floor(yRound - camera.y + player.h / 2);
+	let centerX = Math.floor(xRound - camera.x + PLAYER_W / 2);
+	let centerY = Math.floor(yRound - camera.y + PLAYER_W / 2);
 	let xGun = centerX;
 	let yGun = centerY - player.gun.h / 2;
 	ctx.fillStyle = player.color;

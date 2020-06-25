@@ -238,15 +238,23 @@ function isPowerupActive(type, player) {
 
 function getStrippedPlayer(player) {
 	let stripped = {};
-	stripped.x = player.x;
-	stripped.y = player.y;
-	stripped.w = player.w;
-	stripped.h = player.h;
-	stripped.health = player.health;
+	//Only send stuff if changed from last send state
+
+	//Package up into 16 bit integers
+	let buff1 = new ArrayBuffer(10);
+	stripped.BUFF = buff1;
+	stripped.x = Math.round(player.x);
+	stripped.y = Math.round(player.y);
+	stripped.health = Math.round(player.health);
 	stripped.maxHealth = player.maxHealth;
-	stripped.gun = player.gun;
+	stripped.gun = {};
+	stripped.gun.rotation = parseFloat(player.gun.rotation.toFixed(2));
+
+	//Don't even package
 	stripped.color = player.color;
 	stripped.name = player.name;
+
+	//Package up into 8 bit integers
 	stripped.upgrades = player.upgrades;
 	return stripped;
 }

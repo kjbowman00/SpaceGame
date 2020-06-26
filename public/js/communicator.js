@@ -78,6 +78,15 @@ function socketStuff(formData) {
             let array16 = new Int16Array(obj.pos);
             obj.x = array16[0];
             obj.y = array16[1];
+
+            //Gather upgrade data
+            if (obj.upgrades != undefined) {
+                let array8 = new Int8Array(obj.upgrades);
+                obj.upgrades = new Array(array8.length);
+                for (let i = 0; i < array8.length; i++) {
+                    obj.upgrades[i] = array8[i];
+                }
+            }
         });
 
         worldObjsOld.players.forEach((obj, id, map) => {

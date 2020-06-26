@@ -266,7 +266,14 @@ function getStrippedPlayer(player, neverSeen) {
 		stripped.gun.rotation = parseFloat(player.gun.rotation.toFixed(2));
 		stripped.color = player.color;
 		stripped.name = player.name;
-		stripped.upgrades = player.upgrades;
+
+		let upgrades = player.upgrades;
+		let buff2 = new ArrayBuffer(upgrades.length);
+		let upgradeArray = new Int8Array(buff2);
+		for (let i = 0; i < upgradeArray.length; i++) {
+			upgradeArray[i] = upgrades[i];
+		}
+		stripped.upgrades = upgradeArray;
 	} else {
 		//Only send stuff if changed from last send state
 		//Package up into 16 bit integers
@@ -288,7 +295,14 @@ function getStrippedPlayer(player, neverSeen) {
 		}
 
 		let upgrades = player.upgrades;
-		if (arrayEquals(upgrades, player.lastState.upgrades)) stripped.upgrades = upgrades;
+		if (arrayEquals(upgrades, player.lastState.upgrades)) {
+			let buff2 = new ArrayBuffer(upgrades.length);
+			let upgradeArray = new Int8Array(buff2);
+			for (let i = 0; i < upgradeArray.length; i++) {
+				upgradeArray[i] = upgrades[i];
+			}
+			stripped.upgrades = upgradeArray;
+		}
 	}
 	return stripped;
 }

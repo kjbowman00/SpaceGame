@@ -236,26 +236,60 @@ function isPowerupActive(type, player) {
 	return false;
 }
 
-function getStrippedPlayer(player) {
+function getSelfStripped(player) {
 	let stripped = {};
-	//Only send stuff if changed from last send state
-
-	//Package up into 16 bit integers
-	let buff1 = new ArrayBuffer(10);
-	stripped.BUFF = buff1;
-	stripped.x = Math.round(player.x);
-	stripped.y = Math.round(player.y);
-	stripped.health = Math.round(player.health);
+	stripped.health = player.health;
 	stripped.maxHealth = player.maxHealth;
-	stripped.gun = {};
-	stripped.gun.rotation = parseFloat(player.gun.rotation.toFixed(2));
-
-	//Don't even package
-	stripped.color = player.color;
-	stripped.name = player.name;
-
-	//Package up into 8 bit integers
+	stripped.orbs = player.orbs;
+	stripped.orbsToUpgrade = player.orbsToUpgrade;
+	stripped.kills = player.kills;
+	stripped.levelUpInProgress = player.levelUpInProgress;
+	stripped.availableUpgrades = player.availableUpgrades;
+	stripped.cryoSlowTimer = player.cryoSlowTimer;
 	stripped.upgrades = player.upgrades;
+	stripped.activePowerups = player.activePowerups;
+}
+
+function getStrippedPlayer(player, neverSeen) {
+	let stripped = {};
+	if (neverSeen || player.lastState == null) {
+		//Send everything
+		let buff1 = new ArrayBuffer(4);
+		let posArray = new Int16Array(buff1);
+		posArray[0] = Math.round(player.x);
+		posArray[1] = Math.round(player.y);
+		stripped.pos = buff1;
+
+		stripped.health = Math.round(player.health);
+		stripped.maxHealth = Math.round(player.maxHealth);
+		stripped.gun = {};
+		stripped.gun.rotation = parseFloat(player.gun.rotation.toFixed(2));
+		stripped.color = player.color;
+		stripped.name = player.name;
+		stripped.upgrades = player.upgrades;
+	} else {
+		//Only send stuff if changed from last send state
+		//Package up into 16 bit integers
+		let buff1 = new ArrayBuffer(4);
+		let posArray = new Int16Array(buff1);
+		posArray[0] = Math.round(player.x);
+		posArray[1] = Math.round(player.y);
+		stripped.pos = buff1;
+
+		let nHealth = Math.round(player.health);
+		if (nHealth != player.lastState.health) stripped.health = nHealth;
+		let nMaxHealth = player.maxHealth;
+		if (nMaxHealth != player.lastState.maxHealth) stripped.maxHealth = nMaxHealth;
+
+		let rotation = parseFloat(player.gun.rotation.toFixed(2));
+		if (rotation != player.lastState.gun.rotation) {
+			stripped.gun = {};
+			stripped.gun.rotation = parseFloat(player.gun.rotation.toFixed(2));
+		}
+
+		let upgrades = player.upgrades;
+		if (arrayEquals(upgrades, player.lastState.upgrades)) stripped.upgrades = upgrades;
+	}
 	return stripped;
 }
 
@@ -265,6 +299,7 @@ var sendUpdates = function (io) {
 	const DIST_NEEDED = 1000000;
 	players.forEach((value, key, map) => {
 		if (!value.bot) {
+			let newPlayersSent = [];
 			//Key is socketid. //value is player object
 			//Need to grab each nearby object to this player
 			var objectsToSend = {};
@@ -274,11 +309,15 @@ var sendUpdates = function (io) {
 					var distSq = (value.x - value2.x) * (value.x - value2.x);
 					distSq += (value.y - value.y) * (value.y - value2.y);
 					if (distSq <= DIST_NEEDED) {
-						objectsToSend.players.set(key2, getStrippedPlayer(value2));
+						let neverSeen = true;
+						if (value.playersSent.includes(key2)) neverSeen = false;
+						objectsToSend.players.set(key2, getStrippedPlayer(value2, neverSeen));
+						newPlayersSent.push(key2);
 					}
 				}
 			});
 			objectsToSend.players = Array.from(objectsToSend.players);
+			value.playersSent = newPlayersSent;
 
 			objectsToSend.bullets = new Map();
 			//Gather bullets
@@ -304,6 +343,20 @@ var sendUpdates = function (io) {
 
 			bulletsMarkedForExplosion.length = 0; //Delete contents of explosion array
 		}
+	});
+	players.forEach((value, key, map) => {
+		let state = {};
+		state.health = value.health;
+		state.maxHealth = value.health;
+		state.gun = {};
+		state.gun.rotation = value.gun.rotation;
+		state.upgrades = value.upgrades;
+
+		state.orbs = value.orbs;
+		state.orbsToUpgrade = value.orbsToUpgrade;
+		state.kills = value.kills;
+
+		value.lastState = state;
 	});
 }
 
@@ -353,6 +406,14 @@ var requestRespawn = function (socketID) {
 	return req;
 }
 
+function arrayEquals(a1, a2) {
+	if (a1.length != a2.length) return false;
+	for (let i = 0; i < a1.length; i++) {
+		if (a1[i] != a2[i]) return false;
+	}
+	return true;
+}
+
 var removePlayer = function (socketID) {
 	players.delete(socketID);
 };
@@ -391,6 +452,8 @@ function Player(name, x, y, color) {
 	this.orbsToUpgrade = upgrades.AMOUNT_TO_UPGRADE[0];
 	this.cryoSlowTimer = 0;
 	this.acidDamage = 0;
+	this.lastState = null;
+	this.playersSent = [];
 }
 
 var playerInput = function (socketID, input) {

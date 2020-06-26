@@ -61,6 +61,7 @@ function socketStuff(formData) {
         worldObjsOld.players.forEach((obj, id, map) => {
             let newObj = worldObjsUpdated.players.get(id);
             if (newObj != undefined) {
+                //Move over trail object
                 let trail = obj.trail;
                 newObj.trail = obj.trail;
             }
@@ -72,6 +73,29 @@ function socketStuff(formData) {
         worldObjsUpdated.bullets = new Map(data.objects.bullets);
         worldObjsUpdated.orbs = new Map(data.objects.orbs);
 
+        worldObjsUpdated.players.forEach((obj, id, map) => {
+            //Grab x and y from binary data
+            let array16 = new Int16Array(obj.pos);
+            obj.x = array16[0];
+            obj.y = array16[1];
+        });
+
+        worldObjsOld.players.forEach((obj, id, map) => {
+            let newObj = worldObjsUpdated.players.get(id);
+            if (newObj != undefined) {
+                //Handle things that got changed
+                if (newObj.health == undefined) newObj.health = obj.health;
+                if (newObj.maxHealth == undefined) newObj.maxHealth = obj.maxHealth;
+                if (newObj.gun == undefined) {
+                    newObj.gun = {};
+                    newObj.gun.rotation = obj.gun.rotation;
+                }
+                if (newObj.upgrades == undefined) newObj.upgrades = obj.upgrades;
+                if (newObj.name == undefined) newObj.name = obj.name;
+                if (newObj.color == undefined) newObj.color = obj.color;
+            }
+        })
+
         leaderboard = data.leaderboard;
 
         powerupObjs = data.objects.powerups;
@@ -82,7 +106,7 @@ function socketStuff(formData) {
         }*/
 
         serverPlayerState = data.player;
-        if (serverPlayerState.health < player.health) Sounds.playDamageSound();
+        //if (serverPlayerState.health < player.health) Sounds.playDamageSound();
         player.health = serverPlayerState.health;
         player.orbs = serverPlayerState.orbs;
         player.orbsToUpgrade = serverPlayerState.orbsToUpgrade;

@@ -345,10 +345,10 @@ var sendUpdates = function (io) {
 				distSq += (value.y - bullet.y) * (value.y - bullet.y);
 				if (distSq <= DIST_NEEDED && !bullet.playersSeen.includes(key)) {
 					objectsToSend.bullets.set(id, {
-						x: bullet.x,
-						y: bullet.y,
-						xVel: bullet.xVel,
-						yVel: bullet.yVel,
+						x: Math.round(bullet.x),
+						y: Math.round(bullet.y),
+						xVel: Math.round(bullet.xVel),
+						yVel: Math.round(bullet.yVel),
 						color: bullet.color
 					});
 					bullet.playersSeen.push(key);

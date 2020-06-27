@@ -89,6 +89,12 @@ function socketStuff(formData) {
             }
         });
 
+        //Grab all bullets and move them over
+        worldObjsOld.bullets.forEach((obj, id, map) => {
+            let newObj = worldObjsUpdated.bullets.get(id);
+            if (newObj == undefined) worldObjsUpdated.bullets.set(id, obj);
+        });
+
         worldObjsOld.players.forEach((obj, id, map) => {
             let newObj = worldObjsUpdated.players.get(id);
             if (newObj != undefined) {
@@ -104,6 +110,14 @@ function socketStuff(formData) {
                 if (newObj.color == undefined) newObj.color = obj.color;
             }
         })
+
+        //Delete bullets server told us to
+        let serverMarkedBullets = data.objects.bulletsMarkedForExplosion;
+        for (let i = serverMarkedBullets.length - 1; i >= 0; i--) {
+            let id = serverMarkedBullets.pop();
+            worldObjsOld.bullets.delete(id);
+            worldObjsUpdated.bullets.delete(id);
+        }
 
         leaderboard = data.leaderboard;
 

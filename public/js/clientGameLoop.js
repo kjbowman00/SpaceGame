@@ -152,13 +152,24 @@ function update() {
 		}
 	});
 	//Update bullets
+	let bulletsMarkedForDelete = [];
 	worldObjsOld.bullets.forEach((obj, id, map) => {
-		var objNew = worldObjsUpdated.bullets.get(id);
+		/*var objNew = worldObjsUpdated.bullets.get(id);
 		if (objNew != undefined) {
 			if (Math.abs(obj.x - objNew.x) > 0.1) obj.x = lerp(obj.x, objNew.x, percentageUpdate);
 			if (Math.abs(obj.y - objNew.y) > 0.1) obj.y = lerp(obj.y, objNew.y, percentageUpdate);
-		}
+		}*/
+		obj.x += obj.xVel * deltaTime;
+		obj.y += obj.yVel * deltaTime;
+		if (obj.timeAlive == undefined) obj.timeAlive = 0;
+		obj.timeAlive += deltaTime;
+		if (obj.timeAlive > 1.5) bulletsMarkedForDelete.push(id);
 	});
+	//Delete bullets marked
+	for (let i = bulletsMarkedForDelete.length - 1; i >= 0; i--) {
+		worldObjsOld.bullets.delete(bulletsMarkedForDelete.pop());
+	}
+
 	worldObjsOld.orbs.forEach((obj, id, map) => {
 		var objNew = worldObjsUpdated.orbs.get(id);
 		if (objNew != undefined) {

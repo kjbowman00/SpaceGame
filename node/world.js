@@ -110,7 +110,8 @@ var update = function (deltaTime) {
 						color: currentPlayer.color,
 						timeAlive: 0,
 						armorPiercing: armorPiercing,
-						playerEmitId: key
+						playerEmitId: key,
+						playersSeen: []
 					});
 					bulletNum++;
 					bullets.set(bulletNum, {
@@ -123,7 +124,8 @@ var update = function (deltaTime) {
 						color: currentPlayer.color,
 						timeAlive: 0,
 						armorPiercing: armorPiercing,
-						playerEmitId: key
+						playerEmitId: key,
+						playersSeen: []
 					});
 					bulletNum++;
 					bullets.set(bulletNum, {
@@ -136,7 +138,8 @@ var update = function (deltaTime) {
 						color: currentPlayer.color,
 						timeAlive: 0,
 						armorPiercing: armorPiercing,
-						playerEmitId: key
+						playerEmitId: key,
+						playersSeen: []
 					});
 					bulletNum++;
 					currentPlayer.gun.shotTimer = 0;
@@ -153,7 +156,8 @@ var update = function (deltaTime) {
 						color: currentPlayer.color,
 						timeAlive: 0,
 						armorPiercing: armorPiercing,
-						playerEmitId: key
+						playerEmitId: key,
+						playersSeen: []
 					});
 					bulletNum++;
 					currentPlayer.gun.shotTimer = 0;
@@ -225,6 +229,7 @@ var update = function (deltaTime) {
 	//Delete old bullets
 	for (let i = bulletsMarkedForDelete.length - 1; i >= 0; i--) {
 		bullets.delete(bulletsMarkedForDelete[i]);
+		bulletsMarkedForExplosion.push(bulletsMarkedForDelete[i]);
 	}
 };
 
@@ -338,7 +343,7 @@ var sendUpdates = function (io) {
 			bullets.forEach((bullet, id, map) => {
 				let distSq = (value.x - bullet.x) * (value.x - bullet.x);
 				distSq += (value.y - bullet.y) * (value.y - bullet.y);
-				if (distSq <= DIST_NEEDED) {
+				if (distSq <= DIST_NEEDED && !bullet.playersSeen.includes(key)) {
 					objectsToSend.bullets.set(id, bullet);
 				}
 			});

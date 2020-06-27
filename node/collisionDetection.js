@@ -97,6 +97,7 @@ function handleBulletCollision(players, bullets, bulletsMarkedForExplosion, delt
 							let rotation = Math.atan2(bullet.y - (player.y + player.h / 2), bullet.x - (player.x + player.h / 2));
 							bullet.xVel = Math.cos(rotation) * (bullet.baseSpeed * 1.4); //the 1.4 gives a stronger repulse effect
 							bullet.yVel = Math.sin(rotation) * (bullet.baseSpeed * 1.4);
+							bullet.playersSeen = [];
 						}
 					}
 				}

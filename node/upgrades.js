@@ -33,9 +33,9 @@ const AMOUNT_TO_UPGRADE = [
 ];
 
 const UPGRADE_PROBABILITIES = [
-	0.155833333, 0.155833333, 0.155833333, 0.155833333, 0.155833333, 0.155833333, //Common (93.5%)
-	0.025, 0.025, //Rare (5%)
-	0, 0.005, 0.005, 1 //Legendary (1.5%). 1 at the end to ensure an upgrade happens from rounding errors
+	0.1333333333, 0.1333333333, 0.1333333333, 0.1333333333, 0.1333333333, 0.1333333333, //Common (80%)
+	0.075, 0.075, //Rare (15%)
+	0, 0.0166666, 0.0166666, 1 //Legendary (5%). 1 at the end to ensure an upgrade happens from rounding errors
 ];
 const MAX_UPGRADE_LEVELS = [
 	10, 5, 6, 7, 6, 10,

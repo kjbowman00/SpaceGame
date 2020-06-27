@@ -344,7 +344,14 @@ var sendUpdates = function (io) {
 				let distSq = (value.x - bullet.x) * (value.x - bullet.x);
 				distSq += (value.y - bullet.y) * (value.y - bullet.y);
 				if (distSq <= DIST_NEEDED && !bullet.playersSeen.includes(key)) {
-					objectsToSend.bullets.set(id, bullet);
+					objectsToSend.bullets.set(id, {
+						x: bullet.x,
+						y: bullet.y,
+						xVel: bullet.xVel,
+						yVel: bullet.yVel,
+						color: bullet.color
+					});
+					bullet.playersSeen.push(key);
 				}
 			});
 			objectsToSend.bullets = Array.from(objectsToSend.bullets);

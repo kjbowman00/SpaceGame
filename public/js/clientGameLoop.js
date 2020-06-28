@@ -171,11 +171,13 @@ function update() {
 	}
 
 	worldObjsOld.orbs.forEach((obj, id, map) => {
-		var objNew = worldObjsUpdated.orbs.get(id);
+		/*var objNew = worldObjsUpdated.orbs.get(id);
 		if (objNew != undefined) {
 			if (Math.abs(obj.x - objNew.x) > 0.1) obj.x = lerp(obj.x, objNew.x, percentageUpdate);
 			if (Math.abs(obj.y - objNew.y) > 0.1) obj.y = lerp(obj.y, objNew.y, percentageUpdate);
-		}
+		}*/
+		obj.x = lerp(obj.x, obj.xToGo, 1.5 * deltaTime);
+		obj.y = lerp(obj.y, obj.yToGo, 1.5 * deltaTime);
 
 		if (obj.trail != undefined) {
 			obj.trail.update(obj.x, obj.y, 10, deltaTime);

@@ -34,7 +34,8 @@ function addOrb() {
 		startX: position.x, startY: position.y,
 		xToGo: position.x, yToGo: position.y,
 		w: ORB_WIDTH, h: ORB_WIDTH,
-		color: getColor()
+		color: getColor(),
+		playersSeen: []
 	};
 	orbs.set(orbCounter, orb);
 	orbCounter++;
@@ -58,6 +59,7 @@ function updateOrb(orb, deltaTime) {
 
 		orb.xToGo = orb.startX + xD;
 		orb.yToGo = orb.startY + yD;
+		orb.playersSeen = [];
 	} else { // Keep moving towards current position
 		orb.x = lerp(orb.x, orb.xToGo, 1.5 * deltaTime);
 		orb.y = lerp(orb.y, orb.yToGo, 1.5 * deltaTime);
@@ -98,13 +100,20 @@ function initializeOrbs(worldObj2, staticWorldObjs2) {
 	}
 }
 
-function gather(player, DIST_NEEDED) {
+function gather(player, DIST_NEEDED, PID) {
 	let orbsToSend = new Map();
 	orbs.forEach((orb, id, map) => {
 		let distSq = (player.x - orb.x) * (player.x - orb.x);
 		distSq += (player.y - orb.y) * (player.y - orb.y);
-		if (distSq <= DIST_NEEDED) {
-			orbsToSend.set(id, orb);
+		if (distSq <= DIST_NEEDED && !orb.playersSeen.includes(PID)) {
+			orbsToSend.set(id, {
+				x: Math.round(orb.x),
+				y: Math.round(orb.y),
+				xToGo: Math.round(orb.xToGo),
+				yToGo: Math.round(orb.yToGo),
+				color: orb.color
+			});
+			orb.playersSeen.push(PID);
 		}
 	});
 	return orbsToSend;

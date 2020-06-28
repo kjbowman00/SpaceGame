@@ -315,7 +315,7 @@ function getStrippedPlayer(player, neverSeen) {
 var sendUpdates = function (io) {
 	let leaderboardToSend = leaderboard.getTop10(players);
 
-	const DIST_NEEDED = 1000000;
+	const DIST_NEEDED = 1000 * 1000;
 	players.forEach((value, key, map) => {
 		if (!value.bot) {
 			let newPlayersSent = [];
@@ -373,7 +373,7 @@ var sendUpdates = function (io) {
 	players.forEach((value, key, map) => {
 		let state = {};
 		state.health = value.health;
-		state.maxHealth = value.health;
+		state.maxHealth = value.maxHealth;
 		state.gun = {};
 		state.gun.rotation = value.gun.rotation;
 		state.upgrades = value.upgrades;

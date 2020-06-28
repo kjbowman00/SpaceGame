@@ -11,6 +11,10 @@ function onPlay() {
 console.log("kms");
 document.getElementById("name_form").onsubmit = onPlay;
 
+function outOfRender(obj) {
+    const RENDER_DIST_SQ = 1000 * 1000;
+}
+
 function socketStuff(formData) {
     var gameName = formData.get('server');
 
@@ -86,6 +90,12 @@ function socketStuff(formData) {
                 for (let i = 0; i < array8.length; i++) {
                     obj.upgrades[i] = array8[i];
                 }
+            }
+        });
+        worldObjsOld.orbs.forEach((obj, id, map) => {
+            let newObj = worldObjsUpdated.orbs.get(id);
+            if (newObj == undefined) {
+                worldObjsUpdated.orbs.set(id, obj);
             }
         });
 

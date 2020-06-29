@@ -155,12 +155,14 @@ function handleBulletCollision(players, bullets, bulletsMarkedForExplosion, delt
 	for (let i = 0; i < bulletsToDelete.length; i++) {
 		let id = bulletsToDelete[i];
 		let bullet = bullets.get(id);
-		bulletsMarkedForExplosion.push({
-			id: id,
-			x: bullet.x,
-			y: bullet.y
-		});
-		bullets.delete(id);
+		if (bullet != undefined) {
+			bulletsMarkedForExplosion.push({
+				id: id,
+				x: bullet.x,
+				y: bullet.y
+			});
+			bullets.delete(id);
+		}
 	}
 }
 

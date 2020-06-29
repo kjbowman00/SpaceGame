@@ -11,14 +11,6 @@ function onPlay() {
 console.log("kms");
 document.getElementById("name_form").onsubmit = onPlay;
 
-function outOfRender(obj) {
-    const RENDER_DIST_SQ = 1000 * 1000;
-    let dX = player.x - obj.x;
-    let dY = player.y - obj.y;
-    if (dX * dX + dY * dY >= RENDER_DIST_SQ + 100) return true;
-    return false;
-}
-
 function socketStuff(formData) {
     var gameName = formData.get('server');
 

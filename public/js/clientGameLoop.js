@@ -77,7 +77,38 @@ function isPowerupActive(type, player) {
 	return false;
 }
 
+
+function outOfRender(obj) {
+	const RENDER_DIST_SQ = 1000 * 1000;
+	let dX = player.x - obj.x;
+	let dY = player.y - obj.y;
+	if (dX * dX + dY * dY >= RENDER_DIST_SQ + 200000) {
+		return true;
+	}
+	return false;
+}
 function deleteOutOfBoundsItems() {
+	let toDelete = [];
+
+	//Orbs
+	worldObjsOld.orbs.forEach((obj, id, map) => {
+		if (outOfRender(obj)) toDelete.push(id);
+	});
+	for (let i = toDelete.length - 1; i >= 0; i--) {
+		let id = toDelete.pop();
+		worldObjsOld.orbs.delete(id);
+		worldObjsUpdated.orbs.delete(id);
+	}
+
+	//Bulllets
+	worldObjsOld.bullets.forEach((obj, id, map) => {
+		if (outOfRender(obj)) toDelete.push(id);
+	});
+	for (let i = toDelete.length - 1; i >= 0; i--) {
+		let id = toDelete.pop();
+		worldObjsOld.bullets.delete(id);
+		worldObjsUpdated.bullets.delete(id);
+	}
 }
 
 function update() {

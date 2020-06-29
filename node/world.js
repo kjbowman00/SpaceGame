@@ -345,6 +345,7 @@ var sendUpdates = function (io) {
 	let leaderboardToSend = leaderboard.getTop10(players);
 
 	const DIST_NEEDED = 1000 * 1000;
+	const DIST_REMOVE_NEEDED = 1200 * 1200;
 	players.forEach((value, key, map) => {
 		if (!value.bot) {
 			let newPlayersSent = [];
@@ -390,7 +391,7 @@ var sendUpdates = function (io) {
 			//Orbs deleted
 			let deletedOrbsToSend = [];
 			for (let i = 0; i < deletedOrbs.length; i++) {
-				if (inRange(deletedOrbs[i], value, DIST_NEEDED + 100)) {
+				if (inRange(deletedOrbs[i], value, DIST_REMOVE_NEEDED)) {
 					deletedOrbsToSend.push(deletedOrbs[i].id);
 				}
 			}
@@ -399,7 +400,7 @@ var sendUpdates = function (io) {
 			//Exploded bullets
 			let bulletsMarkedToSend = [];
 			for (let i = 0; i < bulletsMarkedForExplosion.length; i++) {
-				if (inRange(bulletsMarkedForExplosion[i], value, DIST_NEEDED + 100)) {
+				if (inRange(bulletsMarkedForExplosion[i], value, DIST_REMOVE_NEEDED)) {
 					bulletsMarkedToSend.push(bulletsMarkedForExplosion[i].id);
 				}
 			}

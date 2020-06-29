@@ -9,6 +9,7 @@ var worldObj = {
 
 var orbs = require('./orb.js');
 orbs.initializeOrbs(worldObj, staticWorldObjs);
+var deletedOrbs = [];
 
 var leaderboard = require('./leaderboard.js');
 
@@ -221,7 +222,7 @@ var update = function (deltaTime) {
 	orbs.update(deltaTime);
 
 	//Handle collisions
-	collisions.updateCollisions(players, bullets, bulletsMarkedForExplosion, orbs.orbs, deltaTime, botManager);
+	collisions.updateCollisions(players, bullets, bulletsMarkedForExplosion, orbs.orbs, deltaTime, botManager, deletedOrbs);
 
 	//Handle powerup obj
 	powerups.updatePowerup(middlePowerup, players, deltaTime);
@@ -312,6 +313,13 @@ function getStrippedPlayer(player, neverSeen) {
 	return stripped;
 }
 
+function inRange(o1, o2, range) {
+	let dx = o1.x - o2.x;
+	let dy = o1.y - o2.y;
+	if (dx * dx + dy * dy < range) return true;
+	return false;
+}
+
 var sendUpdates = function (io) {
 	let leaderboardToSend = leaderboard.getTop10(players);
 
@@ -358,18 +366,32 @@ var sendUpdates = function (io) {
 
 			//Gather Orbs
 			objectsToSend.orbs = Array.from(orbs.gather(value, DIST_NEEDED));
+			//Orbs deleted
+			let deletedOrbsToSend = [];
+			for (let i = 0; i < deletedOrbs.length; i++) {
+				if (inRange(deletedOrbs[i], value, DIST_NEEDED + 100)) {
+					deletedOrbsToSend.push(deletedOrbs[i].id);
+				}
+			}
+			objectsToSend.orbsToDelete = deletedOrbsToSend;
 
 			//Exploded bullets
-			objectsToSend.bulletsMarkedForExplosion = bulletsMarkedForExplosion;
+			let bulletsMarkedToSend = [];
+			for (let i = 0; i < bulletsMarkedForExplosion.length; i++) {
+				if (inRange(bulletsMarkedForExplosion[i], value, DIST_NEEDED + 100)) {
+					bulletsMarkedToSend.push(bulletsMarkedForExplosion[i].id);
+				}
+			}
+			objectsToSend.bulletsMarkedForExplosion = bulletsMarkedToSend;
 
 			//Powerups
 			objectsToSend.powerups = [middlePowerup];
 
 			io.to(key).emit('state', { player: value, objects: objectsToSend, leaderboard: leaderboardToSend });
-
-			bulletsMarkedForExplosion.length = 0; //Delete contents of explosion array
 		}
 	});
+	deletedOrbs = [];
+	bulletsMarkedForExplosion = [];
 	players.forEach((value, key, map) => {
 		let state = {};
 		state.health = value.health;

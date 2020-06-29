@@ -77,7 +77,13 @@ function isPowerupActive(type, player) {
 	return false;
 }
 
+function deleteOutOfBoundsItems() {
+}
+
 function update() {
+	deleteOutOfBoundsItems();
+	
+
 	if (alive && player.health <= 0) died();
 	var deltaServer = (performance.now() - lastInputTime) / 1000;
 

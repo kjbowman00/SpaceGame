@@ -1,7 +1,7 @@
 var staticWorldObjs = require('./staticWorldObjs').staticWorldObjs;
 const UPGRADE_TYPES = require('./upgrades.js').UPGRADE_TYPES;
 
-function handleStaticObjsCollision(players, bullets, deltaTime, botManager) {
+function handleStaticObjsCollision(players, bullets, deltaTime, botManager, bulletsMarkedForExplosion) {
 	players.forEach((player, id, map) => {
 		if (player.alive) {
 			let bounds = { x: player.x, y: player.y, w: player.w, h: player.h };
@@ -46,6 +46,11 @@ function handleStaticObjsCollision(players, bullets, deltaTime, botManager) {
 		for (let i = staticWorldObjs.length - 1; i >= 0; i--) {
 			if (doesCollide(bounds, staticWorldObjs[i])) {
 				bulletDeleteList.push(id);
+				bulletsMarkedForExplosion.push({
+					id: id,
+					x: bounds.x,
+					y: bounds.y
+				});
 				break;
 			}
 		}
@@ -79,6 +84,7 @@ function bulletCollide(player, bullet) {
 function handleBulletCollision(players, bullets, bulletsMarkedForExplosion, deltaTime) {
 	//Naive solution for now
 	//TODO: Make this not a naive solution if it's too slow (sweep and prune probably)
+	let bulletsToDelete = [];
 	players.forEach((player, playerId, playerMap) => {
 		if (player.alive) {
 			let repulser = false;
@@ -140,14 +146,21 @@ function handleBulletCollision(players, bullets, bulletsMarkedForExplosion, delt
 					player.lastDamagedBy = bullet.playerEmitId;
 					player.regenStartTimer = 0;
 					//Blow up and damage player
-					bulletsMarkedForExplosion.push(bulletId); //used so the player can make animation
+					bulletsToDelete.push(bulletId); //used so the player can make animation
 				}
 			});
 		}
 	});
 	//Remove the bullets from our bullets list
-	for (let i = 0; i < bulletsMarkedForExplosion.length; i++) {
-		bullets.delete(bulletsMarkedForExplosion[i]);
+	for (let i = 0; i < bulletsToDelete.length; i++) {
+		let id = bulletsToDelete[i];
+		let bullet = bullets.get(id);
+		bulletsMarkedForExplosion.push({
+			id: id,
+			x: bullet.x,
+			y: bullet.y
+		});
+		bullets.delete(id);
 	}
 }
 
@@ -159,9 +172,9 @@ function isPowerupActive(type, player) {
 	return false;
 }
 
-function handleOrbCollision(players, orbs) {
-	//Naive solution temporairly
+function handleOrbCollision(players, orbs, deletedOrbs) {
 	let orbsToRemove = [];
+	//Naive solution temporairly
 	players.forEach((player, playerId, map) => {
 		if (player.alive) {
 			orbs.forEach((orb, orbId, map) => {
@@ -175,16 +188,26 @@ function handleOrbCollision(players, orbs) {
 			});
 		}
 	});
+
 	//Remove the orbs that are marked
 	for (let i = orbsToRemove.length - 1; i >= 0; i--) {
-		orbs.delete(orbsToRemove.pop());
+		let id = orbsToRemove.pop();
+		let orb = orbs.get(id);
+		if (orb != undefined) {
+			deletedOrbs.push({
+				id: id,
+				x: orb.x,
+				y: orb.y
+			});
+			orbs.delete(id);
+		}
 	}
 }
 
-function updateCollisions(players, bullets, bulletsMarkedForExplosion, orbs, deltaTime, botManager) {
-	handleStaticObjsCollision(players, bullets, deltaTime, botManager);
+function updateCollisions(players, bullets, bulletsMarkedForExplosion, orbs, deltaTime, botManager, deletedOrbs) {
+	handleStaticObjsCollision(players, bullets, deltaTime, botManager, bulletsMarkedForExplosion);
 	handleBulletCollision(players, bullets, bulletsMarkedForExplosion, deltaTime);
-	handleOrbCollision(players, orbs);
+	handleOrbCollision(players, orbs, deletedOrbs);
 }
 
 exports.updateCollisions = updateCollisions;

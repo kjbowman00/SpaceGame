@@ -96,6 +96,15 @@ function socketStuff(formData) {
                 }
             }
         });
+        worldObjsUpdated.orbs.forEach((obj, id, map) => {
+            //Grab position data from binary data
+            let array16 = new Int16Array(obj.pos);
+            obj.x = array16[0];
+            obj.y = array16[1];
+            obj.xToGo = array16[2];
+            obj.yToGo = array16[3];
+        });
+
         worldObjsOld.orbs.forEach((obj, id, map) => {
             let newObj = worldObjsUpdated.orbs.get(id);
             if (newObj == undefined) {
@@ -140,7 +149,7 @@ function socketStuff(formData) {
             worldObjsUpdated.orbs.delete(id);
         }
 
-        leaderboard = data.leaderboard;
+        if (data.leaderboard != undefined) leaderboard = data.leaderboard;
 
         powerupObjs = data.objects.powerups;
 
@@ -150,8 +159,11 @@ function socketStuff(formData) {
         }*/
 
         serverPlayerState = data.player;
+        let posArray = new Int16Array(serverPlayerState.pos);
+        serverPlayerState.x = posArray[0];
+        serverPlayerState.y = posArray[1];
         //if (serverPlayerState.health < player.health) Sounds.playDamageSound();
-        player.health = serverPlayerState.health;
+        if (serverPlayerState.health != undefined) player.health = serverPlayerState.health;
         player.orbs = serverPlayerState.orbs;
         player.orbsToUpgrade = serverPlayerState.orbsToUpgrade;
         player.kills = serverPlayerState.kills;
@@ -159,7 +171,14 @@ function socketStuff(formData) {
         player.levelUpInProgress = serverPlayerState.levelUpInProgress;
         player.availableUpgrades = serverPlayerState.availableUpgrades;
         player.cryoSlowTimer = serverPlayerState.cryoSlowTimer;
-        player.upgrades = serverPlayerState.upgrades; //Remove later so we're not constantly sending this same with above
+        if (player.upgrades != undefined) {
+            let upgradeBuff = new Int8Array(serverPlayerState.upgrades);
+            let upgrades = [];
+            for (let i = 0; i < upgradeBuff.length; i++) {
+                upgrades.push(upgradeBuff[i]);
+            }
+            player.upgrades = upgrades;
+        }
 
         handleInitialPowerup(serverPlayerState);
         player.activePowerups = serverPlayerState.activePowerups;

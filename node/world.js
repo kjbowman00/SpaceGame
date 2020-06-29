@@ -244,7 +244,12 @@ function isPowerupActive(type, player) {
 
 function getSelfStripped(player) {
 	let stripped = {};
-	stripped.health = player.health;
+	let buff1 = new ArrayBuffer(4);
+	let posArray = new Int16Array(buff1);
+	posArray[0] = Math.round(player.x);
+	posArray[1] = Math.round(player.y);
+	stripped.pos = buff1;
+	stripped.health = Math.round(player.health);
 	stripped.maxHealth = player.maxHealth;
 	stripped.orbs = player.orbs;
 	stripped.orbsToUpgrade = player.orbsToUpgrade;
@@ -252,8 +257,24 @@ function getSelfStripped(player) {
 	stripped.levelUpInProgress = player.levelUpInProgress;
 	stripped.availableUpgrades = player.availableUpgrades;
 	stripped.cryoSlowTimer = player.cryoSlowTimer;
-	stripped.upgrades = player.upgrades;
 	stripped.activePowerups = player.activePowerups;
+	let upgrades = player.upgrades;
+	if (player.lastState == null) {
+		let buff2 = new ArrayBuffer(upgrades.length);
+		let upgradeArray = new Int8Array(buff2);
+		for (let i = 0; i < upgradeArray.length; i++) {
+			upgradeArray[i] = upgrades[i];
+		}
+		stripped.upgrades = upgradeArray;
+	} else if (arrayEquals(upgrades, player.lastState.upgrades)) {
+		let buff2 = new ArrayBuffer(upgrades.length);
+		let upgradeArray = new Int8Array(buff2);
+		for (let i = 0; i < upgradeArray.length; i++) {
+			upgradeArray[i] = upgrades[i];
+		}
+		stripped.upgrades = upgradeArray;
+	}
+	return stripped;
 }
 
 function getStrippedPlayer(player, neverSeen) {
@@ -387,7 +408,15 @@ var sendUpdates = function (io) {
 			//Powerups
 			objectsToSend.powerups = [middlePowerup];
 
-			io.to(key).emit('state', { player: value, objects: objectsToSend, leaderboard: leaderboardToSend });
+			let finalObj = {};
+			finalObj.player = getSelfStripped(value);
+			finalObj.objects = objectsToSend;
+			if (value.lastLeaderBoardState < leaderboard.getStateNum()) {
+				finalObj.leaderboard = leaderboardToSend;
+				value.lastLeaderBoardState = leaderboard.getStateNum();
+			}
+
+			io.to(key).emit('state', finalObj);
 		}
 	});
 	deletedOrbs = [];
@@ -502,6 +531,7 @@ function Player(name, x, y, color) {
 	this.acidDamage = 0;
 	this.lastState = null;
 	this.playersSent = [];
+	this.lastLeaderBoardState = -1;
 }
 
 var playerInput = function (socketID, input) {

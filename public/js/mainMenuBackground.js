@@ -182,7 +182,7 @@ function menuLoop(timestamp) {
 	menuLastUpdateTime = timestamp;
 	menuUpdate();
 	menuDraw();
-	requestAnimationFrame(menuLoop);
+	menuLoopID = requestAnimationFrame(menuLoop);
 }
 
 menuLoopID = requestAnimationFrame(menuLoop);

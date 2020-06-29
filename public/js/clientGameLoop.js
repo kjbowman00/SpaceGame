@@ -338,6 +338,6 @@ function mainLoop(timestamp) {
 	lastUpdateTime = timestamp;
 	update();
 	draw();
-	requestAnimationFrame(mainLoop);
+	loopID = requestAnimationFrame(mainLoop);
 }
 

@@ -1,5 +1,6 @@
 let loopID;
 var gameRunning = false;
+var menuRunning = true;
 function gameStart() {
 	alive = true;
 	//Turn on canvas
@@ -7,21 +8,25 @@ function gameStart() {
 	document.getElementById('main_menu').style.display = 'none';
 
 	gameRunning = true;
+	menuRunning = false;
 	resizeCanvas();
 	camera.x = player.x + 25 - camera.w / 2;
 	camera.y = player.y + 25 - camera.h / 2;
 
 
 	//Enable animation frame updating
+	cancelAnimationFrame(menuLoopID);
 	loopID = requestAnimationFrame(mainLoop);
 }
 
 function toMenu() {
 	//Disable animation frame updating
+	menuRunning = true;
+	gameRunning = false;
 	cancelAnimationFrame(loopID);
+	menuLoopID = requestAnimationFrame(menuLoop);
 
 	//Tell server bye
-	gameRunning = false;
 	socket.close();
 
 	//Turn off canvas

@@ -42,8 +42,6 @@ io.on('connection', function(socket) {
             socket.emit('join_game_success', { world: gameLoop.world.worldObj, startPos: startPos });
         }
         catch (error) {
-            console.log("PLAYER FAILED TO JOIN SERVER:");
-            console.log(error);
         }
     });
     socket.on('player_input', function (data) {
@@ -53,8 +51,6 @@ io.on('connection', function(socket) {
             gameLoop.world.playerInput(socket.id, data);
         }
         catch (error) {
-            console.log("Input Error:");
-            console.log(error);
         }
     });
     socket.on('player_respawn_request', function () {
@@ -77,8 +73,6 @@ io.on('connection', function(socket) {
                 }
             } else throw "Not a number";
         } catch (error) {
-            console.log("Upgrade Request error:");
-            console.log(error);
         }
     });
 

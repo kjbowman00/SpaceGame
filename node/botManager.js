@@ -20,9 +20,7 @@ const BOT_NAMES = [
 	"EEEEEE", "Jeroo", "Jerboa", "Upgrade", "Stealer", "Nose", "Cant", "Burp", "Juicy",
 	"Bent", "Spine"
 ];
-const BOT_NAME_DELIMITERS = ["", "", "", "", "", " ", " ", " ", " "," ", ".", "_", "-", "~", "#", "+"];
-const BOT_NAME_PREFIX = ["#", "@", "$", "[", "~"];
-const BOT_NAME_SUFFIX = ["!", "]", "+", "$", "_:D", "*"];
+const BOT_NAME_DELIMITERS = ["", "", "", "", "", "", "", "", "", "", "", " ", " ", " ", " ", " ", " "," ", ".", "_", "-", "~"];
 
 const colorPalette = [
 	"#ff0000", "#ff9900", "#ffff00", "#00ff00", "#00ffff", "#0000ff", "#9900ff", "#ff00ff",
@@ -78,7 +76,7 @@ function addBot() {
 	//Get random name
 	let name = "";
 	let nameSize = Math.random();
-	if (nameSize < 0.15) {
+	if (nameSize < 0.1) {
 		//One name
 		name = BOT_NAMES[Math.floor(Math.random() * BOT_NAMES.length)];
 	} else {
@@ -88,23 +86,9 @@ function addBot() {
 		let delim = BOT_NAME_DELIMITERS[Math.floor(Math.random() * BOT_NAME_DELIMITERS.length)];
 		name = name1 + delim + name2;
 	}
-	//Symbols at beginning or end?
-	let symbolRand = Math.random();
-	if (symbolRand < 0.1) {
-		//Put symbol at the beginning
-		let symbol = BOT_NAME_PREFIX[Math.floor(Math.random() * BOT_NAME_PREFIX.length)];
-		name = symbol + name;
-	}
-	symbolRand = Math.random();
-	if (symbolRand < 0.1) {
-		// Put symbol or numbers at end
-		let symbolOrNum = Math.random();
-		if (symbolOrNum < 0.3) {
-			let symbol = BOT_NAME_SUFFIX[Math.floor(Math.random() * BOT_NAME_SUFFIX.length)];
-			name = name + symbol;
-		} else {
-			name = name + Math.floor(Math.random() * 103);
-		}
+	let numRand = Math.random();
+	if (numRand < 0.05) {
+		name = name + Math.floor(Math.random() * 103);
 	}
 
 

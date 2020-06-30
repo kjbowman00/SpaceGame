@@ -35,13 +35,14 @@ function getYDir() {
 }
 
 function handleKeyDown(event) {
-	if (event.key == "a") {
+	let code = event.keyCode;
+	if (code=="65" || code == "37") {
 		leftHeld = true;
-	} else if (event.key == "d") {
+	} else if (code=="68" || code =="39") {
 		rightHeld = true;
-	} else if (event.key == "w") {
+	} else if (code=="87" || code =="38") {
 		upHeld = true;
-	} else if (event.key == "s") {
+	} else if (code=="83" || code =="40") {
 		downHeld = true;
 	}
 	yDir = getYDir();
@@ -51,13 +52,14 @@ function handleKeyDown(event) {
 }
 
 function handleKeyUp(event) {
-	if (event.key == "a") {
+	let code = event.keyCode
+	if (code == "65" || code == "37") {
 		leftHeld = false;
-	} else if (event.key == "d") {
+	} else if (code == "68" || code == "39") {
 		rightHeld = false;
-	} else if (event.key == "w") {
+	} else if (code == "87" || code == "38") {
 		upHeld = false;
-	} else if (event.key == "s") {
+	} else if (code == "83" || code == "40") {
 		downHeld = false;
 	}
 

@@ -185,6 +185,11 @@ function socketStuff(formData) {
         respawnSuccess(data);
     });
 
+    socket.on('disconnect', function (data) {
+        console.log("SHUT DOWN");
+        toMenu();
+    });
+
     socket.emit('play_game', {
         name: formData.get('username'),
         color: playerColor

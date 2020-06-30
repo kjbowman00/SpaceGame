@@ -3,7 +3,7 @@ var deltaTime = 0; //In seconds
 
 var alive = false;
 
-const SERVER_WORLD_UPDATE_TIME = 1 / 20;
+const SERVER_WORLD_UPDATE_TIME = 1 / 15;
 
 var worldObjsOld = {};
 worldObjsOld.players = new Map();
@@ -237,13 +237,12 @@ function draw() {
 	bCtx.clearRect(0, 0, canvas.width, canvas.height);
 	var amountGoBackX = Math.floor(camera.x) % backGroundImage.width;
 	var amountGoBackY = Math.floor(camera.y) % backGroundImage.height;
-	//This is to avoid drawing accross the entire world and instead just a small portion
-	var pattern = bCtx.createPattern(backGroundImage, 'repeat');
-	bCtx.fillStyle = pattern;
+	bCtx.globalCompositeOperation = "source-over";
+	//bCtx.drawImage(offscreenBackgroundCanvas, -backGroundImage.width+amountGoBackX, -backGroundImage.height+amountGoBackY, canvas.width + 2*backGroundImage.width, canvas.height + 2*backGroundImage.height);
 	bCtx.translate(-amountGoBackX, -amountGoBackY);
-	bCtx.fillRect(-backGroundImage.width, -backGroundImage.height,
-		canvas.width + 2*backGroundImage.width, canvas.height + 2*backGroundImage.height);
+	bCtx.drawImage(offscreenBackgroundCanvas, -backGroundImage.width, -backGroundImage.height);
 	bCtx.resetTransform();
+
 	//Draw black over anything beyond world borders
 	ctx.fillStyle = "#000000";
 	if (camera.x < -world.width / 2) { // Fill left

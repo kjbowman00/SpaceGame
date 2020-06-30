@@ -4,14 +4,31 @@ OPTIONS.orbTrailQuality = 2;
 OPTIONS.volume = 0.5;
 OPTIONS.musicVolume = 0.5;
 
+var optionsBoxOpen = false;
+
 function openOptions() {
 	document.getElementById("open_options").style.display = "none";
 	document.getElementById("options_box").style.display = "block";
+	optionsBoxOpen = true;
 }
 
 function closeOptions() {
 	document.getElementById("open_options").style.display = "block";
 	document.getElementById("options_box").style.display = "none";
+	optionsBoxOpen = false;
+}
+
+function flipOptions() {
+	if (optionsBoxOpen) {
+		closeOptions();
+	} else {
+		openOptions();
+	}
+}
+
+function quitButtonAction() {
+	closeOptions();
+	toMenu();
 }
 
 function changePlayerTrailQuality(num) {

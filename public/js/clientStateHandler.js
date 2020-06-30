@@ -27,7 +27,7 @@ function toMenu() {
 	menuLoopID = requestAnimationFrame(menuLoop);
 
 	//Tell server bye
-	socket.close();
+	if (socket != undefined) socket.close();
 
 	//Turn off canvas
 	document.getElementById('canvas_holder').style.display = 'none';

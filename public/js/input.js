@@ -36,6 +36,9 @@ function getYDir() {
 
 function handleKeyDown(event) {
 	let code = event.keyCode;
+
+	if (code == "27") flipOptions();
+
 	if (code=="65" || code == "37") {
 		leftHeld = true;
 	} else if (code=="68" || code =="39") {

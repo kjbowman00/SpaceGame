@@ -1,6 +1,10 @@
 const gameNum = 1;
 const portNum = 2999 + gameNum;
 
+if (process.env.NODE_ENV == 'production') {
+    console.log("PRODUCTION MODE");
+} else console.log("Development mode");
+
 var express = require('express');
 var app = express();
 var http = require('http').createServer();

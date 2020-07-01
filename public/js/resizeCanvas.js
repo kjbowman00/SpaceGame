@@ -3,8 +3,9 @@ var canvas = document.getElementById('canvas');
 var backgroundCanvas = document.getElementById('background_canvas');
 var UICanvas = document.getElementById('UI_canvas');
 
-var offscreenBackgroundCanvas = new OffscreenCanvas(window.innerWidth + backGroundImage.width * 2,
-	window.innerHeight + backGroundImage.height *2);
+/*var offscreenBackgroundCanvas = new OffscreenCanvas(window.innerWidth + backGroundImage.width * 2,
+	window.innerHeight + backGroundImage.height *2);*/
+var offscreenBackgroundCanvas = document.getElementById('invisible_background_canvas');
 
 function resizeCanvas() {
 	mainMenuCanvas.width = window.innerWidth;

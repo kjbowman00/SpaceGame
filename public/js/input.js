@@ -79,7 +79,7 @@ function mouseDown(event) {
 	Mouse.pressed = true;
 	try {
 		checkUpgradeClick({ x: event.clientX, y: event.clientY });
-	} catch {
+	} catch(err) {
 		//Not all scripts loaded yet
 	}
 }

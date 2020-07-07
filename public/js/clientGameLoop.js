@@ -218,7 +218,7 @@ function update() {
 		if (obj.trail != undefined) {
 			obj.trail.update(obj.x, obj.y, 10, deltaTime);
 		} else {
-			obj.trail = new Trail(obj.x, obj.y, obj.color, 10, 5);
+			obj.trail = new OrbTrail(obj.x, obj.y, obj.color, 10, 5);
 		}
 	});
 }
@@ -298,19 +298,32 @@ function draw() {
 		bCtx.fillRect(Math.floor(bullet.x - camera.x), Math.floor(bullet.y - camera.y), 2 * 5, 2 * 5);
 	});
 	worldObjsOld.orbs.forEach((elem, id, map) => {
-		var grd = bCtx.createRadialGradient(Math.floor(elem.x - camera.x + 10), Math.floor(elem.y - camera.y + 10), 3, Math.floor(elem.x - camera.x + 10), Math.floor(elem.y - camera.y + 10), 10);
+		//Render trail
+		if (OPTIONS.orbTrailQuality > 0 && elem.trail != undefined) {
+			elem.trail.render(bCtx, OPTIONS.orbTrailQuality);
+		}
+		if (elem.grdCanvas == undefined) {
+			let r = 10;
+			elem.grdCanvas = document.createElement("canvas", 2*r, 2*r);
+			let tempCtx = elem.grdCanvas.getContext("2d");
+			let c = hexToRGB(elem.color);
+			let grd = bCtx.createRadialGradient(r, r, 3, r, r, 10);
+			grd.addColorStop(0, 'rgba(255,255,255, 0.8)');
+			grd.addColorStop(0.5, 'rgba(' + c.r + ', ' + c.g + ', ' + c.b + ', 0.5)');
+			grd.addColorStop(1, 'rgba(' + c.r + ', ' + c.g + ', ' + c.b + ', 0.0)');
+			tempCtx.fillStyle = grd;
+			tempCtx.fillRect(0, 0, r * 2, r * 2);
+		}
+		/*var grd = bCtx.createRadialGradient(Math.floor(elem.x - camera.x + 10), Math.floor(elem.y - camera.y + 10), 3, Math.floor(elem.x - camera.x + 10), Math.floor(elem.y - camera.y + 10), 10);
 		let c = hexToRGB(elem.color);
 		grd.addColorStop(0, 'rgba(255,255,255, 0.8)');
 		grd.addColorStop(0.5, 'rgba(' + c.r + ', ' + c.g + ', ' + c.b + ', 0.5)');
 		grd.addColorStop(1, 'rgba(' + c.r + ', ' + c.g + ', ' + c.b + ', 0.0)');
 		bCtx.fillStyle = grd;
 		bCtx.globalCompositeOperation = "lighter";
-		bCtx.fillRect(Math.floor(elem.x - camera.x), Math.floor(elem.y - camera.y), 20, 20);
+		bCtx.fillRect(Math.floor(elem.x - camera.x), Math.floor(elem.y - camera.y), 20, 20);*/
+		bCtx.drawImage(elem.grdCanvas, Math.floor(elem.x - camera.x), Math.floor(elem.y - camera.y));
 
-		//Render trail
-		if (OPTIONS.orbTrailQuality > 0 && elem.trail != undefined) {
-			elem.trail.render(bCtx, OPTIONS.orbTrailQuality);
-		}
 	});
 
 	//Render powerups

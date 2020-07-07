@@ -59,9 +59,10 @@ var update = function (deltaTime) {
 			if (isPowerupActive(powerups.powerups.superSpeed, currentPlayer)) velocityMod += 0.8;
 			velocityMod += currentPlayer.upgrades[UPGRADE_TYPES.speed] * 0.1;
 
+			let cryoSlowMod = 1;
 			if (currentPlayer.cryoSlowTimer > 0) {
 				currentPlayer.cryoSlowTimer -= deltaTime;
-				velocityMod *= 0.65;
+				cryoSlowMod = 0.65;
 			}
 
 			let velMod2 = 1;
@@ -77,8 +78,8 @@ var update = function (deltaTime) {
 				currentPlayer.oldX = currentPlayer.x;
 				currentPlayer.oldY = currentPlayer.y;
 
-				currentPlayer.x += currentPlayer.xVel * deltaTime * velocityMod * velMod2;
-				currentPlayer.y += currentPlayer.yVel * deltaTime * velocityMod * velMod2;
+				currentPlayer.x += currentPlayer.xVel * deltaTime * velocityMod * velMod2 * cryoSlowMod;
+				currentPlayer.y += currentPlayer.yVel * deltaTime * velocityMod * velMod2 * cryoSlowMod;
 			}
 
 			let shotTimeMod = 1;
@@ -345,7 +346,7 @@ var sendUpdates = function (io) {
 	let leaderboardToSend = leaderboard.getTop10(players);
 
 	const DIST_NEEDED = 1000 * 1000;
-	const DIST_REMOVE_NEEDED = 1200 * 1200;
+	const DIST_REMOVE_NEEDED = 1500 * 1500;
 	players.forEach((value, key, map) => {
 		if (!value.bot) {
 			let newPlayersSent = [];

@@ -56,6 +56,8 @@ function socketStuff(formData) {
             if (newObj != undefined) {
                 let trail = obj.trail;
                 newObj.trail = obj.trail;
+
+                newObj.grdCanvas = obj.grdCanvas;
             }
         });
         worldObjsOld.players.forEach((obj, id, map) => {

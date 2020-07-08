@@ -18,9 +18,13 @@ const BOT_NAMES = [
 	"Protein", "Shake", "Calorie", "Dense", "Long", "Short", "Cable", "Internet", "Web",
 	"Land", "Apple", "Orange", "Kiwi", "Blowhole", "Bumpkin", "Cabbage", "Egg", "Troglodyte",
 	"EEEEEE", "Jeroo", "Jerboa", "Upgrade", "Stealer", "Nose", "Cant", "Burp", "Juicy",
-	"Bent", "Spine"
+	"Bent", "Spine", "Wand", "Magic", "Steve", "Right", "Now", "Democrat", "Republican", "Liberal",
+	"Conservative", "Chungo", "Bungo", "Dingo", "Dongo", "Chongo", "Bingo", "Bongo", "Lil",
+	"Slayer", "Waffle",
 ];
 const BOT_NAME_DELIMITERS = ["", "", "", "", "", "", "", "", "", "", "", " ", " ", " ", " ", " ", " "," ", ".", "_", "-", "~"];
+var upgrades = require('./upgrades.js');
+const UPGRADE_TYPES = upgrades.UPGRADE_TYPES;
 
 const colorPalette = [
 	"#ff0000", "#ff9900", "#ffff00", "#00ff00", "#00ffff", "#0000ff", "#9900ff", "#ff00ff",
@@ -186,14 +190,32 @@ function updateBot(botNum, bot, deltaTime) {
 		bot.xToGo = newPos.x;
 		bot.yToGo = newPos.y;
 	}
+
+
 	//Move towards new position
+	//Get powerup mods
+	let velocityMod = 1;
+	velocityMod += bot.upgrades[UPGRADE_TYPES.speed] * 0.1;
+
+	let cryoSlowMod = 1;
+	if (bot.cryoSlowTimer > 0) {
+		bot.cryoSlowTimer -= deltaTime;
+		cryoSlowMod = 0.6;
+	}
+
+	let velMod2 = 1;
+	if (bot.upgrades[UPGRADE_TYPES.tank] > 0) velMod2 = 0.60;
+	if (bot.upgrades[UPGRADE_TYPES.speedster] > 0) {
+		velMod2 = 1.5;
+	}
+	//Move
 	bot.oldX = bot.x;
 	bot.oldY = bot.y;
 	if (Math.abs(bot.x - bot.xToGo) > 2) {
-		bot.x += deltaTime * 150 * Math.cos(bot.rotation);
+		bot.x += deltaTime * 150 * Math.cos(bot.rotation) * velocityMod * velMod2 * cryoSlowMod;
 	}
 	if (Math.abs(bot.y - bot.yToGo) > 2) {
-		bot.y += deltaTime * 150 * Math.sin(bot.rotation);
+		bot.y += deltaTime * 150 * Math.sin(bot.rotation) * velocityMod * velMod2 * cryoSlowMod;
 	}
 
 	//other player nearby, target them and shoot at them

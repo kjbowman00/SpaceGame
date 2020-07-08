@@ -134,7 +134,7 @@ function handleBulletCollision(players, bullets, bulletsMarkedForExplosion, delt
 							let rand = Math.random();
 							if (rand < 1) {
 								//Slow effect
-								player.cryoSlowedTimer = 0.5;
+								player.cryoSlowTimer = 0.5;
 							}
 						}
 						if (damagingPlayer.upgrades[UPGRADE_TYPES.acidic_rounds] > 0) {

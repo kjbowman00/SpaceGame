@@ -62,7 +62,7 @@ var update = function (deltaTime) {
 			let cryoSlowMod = 1;
 			if (currentPlayer.cryoSlowTimer > 0) {
 				currentPlayer.cryoSlowTimer -= deltaTime;
-				cryoSlowMod = 0.65;
+				cryoSlowMod = 0.6;
 			}
 
 			let velMod2 = 1;

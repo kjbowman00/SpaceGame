@@ -27,6 +27,9 @@ const UPGRADE_TYPES = {
 	bullet_hose: 15
 };
 
+//This tells the amount the upgrade should increase the trait per level
+const UPGRADE_EFFECT_AMOUNTS = require('../public/js/upgradeEffectAmounts.js').UPGRADE_EFFECT_AMOUNTS;
+
 const AMOUNT_TO_UPGRADE = [
 	25, 25, 25, 25, 50, 50, 50, 50, 75, 75, 75, 75, 75, 100, 100, 100,
 	100, 100, 100, 200, 200, 200, 200, 200, 200, 200, 200, 200, 200, 500, 500, "N/A"
@@ -112,16 +115,16 @@ function upgradePlayer(player, selection) {
 
 	//Handle things that need to be changed once
 	if (upgradeType == UPGRADE_TYPES.health) {
-		player.maxHealth = 100 + 25 * (player.upgrades[upgradeType]);
-		if (player.upgrades[UPGRADE_TYPES.tank] > 0) player.maxHealth *= 2;
+		player.maxHealth = 100 * (1 + UPGRADE_EFFECT_AMOUNTS.health * player.upgrades[upgradeType]);
+		if (player.upgrades[UPGRADE_TYPES.tank] > 0) player.maxHealth *= UPGRADE_EFFECT_AMOUNTS.tank.healthMod;
 		if (player.upgrades[UPGRADE_TYPES.speedster] > 0) {
-			player.maxHealth /= 2;
+			player.maxHealth *= UPGRADE_EFFECT_AMOUNTS.speedster.healthMod;
 			if (player.health > player.maxHealth) player.health = player.maxHealth;
 		}
 	}
-	if (upgradeType == UPGRADE_TYPES.tank) player.maxHealth *= 2;
+	if (upgradeType == UPGRADE_TYPES.tank) player.maxHealth *= UPGRADE_EFFECT_AMOUNTS.tank.healthMod;
 	if (upgradeType == UPGRADE_TYPES.speedster) {
-		player.maxHealth /= 2;
+		player.maxHealth *= UPGRADE_EFFECT_AMOUNTS.speedster.healthMod;
 		if (player.health > player.maxHealth) player.health = player.maxHealth;
 	}
 }
@@ -130,5 +133,6 @@ function upgradePlayer(player, selection) {
 
 exports.UPGRADE_TYPES = UPGRADE_TYPES;
 exports.AMOUNT_TO_UPGRADE = AMOUNT_TO_UPGRADE;
+exports.UPGRADE_EFFECT_AMOUNTS = UPGRADE_EFFECT_AMOUNTS;
 exports.getUpgradeSet = getUpgradeSet;
 exports.upgradePlayer = upgradePlayer;

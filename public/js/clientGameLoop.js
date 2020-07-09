@@ -34,6 +34,8 @@ const playerFireTimeNeeded = 0.5;
 const fadeTime = 0.5; //Amount in seconds to fade screen on death
 var fadeTimer = 0;
 
+var deathAnimations = [];
+
 function initializeWorldObjects() {
 	worldObjsOld = {};
 	worldObjsOld.players = new Map();
@@ -170,6 +172,14 @@ function update() {
 		}
 	} //END IF ALIVE
 
+	console.log(deathAnimations.length);
+	for (let i = deathAnimations.length - 1; i >= 0; i--) {
+		if (deathAnimations.timeAlive > 2) {
+			deathAnimations.splice(i, 1);
+		} else {
+			deathAnimations[i].update(deltaTime);
+		}
+	}
 
 	//Update other player objects
 	var percentageUpdate = deltaServer / SERVER_WORLD_UPDATE_TIME;
@@ -314,14 +324,6 @@ function draw() {
 			tempCtx.fillStyle = grd;
 			tempCtx.fillRect(0, 0, r * 2, r * 2);
 		}
-		/*var grd = bCtx.createRadialGradient(Math.floor(elem.x - camera.x + 10), Math.floor(elem.y - camera.y + 10), 3, Math.floor(elem.x - camera.x + 10), Math.floor(elem.y - camera.y + 10), 10);
-		let c = hexToRGB(elem.color);
-		grd.addColorStop(0, 'rgba(255,255,255, 0.8)');
-		grd.addColorStop(0.5, 'rgba(' + c.r + ', ' + c.g + ', ' + c.b + ', 0.5)');
-		grd.addColorStop(1, 'rgba(' + c.r + ', ' + c.g + ', ' + c.b + ', 0.0)');
-		bCtx.fillStyle = grd;
-		bCtx.globalCompositeOperation = "lighter";
-		bCtx.fillRect(Math.floor(elem.x - camera.x), Math.floor(elem.y - camera.y), 20, 20);*/
 		bCtx.drawImage(elem.grdCanvas, Math.floor(elem.x - camera.x), Math.floor(elem.y - camera.y));
 
 	});
@@ -329,6 +331,11 @@ function draw() {
 	//Render powerups
 	for (let i = 0; i < powerupObjs.length; i++) {
 		displayPowerupObj(powerupObjs[i], bCtx);
+	}
+
+	//Death animations
+	for (let i = deathAnimations.length - 1; i >= 0; i--) {
+		deathAnimations[i].draw(ctx);
 	}
 
 	displayLeaderboard(uiCtx);

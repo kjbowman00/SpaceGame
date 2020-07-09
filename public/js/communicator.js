@@ -8,7 +8,6 @@ function onPlay() {
 	socketStuff(formData);
 	return false;
 }
-console.log("kms");
 document.getElementById("name_form").onsubmit = onPlay;
 
 function socketStuff(formData) {
@@ -43,7 +42,6 @@ function socketStuff(formData) {
         world = data.world;
         player.x = data.startPos.x;
         player.y = data.startPos.y;
-        console.log(data.startPos);
         player.oldX = player.x;
         player.oldY = player.y;
         serverPlayerState.x = player.x;
@@ -151,6 +149,20 @@ function socketStuff(formData) {
         for (let i = 0; i < bulletsToExplode.length; i++) {
             console.log("Bullet " + bulletsToExplode[i] + " exploded!");
         }*/
+        let deadPlayers = data.objects.deadPlayers;
+        for (let i = deadPlayers.length - 1; i >= 0; i--) {
+            let current = deadPlayers[i];
+            let deadPlayer = worldObjsOld.players.get(current);
+            if (deadPlayer != undefined) {
+                deathAnimations.push(new deathAnimator(
+                    deadPlayer.x,
+                    deadPlayer.y,
+                    50,
+                    50,
+                    hexToRGB(deadPlayer.color)
+                ));
+            }
+        }
 
         serverPlayerState = data.player;
         let posArray = new Int16Array(serverPlayerState.pos);

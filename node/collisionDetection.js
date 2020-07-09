@@ -132,14 +132,14 @@ function handleBulletCollision(players, bullets, bulletsMarkedForExplosion, delt
 
 						if (damagingPlayer.upgrades[UPGRADE_TYPES.cryo_rounds] > 0) {
 							let rand = Math.random();
-							if (rand < 1) {
+							if (rand < 0.25) {
 								//Slow effect
-								player.cryoSlowTimer = 0.5;
+								player.cryoSlowTimer = 0.8 * damage / 10; // 0.8 seconds of slow scaled by damage
 							}
 						}
 						if (damagingPlayer.upgrades[UPGRADE_TYPES.acidic_rounds] > 0) {
-							player.acidDamage += 1 + 0.05 * damagingPlayer.upgrades[UPGRADE_TYPES.damage];
-							if (player.acidDamage > 5) player.acidDamage = 5;
+							player.acidDamage += 5 + 1 * damagingPlayer.upgrades[UPGRADE_TYPES.damage];
+							if (player.acidDamage > 25) player.acidDamage = 25;
 						}
 					}
 

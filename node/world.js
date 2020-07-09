@@ -25,6 +25,7 @@ var players = new Map();
 var bullets = new Map();
 var bulletNum = 0; //Used to communicate to player what bullet to delete when it hits
 var bulletsMarkedForExplosion = [];
+var playersMarkedForExplosion = [];
 
 var botManager = require('./botManager.js');
 
@@ -46,8 +47,8 @@ var update = function (deltaTime) {
 			}
 
 			if (currentPlayer.acidDamage > 0) {
-				currentPlayer.health -= deltaTime;
-				currentPlayer.acidDamage -= deltaTime;
+				currentPlayer.health -= deltaTime * 10;
+				currentPlayer.acidDamage -= deltaTime * 10;
 				if (currentPlayer.acidDamage < 0) {
 					currentPlayer.health -= currentPlayer.acidDamage;
 					currentPlayer.acidDamage = 0;
@@ -178,7 +179,11 @@ var update = function (deltaTime) {
 
 			if (currentPlayer.health <= 0) {
 				currentPlayer.alive = false;
-
+				playersMarkedForExplosion.push({
+					x: currentPlayer.x,
+					y: currentPlayer.y,
+					id: key
+				});
 				//Reward killing player
 				let killingPlayer = players.get(currentPlayer.lastDamagedBy);
 				if (killingPlayer != undefined) {
@@ -407,6 +412,15 @@ var sendUpdates = function (io) {
 			}
 			objectsToSend.bulletsMarkedForExplosion = bulletsMarkedToSend;
 
+			//Exploded players
+			let deadPlayersMarkedToSend = [];
+			for (let i = 0; i < playersMarkedForExplosion.length; i++) {
+				if (inRange(playersMarkedForExplosion[i], value, DIST_REMOVE_NEEDED)) {
+					deadPlayersMarkedToSend.push(playersMarkedForExplosion[i].id);
+				}
+			}
+			objectsToSend.deadPlayers = deadPlayersMarkedToSend;
+
 			//Powerups
 			objectsToSend.powerups = [middlePowerup];
 
@@ -423,6 +437,7 @@ var sendUpdates = function (io) {
 	});
 	deletedOrbs = [];
 	bulletsMarkedForExplosion = [];
+	playersMarkedForExplosion = [];
 	players.forEach((value, key, map) => {
 		let state = {};
 		state.health = value.health;

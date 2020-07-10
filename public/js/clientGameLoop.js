@@ -1,3 +1,5 @@
+import { UPGRADE_EFFECT_AMOUNTS } from "./upgradeEffectAmounts";
+
 /*jshint esversion: 6 */
 var deltaTime = 0; //In seconds
 
@@ -124,7 +126,7 @@ function update() {
 		//Get powerup for superspeed
 		let velocityMod = 1;
 		if (isPowerupActive(powerups.superSpeed, player)) velocityMod += .8;
-		velocityMod += player.upgrades[UPGRADE_TYPES.speed] * 0.1;
+		velocityMod += player.upgrades[UPGRADE_TYPES.speed] * UPGRADE_EFFECT_AMOUNTS.speed;
 		let velMod2 = 1;
 		if (player.upgrades[UPGRADE_TYPES.tank] > 0) velMod2 = 0.6;
 		if (player.upgrades[UPGRADE_TYPES.speedster] > 0) velMod2 = 1.5;

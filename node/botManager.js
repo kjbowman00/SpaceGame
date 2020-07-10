@@ -50,6 +50,7 @@ const BOT_NAMES = [
 const BOT_NAME_DELIMITERS = ["", "", "", "", "", "", "", "", "", "", "", " ", " ", " ", " ", " ", " "," ", ".", "_", "-", "~"];
 var upgrades = require('./upgrades.js');
 const UPGRADE_TYPES = upgrades.UPGRADE_TYPES;
+const UPGRADE_EFFECT_AMOUNTS = upgrades.UPGRADE_EFFECT_AMOUNTS;
 
 const colorPalette = [
 	"#ff0000", "#ff9900", "#ffff00", "#00ff00", "#00ffff", "#0000ff", "#9900ff", "#ff00ff",
@@ -220,7 +221,7 @@ function updateBot(botNum, bot, deltaTime) {
 	//Move towards new position
 	//Get powerup mods
 	let velocityMod = 1;
-	velocityMod += bot.upgrades[UPGRADE_TYPES.speed] * 0.1;
+	velocityMod += bot.upgrades[UPGRADE_TYPES.speed] * UPGRADE_EFFECT_AMOUNTS.speed;
 
 	let cryoSlowMod = 1;
 	if (bot.cryoSlowTimer > 0) {

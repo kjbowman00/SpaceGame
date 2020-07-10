@@ -15,8 +15,8 @@ const UPGRADE_EFFECT_AMOUNTS = {
 		slowTime: 1,
 	},
 	acidic_rounds: {
-		baseDamage: 5,
-		damageSpeed: 15
+		baseDamage: 5, //How much damage each round stacks up
+		damageSpeed: 15 //Damage per second the acid rounds do
 	},
 	tank: {
 		speedMod: 0.8,
@@ -39,4 +39,8 @@ const UPGRADE_EFFECT_AMOUNTS = {
 	}
 }
 
-exports.UPGRADE_EFFECT_AMOUNTS = UPGRADE_EFFECT_AMOUNTS;
+if (typeof exports === 'undefined') {
+	//Do nothing on client side
+} else {
+	exports.UPGRADE_EFFECT_AMOUNTS = UPGRADE_EFFECT_AMOUNTS;
+}

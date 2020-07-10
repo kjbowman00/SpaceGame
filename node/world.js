@@ -15,6 +15,7 @@ var leaderboard = require('./leaderboard.js');
 
 var upgrades = require('./upgrades.js');
 const UPGRADE_TYPES = upgrades.UPGRADE_TYPES;
+const UPGRADE_EFFECT_AMOUNTS = upgrades.UPGRADE_EFFECT_AMOUNTS;
 
 var powerups = require('./powerups.js');
 var middlePowerup = new powerups.powerupObj(-50, -50, 100, 100);
@@ -58,7 +59,7 @@ var update = function (deltaTime) {
 			//Get powerup mods
 			let velocityMod = 1;
 			if (isPowerupActive(powerups.powerups.superSpeed, currentPlayer)) velocityMod += 0.8;
-			velocityMod += currentPlayer.upgrades[UPGRADE_TYPES.speed] * 0.1;
+			velocityMod += currentPlayer.upgrades[UPGRADE_TYPES.speed] * UPGRADE_EFFECT_AMOUNTS.speed;
 
 			let cryoSlowMod = 1;
 			if (currentPlayer.cryoSlowTimer > 0) {

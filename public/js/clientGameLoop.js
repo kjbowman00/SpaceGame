@@ -128,9 +128,9 @@ function update() {
 		if (isPowerupActive(powerups.superSpeed, player)) velocityMod += .8;
 		velocityMod += player.upgrades[UPGRADE_TYPES.speed] * UPGRADE_EFFECT_AMOUNTS.speed;
 		let velMod2 = 1;
-		if (player.upgrades[UPGRADE_TYPES.tank] > 0) velMod2 = 0.6;
-		if (player.upgrades[UPGRADE_TYPES.speedster] > 0) velMod2 = 1.5;
-		if (player.cryoSlowTimer > 0) velocityMod *= 0.65;
+		if (player.upgrades[UPGRADE_TYPES.tank] > 0) velMod2 = UPGRADE_EFFECT_AMOUNTS.tank.velocityMod;
+		if (player.upgrades[UPGRADE_TYPES.speedster] > 0) velMod2 = UPGRADE_EFFECT_AMOUNTS.speedster.velocityMod;
+		if (player.cryoSlowTimer > 0) velocityMod *= UPGRADE_EFFECT_AMOUNTS.cryo_rounds.velocityMod;
 
 		player.oldX = player.x;
 		player.oldY = player.y;
@@ -155,9 +155,9 @@ function update() {
 
 		let fireTimeMod = 1;
 		if (isPowerupActive(powerups.overcharge, player)) fireTimeMod *= 2;
-		fireTimeMod += 0.15 * player.upgrades[UPGRADE_TYPES.fire_rate];
-		if (player.upgrades[UPGRADE_TYPES.sniper] > 0) fireTimeMod /= 4;
-		if (player.upgrades[UPGRADE_TYPES.bullet_hose] > 0) fireTimeMod *= 3;
+		fireTimeMod += UPGRADE_EFFECT_AMOUNTS.fire_rate * player.upgrades[UPGRADE_TYPES.fire_rate];
+		if (player.upgrades[UPGRADE_TYPES.sniper] > 0) fireTimeMod *= UPGRADE_EFFECT_AMOUNTS.sniper.fireRateMod;
+		if (player.upgrades[UPGRADE_TYPES.bullet_hose] > 0) fireTimeMod *= UPGRADE_EFFECT_AMOUNTS.bullet_hose.fireRateMod;
 
 		//Fire gun
 		playerFireTimer += deltaTime;

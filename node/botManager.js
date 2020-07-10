@@ -226,13 +226,13 @@ function updateBot(botNum, bot, deltaTime) {
 	let cryoSlowMod = 1;
 	if (bot.cryoSlowTimer > 0) {
 		bot.cryoSlowTimer -= deltaTime;
-		cryoSlowMod = 0.6;
+		cryoSlowMod = UPGRADE_EFFECT_AMOUNTS.cryo_rounds.velocityMod;
 	}
 
 	let velMod2 = 1;
-	if (bot.upgrades[UPGRADE_TYPES.tank] > 0) velMod2 = 0.60;
+	if (bot.upgrades[UPGRADE_TYPES.tank] > 0) velMod2 = UPGRADE_EFFECT_AMOUNTS.tank.velocityMod;
 	if (bot.upgrades[UPGRADE_TYPES.speedster] > 0) {
-		velMod2 = 1.5;
+		velMod2 = UPGRADE_EFFECT_AMOUNTS.speedster.velocityMod;
 	}
 	//Move
 	bot.oldX = bot.x;

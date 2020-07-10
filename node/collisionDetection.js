@@ -1,5 +1,7 @@
 var staticWorldObjs = require('./staticWorldObjs').staticWorldObjs;
-const UPGRADE_TYPES = require('./upgrades.js').UPGRADE_TYPES;
+var upgrades = require('./upgrades.js');
+const UPGRADE_TYPES = upgrades.UPGRADE_TYPES;
+const UPGRADE_EFFECT_AMOUNTS = upgrades.UPGRADE_EFFECT_AMOUNTS;
 
 function handleStaticObjsCollision(players, bullets, deltaTime, botManager, bulletsMarkedForExplosion) {
 	players.forEach((player, id, map) => {
@@ -99,7 +101,7 @@ function handleBulletCollision(players, bullets, bulletsMarkedForExplosion, delt
 						bullet.repulseChecked = true;
 						//Repulse the bullet
 						let shouldRepulseRand = Math.random();
-						if (shouldRepulseRand < 0.25) { // 1/4 chance to repulse
+						if (shouldRepulseRand < UPGRADE_EFFECT_AMOUNTS.repulser) { //Chance to repulse
 							let rotation = Math.atan2(bullet.y - (player.y + player.h / 2), bullet.x - (player.x + player.h / 2));
 							bullet.xVel = Math.cos(rotation) * (bullet.baseSpeed * 1.4); //the 1.4 gives a stronger repulse effect
 							bullet.yVel = Math.sin(rotation) * (bullet.baseSpeed * 1.4);
@@ -112,9 +114,9 @@ function handleBulletCollision(players, bullets, bulletsMarkedForExplosion, delt
 					if (isPowerupActive(2, player)) { //CHECK if juggernaut enabled
 						armor += 0.5;
 					}
-					armor += 0.05 * player.upgrades[UPGRADE_TYPES.armor]; //Armor
-					armor += 0.30 * player.upgrades[UPGRADE_TYPES.tank];
-					armor -= (0.05 * player.upgrades[UPGRADE_TYPES.armor_piercing]);
+					armor += UPGRADE_EFFECT_AMOUNTS.armor * player.upgrades[UPGRADE_TYPES.armor]; //Armor
+					armor += UPGRADE_EFFECT_AMOUNTS.tank.armorMod * player.upgrades[UPGRADE_TYPES.tank];
+					armor -= (UPGRADE_EFFECT_AMOUNTS.armor_piercing * player.upgrades[UPGRADE_TYPES.armor_piercing]);
 					if (armor < 0) armor = 0;
 					if (armor > 1) armor = 1;
 
@@ -124,7 +126,7 @@ function handleBulletCollision(players, bullets, bulletsMarkedForExplosion, delt
 					let damagingPlayer = players.get(bullet.playerEmitId);
 					if (damagingPlayer != undefined) {
 						if (damagingPlayer.health > 0) { //This ensures they aren't already dead
-							let lifeSteal = damagingPlayer.upgrades[UPGRADE_TYPES.life_steal] * 0.05;
+							let lifeSteal = damagingPlayer.upgrades[UPGRADE_TYPES.life_steal] * UPGRADE_EFFECT_AMOUNTS.life_steal;
 							let lifeStolen = lifeSteal * damage;
 							damagingPlayer.health += lifeStolen;
 							if (damagingPlayer.health > damagingPlayer.maxHealth) damagingPlayer.health = damagingPlayer.maxHealth;
@@ -132,14 +134,14 @@ function handleBulletCollision(players, bullets, bulletsMarkedForExplosion, delt
 
 						if (damagingPlayer.upgrades[UPGRADE_TYPES.cryo_rounds] > 0) {
 							let rand = Math.random();
-							if (rand < 0.25) {
+							if (rand < UPGRADE_EFFECT_AMOUNTS.cryo_rounds.chance) {
 								//Slow effect
-								player.cryoSlowTimer = 0.8 * damage / 10; // 0.8 seconds of slow scaled by damage
+								player.cryoSlowTimer = UPGRADE_EFFECT_AMOUNTS.cryo_rounds.slowTime * damage / 10; // 0.8 seconds of slow scaled by damage
 							}
 						}
 						if (damagingPlayer.upgrades[UPGRADE_TYPES.acidic_rounds] > 0) {
-							player.acidDamage += 5 + 1 * damagingPlayer.upgrades[UPGRADE_TYPES.damage];
-							if (player.acidDamage > 25) player.acidDamage = 25;
+							player.acidDamage += UPGRADE_EFFECT_AMOUNTS.acidic_rounds.baseDamage + 1 * damagingPlayer.upgrades[UPGRADE_TYPES.damage];
+							if (player.acidDamage > UPGRADE_EFFECT_AMOUNTS.acidic_rounds.maxDamage) player.acidDamage = UPGRADE_EFFECT_AMOUNTS.acidic_rounds.maxDamage;
 						}
 					}
 

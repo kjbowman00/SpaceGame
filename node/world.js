@@ -43,13 +43,14 @@ var update = function (deltaTime) {
 		if (currentPlayer.alive) {
 			currentPlayer.regenStartTimer += deltaTime;
 			if (currentPlayer.regenStartTimer > REGEN_START_TIME) {
-				currentPlayer.health += deltaTime * 5 * (1 + 0.25 * currentPlayer.upgrades[UPGRADE_TYPES.health_regen]); //5 health per second
+				currentPlayer.health += deltaTime * 5 * (1 + UPGRADE_EFFECT_AMOUNTS.health_regen * currentPlayer.upgrades[UPGRADE_TYPES.health_regen]); //5 health per second
 				if (currentPlayer.health > currentPlayer.maxHealth) currentPlayer.health = currentPlayer.maxHealth;
 			}
 
 			if (currentPlayer.acidDamage > 0) {
-				currentPlayer.health -= deltaTime * 10;
-				currentPlayer.acidDamage -= deltaTime * 10;
+				let damageMod = UPGRADE_EFFECT_AMOUNTS.acidic_rounds.damageSpeed;
+				currentPlayer.health -= deltaTime * damageMod;
+				currentPlayer.acidDamage -= deltaTime * damageMod;
 				if (currentPlayer.acidDamage < 0) {
 					currentPlayer.health -= currentPlayer.acidDamage;
 					currentPlayer.acidDamage = 0;
@@ -64,13 +65,13 @@ var update = function (deltaTime) {
 			let cryoSlowMod = 1;
 			if (currentPlayer.cryoSlowTimer > 0) {
 				currentPlayer.cryoSlowTimer -= deltaTime;
-				cryoSlowMod = 0.6;
+				cryoSlowMod = UPGRADE_EFFECT_AMOUNTS.cryo_rounds.velocityMod;
 			}
 
 			let velMod2 = 1;
-			if (currentPlayer.upgrades[UPGRADE_TYPES.tank] > 0) velMod2 = 0.60;
+			if (currentPlayer.upgrades[UPGRADE_TYPES.tank] > 0) velMod2 = UPGRADE_EFFECT_AMOUNTS.tank.velocityMod;
 			if (currentPlayer.upgrades[UPGRADE_TYPES.speedster] > 0) {
-				velMod2 = 1.5;
+				velMod2 = UPGRADE_EFFECT_AMOUNTS.speedster.velocityMod;
 			}
 
 			//Update old positions
@@ -88,18 +89,21 @@ var update = function (deltaTime) {
 			if (isPowerupActive(powerups.powerups.overcharge, currentPlayer)) {
 				shotTimeMod *= 2;
 			}
-			shotTimeMod += 0.15 * currentPlayer.upgrades[UPGRADE_TYPES.fire_rate];
-			if (currentPlayer.upgrades[UPGRADE_TYPES.bullet_hose]) shotTimeMod *= 3;
+			shotTimeMod += UPGRADE_EFFECT_AMOUNTS.fire_rate * currentPlayer.upgrades[UPGRADE_TYPES.fire_rate];
+			if (currentPlayer.upgrades[UPGRADE_TYPES.bullet_hose]) shotTimeMod *= UPGRADE_EFFECT_AMOUNTS.bullet_hose.fireRateMod;
 			let sniperShotTimeAdjuster = 1;
-			if (currentPlayer.upgrades[UPGRADE_TYPES.sniper] > 0) sniperShotTimeAdjuster = 2;
+			if (currentPlayer.upgrades[UPGRADE_TYPES.sniper] > 0) sniperShotTimeAdjuster = UPGRADE_EFFECT_AMOUNTS.sniper.fireRateMod;
 			shotTimeMod /= sniperShotTimeAdjuster;
 
 			//Handle player shooting
-			let bulletDmg = 10 * (1 + 0.05 * currentPlayer.upgrades[UPGRADE_TYPES.damage]);
-			if (currentPlayer.upgrades[UPGRADE_TYPES.speedster] > 0) bulletDmg = 0.75 * bulletDmg;
-			if (currentPlayer.upgrades[UPGRADE_TYPES.sniper] > 0) bulletDmg *= 2.5;
-			if (currentPlayer.upgrades[UPGRADE_TYPES.bullet_hose] > 0) bulletDmg *= 0.2;
-			let armorPiercing = 0.05 * currentPlayer.upgrades[UPGRADE_TYPES.armor_piercing];
+			let bulletBaseSpeed = 500;
+			if (currentPlayer.upgrades[UPGRADE_TYPES.sniper] > 0) bulletBaseSpeed *= UPGRADE_EFFECT_AMOUNTS.sniper.bulletSpeedMod;
+
+			let bulletDmg = 10 * (1 + UPGRADE_EFFECT_AMOUNTS.damage * currentPlayer.upgrades[UPGRADE_TYPES.damage]);
+			if (currentPlayer.upgrades[UPGRADE_TYPES.speedster] > 0) bulletDmg = UPGRADE_EFFECT_AMOUNTS.speedster.damageMod * bulletDmg;
+			if (currentPlayer.upgrades[UPGRADE_TYPES.sniper] > 0) bulletDmg *= UPGRADE_EFFECT_AMOUNTS.sniper.damageMod;
+			if (currentPlayer.upgrades[UPGRADE_TYPES.bullet_hose] > 0) bulletDmg *= UPGRADE_EFFECT_AMOUNTS.bullet_hose.damageMod;
+			let armorPiercing = UPGRADE_EFFECT_AMOUNTS.armor_piercing * currentPlayer.upgrades[UPGRADE_TYPES.armor_piercing];
 			if (currentPlayer.gun.shotsRequested > 0 && currentPlayer.gun.shotTimer >= currentPlayer.gun.shotTimeNeeded / shotTimeMod - 0.03) {
 				if (isPowerupActive(powerups.powerups.triShot, currentPlayer)) {
 					//TRI shot powerup is active
@@ -107,9 +111,9 @@ var update = function (deltaTime) {
 					bullets.set(bulletNum, {
 						x: currentPlayer.x + currentPlayer.w / 2 - 5, y: currentPlayer.y + (currentPlayer.h / 2) - 5,
 						r: 5,
-						baseSpeed: 500,
-						xVel: Math.cos(currentPlayer.gun.rotation) * 500 + currentPlayer.xVel / 2,
-						yVel: Math.sin(currentPlayer.gun.rotation) * 500 + currentPlayer.yVel / 2,
+						baseSpeed: bulletBaseSpeed,
+						xVel: Math.cos(currentPlayer.gun.rotation) * bulletBaseSpeed + currentPlayer.xVel / 2,
+						yVel: Math.sin(currentPlayer.gun.rotation) * bulletBaseSpeed + currentPlayer.yVel / 2,
 						damage: bulletDmg,
 						color: currentPlayer.color,
 						timeAlive: 0,
@@ -121,9 +125,9 @@ var update = function (deltaTime) {
 					bullets.set(bulletNum, {
 						x: currentPlayer.x + currentPlayer.w / 2 - 5, y: currentPlayer.y + (currentPlayer.h / 2) - 5,
 						r: 5,
-						baseSpeed: 500,
-						xVel: Math.cos(currentPlayer.gun.rotation + spreadAngle) * 500 + currentPlayer.xVel / 2,
-						yVel: Math.sin(currentPlayer.gun.rotation + spreadAngle) * 500 + currentPlayer.yVel / 2,
+						baseSpeed: bulletBaseSpeed,
+						xVel: Math.cos(currentPlayer.gun.rotation + spreadAngle) * bulletBaseSpeed + currentPlayer.xVel / 2,
+						yVel: Math.sin(currentPlayer.gun.rotation + spreadAngle) * bulletBaseSpeed + currentPlayer.yVel / 2,
 						damage: bulletDmg,
 						color: currentPlayer.color,
 						timeAlive: 0,
@@ -135,9 +139,9 @@ var update = function (deltaTime) {
 					bullets.set(bulletNum, {
 						x: currentPlayer.x + currentPlayer.w / 2 - 5, y: currentPlayer.y + (currentPlayer.h / 2) - 5,
 						r: 5,
-						baseSpeed:500,
-						xVel: Math.cos(currentPlayer.gun.rotation - spreadAngle) * 500 + currentPlayer.xVel / 2,
-						yVel: Math.sin(currentPlayer.gun.rotation - spreadAngle) * 500 + currentPlayer.yVel / 2,
+						baseSpeed:bulletBaseSpeed,
+						xVel: Math.cos(currentPlayer.gun.rotation - spreadAngle) * bulletBaseSpeed + currentPlayer.xVel / 2,
+						yVel: Math.sin(currentPlayer.gun.rotation - spreadAngle) * bulletBaseSpeed + currentPlayer.yVel / 2,
 						damage: bulletDmg,
 						color: currentPlayer.color,
 						timeAlive: 0,
@@ -153,9 +157,9 @@ var update = function (deltaTime) {
 					bullets.set(bulletNum, {
 						x: currentPlayer.x + currentPlayer.w / 2 - 5, y: currentPlayer.y + (currentPlayer.h / 2) - 5,
 						r: 5,
-						baseSpeed: 500,
-						xVel: Math.cos(currentPlayer.gun.rotation) * 500 + currentPlayer.xVel / 2,
-						yVel: Math.sin(currentPlayer.gun.rotation) * 500 + currentPlayer.yVel / 2,
+						baseSpeed: bulletBaseSpeed,
+						xVel: Math.cos(currentPlayer.gun.rotation) * bulletBaseSpeed + currentPlayer.xVel / 2,
+						yVel: Math.sin(currentPlayer.gun.rotation) * bulletBaseSpeed + currentPlayer.yVel / 2,
 						damage: bulletDmg,
 						color: currentPlayer.color,
 						timeAlive: 0,

@@ -9,22 +9,24 @@ const UPGRADE_EFFECT_AMOUNTS = {
 	armor_piercing: 0.05,
 	life_steal: 0.05,
 	pet: 0,
-	repulser: 0.25,
+	repulser: 0.25, //chance to bounce
 	cryo_rounds: {
-		slowAmount: 0.65,
+		velocityMod: 0.65,
 		slowTime: 1,
+		chance: 0.25
 	},
 	acidic_rounds: {
 		baseDamage: 5, //How much damage each round stacks up
-		damageSpeed: 15 //Damage per second the acid rounds do
+		damageSpeed: 15, //Damage per second the acid rounds do
+		maxDamage: 25
 	},
 	tank: {
-		speedMod: 0.8,
+		velocityMod: 0.8,
 		healthMod: 2,
 		armorMod: 2
 	},
 	speedster: {
-		speedMod: 2,
+		velocityMod: 2,
 		healthMod: 0.5,
 		damageMod: 0.7
 	},

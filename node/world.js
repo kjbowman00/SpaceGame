@@ -21,6 +21,7 @@ var powerups = require('./powerups.js');
 var middlePowerup = new powerups.powerupObj(-50, -50, 100, 100);
 
 const MAX_PLAYERS = 50;
+var killstreak_numbers = [5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 75, 100, 150, 1000, "N/A"];
 
 var players = new Map();
 var bullets = new Map();
@@ -196,8 +197,20 @@ var update = function (deltaTime, io) {
 				if (killingPlayer != undefined) {
 					killingPlayer.kills++;
 					let orbsRewarded = 15 * currentPlayer.level + 15;
-					killingPlayer.orbs += orbsRewarded;
-					killingPlayer.playersJustKilled.push({ orbs: orbsRewarded });
+					let killStreakOrbs = 0;
+					let killStreak = false;
+					if (killingPlayer.kills >= killstreak_numbers[killingPlayer.killStreakNum]) {
+						killingPlayer.killStreakNum++;
+						killStreakOrbs += 50 * killingPlayer.killStreakNum;
+						killStreak = true;
+					}
+
+					killingPlayer.orbs += orbsRewarded + killStreakOrbs;
+					if (killStreak) {
+						killingPlayer.playersJustKilled.push({ orbs: orbsRewarded, killStreakOrbs: killStreakOrbs, killStreakNumber: killingPlayer.killStreakNum-1 });
+					} else {
+						killingPlayer.playersJustKilled.push({ orbs: orbsRewarded });
+					}
 				}
 			}
 
@@ -584,6 +597,7 @@ function Player(name, x, y, color) {
 	this.lastLeaderBoardState = -1;
 	this.timeDead = 0;
 	this.playersJustKilled = [];
+	this.killStreakNum = 0;
 }
 
 var playerInput = function (socketID, input) {

@@ -85,6 +85,12 @@ const UPGRADE_LEVELS = {
 	specialized: 13
 };
 
+const KILL_STREAK_TEXT = ["Finisher", "Punisher", "Maniac", "Destroyer",
+		"Tormentor", "Extinguisher", "Terminator", "Obliterator",
+		"Executioner", "Annihilator", "Exterminator", "Bearer Of Death",
+		"Unstoppable", "Hello from dev"
+	];
+
 //For displaying orbs gained from a kill and also saying kill streaks
 var killInfoArray = [];
 
@@ -133,10 +139,18 @@ function drawTopInfoBar(ctx) {
 	let y = canvas.height / 2 - 125;
 	for (let i = 0; i < killInfoArray.length; i++) {
 		let currentKill = killInfoArray[i];
-		ctx.fillStyle = "rgba(220, 220, 20, " + currentKill.a + ")";
-		ctx.font = (currentKill.size * 12).toFixed(0) + "px Arial";
-		ctx.textAlign = "center";
-		ctx.fillText("Kill: +" + currentKill.orbs + " Orbs", canvas.width*1.5/3, y);
+		if (currentKill.killStreakOrbs == undefined) {
+			ctx.fillStyle = "rgba(220, 220, 20, " + currentKill.a + ")";
+			ctx.font = (currentKill.size * 12).toFixed(0) + "px Arial";
+			ctx.textAlign = "center";
+			ctx.fillText("Kill: +" + currentKill.orbs + " Orbs", canvas.width * 1.5 / 3, y);
+		} else {
+			ctx.fillStyle = "rgba(255, 68, 5, " + currentKill.a + ")";
+			ctx.font = (currentKill.size * 12).toFixed(0) + "px Arial";
+			ctx.textAlign = "center";
+			ctx.fillText("Kill: +" + currentKill.orbs + " Orbs", canvas.width * 1.5 / 3, y);
+			ctx.fillText("KILL STREAK: " + KILL_STREAK_TEXT[currentKill.killStreakNumber] + " +" + currentKill.killStreakOrbs + " Orbs", canvas.width * 1.5 / 3, y - 20);
+		}
 	}
 }
 

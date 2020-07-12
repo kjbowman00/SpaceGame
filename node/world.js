@@ -195,7 +195,9 @@ var update = function (deltaTime, io) {
 				let killingPlayer = players.get(currentPlayer.lastDamagedBy);
 				if (killingPlayer != undefined) {
 					killingPlayer.kills++;
-					killingPlayer.orbs += 15 * currentPlayer.level;
+					let orbsRewarded = 15 * currentPlayer.level + 15;
+					killingPlayer.orbs += orbsRewarded;
+					killingPlayer.playersJustKilled.push({ orbs: orbsRewarded });
 				}
 			}
 
@@ -306,6 +308,10 @@ function getSelfStripped(player) {
 			upgradeArray[i] = upgrades[i];
 		}
 		stripped.upgrades = upgradeArray;
+	}
+	if (player.playersJustKilled.length > 0) {
+		stripped.playersJustKilled = player.playersJustKilled;
+		player.playersJustKilled = [];
 	}
 	return stripped;
 }
@@ -577,6 +583,7 @@ function Player(name, x, y, color) {
 	this.playersSent = [];
 	this.lastLeaderBoardState = -1;
 	this.timeDead = 0;
+	this.playersJustKilled = [];
 }
 
 var playerInput = function (socketID, input) {

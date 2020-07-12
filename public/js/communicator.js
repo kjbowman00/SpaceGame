@@ -145,6 +145,14 @@ function socketStuff(formData) {
 
         powerupObjs = data.objects.powerups;
 
+        if (data.player.playersJustKilled != undefined) {
+            let killInfo = data.player.playersJustKilled;
+            console.log(killInfo);
+            for (let i = 0; i < killInfo.length; i++) {
+                killInfoArray.push(killInfo[i]);
+            }
+        }
+
         /*let bulletsToExplode = data.objects.bulletsMarkedForExplosion;
         for (let i = 0; i < bulletsToExplode.length; i++) {
             console.log("Bullet " + bulletsToExplode[i] + " exploded!");

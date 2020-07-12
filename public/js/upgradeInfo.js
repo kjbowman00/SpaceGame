@@ -86,10 +86,7 @@ const UPGRADE_LEVELS = {
 };
 
 //For displaying orbs gained from a kill and also saying kill streaks
-var killInfoArray = [
-	{
-		orbs: 25
-	}];
+var killInfoArray = [];
 
 function updateTopInfoBar(deltaTime) {
 	//Manage stages and deletion

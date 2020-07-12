@@ -6,25 +6,26 @@ const UPGRADE_TYPES = {
 	armor: 3,
 	health_regen: 4,
 	damage: 5,
+	bullet_speed: 6,
 
 	//Rare
-	armor_piercing: 6,
-	life_steal: 7,
+	armor_piercing: 7,
+	life_steal: 8,
 
 
 	//Legendary
-	pet: 8,
-	repulser: 9,
-	cryo_rounds: 10,
-	acidic_rounds: 11,
+	pet: 9,
+	repulser: 10,
+	cryo_rounds: 11,
+	acidic_rounds: 12,
 
 	//Specializations
 	//Lvl 5
-	tank: 12,
-	speedster: 13,
+	tank: 13,
+	speedster: 14,
 	//Level 10
-	sniper: 14,
-	bullet_hose: 15
+	sniper: 15,
+	bullet_hose: 16
 };
 
 //This tells the amount the upgrade should increase the trait per level
@@ -37,12 +38,12 @@ const AMOUNT_TO_UPGRADE = [
 //const AMOUNT_TO_UPGRADE = [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]
 
 const UPGRADE_PROBABILITIES = [
-	0.1333333333, 0.1333333333, 0.1333333333, 0.1333333333, 0.1333333333, 0.1333333333, //Common (80%)
+	0.1142857, 0.1142857, 0.1142857, 0.1142857, 0.1142857, 0.1142857, 0.1142857, //Common (80%)
 	0.075, 0.075, //Rare (15%)
 	0, 0.0166666, 0.0166666, 1 //Legendary (5%). 1 at the end to ensure an upgrade happens from rounding errors
 ];
 const MAX_UPGRADE_LEVELS = [
-	10, 5, 6, 7, 6, 10,
+	10, 5, 6, 7, 6, 10, 5,
 	6, 6,
 	1,1,1,1
 ];

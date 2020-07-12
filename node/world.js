@@ -97,6 +97,7 @@ var update = function (deltaTime) {
 
 			//Handle player shooting
 			let bulletBaseSpeed = 500;
+			bulletBaseSpeed *= 1 + currentPlayer.upgrades[UPGRADE_TYPES.bullet_speed] * UPGRADE_EFFECT_AMOUNTS.bullet_speed;
 			if (currentPlayer.upgrades[UPGRADE_TYPES.sniper] > 0) bulletBaseSpeed *= UPGRADE_EFFECT_AMOUNTS.sniper.bulletSpeedMod;
 
 			let bulletDmg = 10 * (1 + UPGRADE_EFFECT_AMOUNTS.damage * currentPlayer.upgrades[UPGRADE_TYPES.damage]);

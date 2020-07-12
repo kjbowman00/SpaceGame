@@ -115,12 +115,17 @@ function handleBulletCollision(players, bullets, bulletsMarkedForExplosion, delt
 						armor += 0.5;
 					}
 					armor += UPGRADE_EFFECT_AMOUNTS.armor * player.upgrades[UPGRADE_TYPES.armor]; //Armor
-					armor += UPGRADE_EFFECT_AMOUNTS.tank.armorMod * player.upgrades[UPGRADE_TYPES.tank];
+					armor += UPGRADE_EFFECT_AMOUNTS.tank.armorAdd * player.upgrades[UPGRADE_TYPES.tank];
 					armor -= (UPGRADE_EFFECT_AMOUNTS.armor_piercing * player.upgrades[UPGRADE_TYPES.armor_piercing]);
-					if (armor < 0) armor = 0;
+					let bonusDamageMod = 1;
+					if (armor < 0) {
+						bonusDamageMod -= armor;
+						armor = 0;
+					}
 					if (armor > 1) armor = 1;
 
 					let damage = bullet.damage - bullet.damage * armor;
+					damage *= bonusDamageMod;
 					player.health -= damage;
 
 					let damagingPlayer = players.get(bullet.playerEmitId);

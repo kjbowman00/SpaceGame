@@ -6,38 +6,40 @@ const UPGRADE_TYPES = {
 	armor: 3,
 	health_regen: 4,
 	damage: 5,
+	bullet_speed: 6,
 
 	//Rare
-	armor_piercing: 6,
-	life_steal: 7,
+	armor_piercing: 7,
+	life_steal: 8,
 
 
 	//Legendary
-	pet: 8,
-	repulser: 9,
-	cryo_rounds: 10,
-	acidic_rounds: 11,
+	pet: 9,
+	repulser: 10,
+	cryo_rounds: 11,
+	acidic_rounds: 12,
 
 	//Specializations
 	//Lvl 5
-	tank: 12,
-	speedster: 13,
+	tank: 13,
+	speedster: 14,
 	//Level 10
-	sniper: 14,
-	bullet_hose: 15
+	sniper: 15,
+	bullet_hose: 16
 };
 
 const UPGRADE_TEXT = [
 	["+25% Health (Common)"],
-	["+10% Speed (Common)"],
-	["+15% Fire-Rate (Common)"],
-	["+5% Armor (Common)"],
+	["+7.5% Speed (Common)"],
+	["+5% Fire-Rate (Common)"],
+	["+7.5% Armor (Common)"],
 	["+25% Health Regen (Common)"],
 	["+5% Damage (Common)"],
+	["+10% Bullet Speed (Common)"],
 
 	//Rare
-	["+5% Armor Piercing (Rare)"],
-	["+5% Life Steal (Rare)"],
+	["+5% Armor Piercing (Rare)", "Overpiercing becomes bonus damage"],
+	["+15% Life Steal (Rare)"],
 
 	//LEGENDARY
 	["Pet Bot (LEGENDARY)", "Pet bot follows and helps you"],
@@ -46,13 +48,13 @@ const UPGRADE_TEXT = [
 	["Acidic Rounds (LEGENDARY)", "Bullets hurt even after hit"],
 
 	//Specializations
-	["Tank (Specialization)", "2x Total Health", "+30% Armor", "-40% Total Speed"],
-	["Speedster (Specialization)", "0.5x Total Health", "1.5x Total Speed", "-25% Total Damage"],
-	["Sniper (Specialization)", "2.5x Total Damage", "0.5x Total Fire-Rate"],
-	["Bullet Hose (Specialization)", "+3x Total Fire-Rate", "0.2x Total Damage"]
+	["Tank (Specialization)", "2x Total Health", "+30% Armor", "-10% Total Speed"],
+	["Speedster (Specialization)", "0.5x Total Health", "1.25x Total Speed", "-10% Total Damage"],
+	["Sniper (Specialization)", "2.5x Total Damage", "0.65x Total Fire-Rate", "1.5x Bullet Speed"],
+	["Bullet Hose (Specialization)", "+3x Total Fire-Rate", "0.4x Total Damage"]
 ];
 
-const UPGRADE_IMAGES = new Array(16);
+const UPGRADE_IMAGES = new Array(17);
 for (let i = 0; i < UPGRADE_IMAGES.length; i++) {
 	UPGRADE_IMAGES[i] = new Image(100, 100);
 }
@@ -62,24 +64,25 @@ UPGRADE_IMAGES[2].src = "/images/upgrades/fire_rate.png";
 UPGRADE_IMAGES[3].src = "/images/upgrades/armor.png";
 UPGRADE_IMAGES[4].src = "/images/upgrades/health_regen.png";
 UPGRADE_IMAGES[5].src = "/images/upgrades/damage.png";
-UPGRADE_IMAGES[6].src = "/images/upgrades/armor_piercing.png";
-UPGRADE_IMAGES[7].src = "/images/upgrades/life_steal.png";
-UPGRADE_IMAGES[8].src = "/images/upgrades/NOT_DONE.png";
-UPGRADE_IMAGES[9].src = "/images/upgrades/repulser_shield.png";
-UPGRADE_IMAGES[10].src = "/images/upgrades/cryo_rounds.png";
-UPGRADE_IMAGES[11].src = "/images/upgrades/acidic_rounds.png";
-UPGRADE_IMAGES[12].src = "/images/upgrades/tank.png";
-UPGRADE_IMAGES[13].src = "/images/upgrades/speedster.png";
-UPGRADE_IMAGES[14].src = "/images/upgrades/sniper.png";
-UPGRADE_IMAGES[15].src = "/images/upgrades/bullet_hose.png";
+UPGRADE_IMAGES[6].src = "/images/upgrades/bullet_speed.png";
+UPGRADE_IMAGES[7].src = "/images/upgrades/armor_piercing.png";
+UPGRADE_IMAGES[8].src = "/images/upgrades/life_steal.png";
+UPGRADE_IMAGES[9].src = "/images/upgrades/NOT_DONE.png";
+UPGRADE_IMAGES[10].src = "/images/upgrades/repulser_shield.png";
+UPGRADE_IMAGES[11].src = "/images/upgrades/cryo_rounds.png";
+UPGRADE_IMAGES[12].src = "/images/upgrades/acidic_rounds.png";
+UPGRADE_IMAGES[13].src = "/images/upgrades/tank.png";
+UPGRADE_IMAGES[14].src = "/images/upgrades/speedster.png";
+UPGRADE_IMAGES[15].src = "/images/upgrades/sniper.png";
+UPGRADE_IMAGES[16].src = "/images/upgrades/bullet_hose.png";
 
 const NO_UPGRADE_IMAGE = new Image(100, 100);
 NO_UPGRADE_IMAGE.src = "/images/upgrades/none.png";
 
 const UPGRADE_LEVELS = {
-	rare: 6,
-	legendary: 8,
-	specialized: 12
+	rare: 7,
+	legendary: 9,
+	specialized: 13
 };
 
 function drawTopInfoBar(ctx) {

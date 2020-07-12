@@ -1,11 +1,9 @@
-import { UPGRADE_EFFECT_AMOUNTS } from "./upgradeEffectAmounts";
-
 /*jshint esversion: 6 */
 var deltaTime = 0; //In seconds
 
 var alive = false;
 
-const SERVER_WORLD_UPDATE_TIME = 1 / 15;
+const SERVER_WORLD_UPDATE_TIME = 1 / 20;
 
 var worldObjsOld = {};
 worldObjsOld.players = new Map();
@@ -174,7 +172,6 @@ function update() {
 		}
 	} //END IF ALIVE
 
-	console.log(deathAnimations.length);
 	for (let i = deathAnimations.length - 1; i >= 0; i--) {
 		if (deathAnimations.timeAlive > 2) {
 			deathAnimations.splice(i, 1);

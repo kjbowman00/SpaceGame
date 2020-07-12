@@ -16,6 +16,7 @@ function deathAnimator(x, y, w, h, color) {
 
 	this.dist = 0;
 	this.update = function (deltaTime) {
+		this.timeAlive += deltaTime;
 		this.dist += deltaTime * 100;
 		this.a -= deltaTime * 0.5;
 		if (this.a < 0) this.a = 0;

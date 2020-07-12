@@ -17,7 +17,7 @@ var loop = function () {
 		previousTick = now;
 
 		//Update
-		world.update(deltaTime);
+		world.update(deltaTime, io);
 	}
 
 	if (previousOutputTick + outputTickLengthMs <= now) {

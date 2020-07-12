@@ -34,10 +34,11 @@ const REGEN_START_TIME = 5; //5 seconds of not being hit
 
 const PLAYER_SPEED = 150;
 
-var update = function (deltaTime) {
+var update = function (deltaTime, io) {
 	botManager.updateBotNumbers();
 	let botsToRemove = [];
 	let playersToReset = [];
+	let playersToKick = [];
 	//Update player positions
 	players.forEach((currentPlayer, key, map) => {
 		if (currentPlayer.alive) {
@@ -140,7 +141,7 @@ var update = function (deltaTime) {
 					bullets.set(bulletNum, {
 						x: currentPlayer.x + currentPlayer.w / 2 - 5, y: currentPlayer.y + (currentPlayer.h / 2) - 5,
 						r: 5,
-						baseSpeed:bulletBaseSpeed,
+						baseSpeed: bulletBaseSpeed,
 						xVel: Math.cos(currentPlayer.gun.rotation - spreadAngle) * bulletBaseSpeed + currentPlayer.xVel / 2,
 						yVel: Math.sin(currentPlayer.gun.rotation - spreadAngle) * bulletBaseSpeed + currentPlayer.yVel / 2,
 						damage: bulletDmg,
@@ -204,17 +205,37 @@ var update = function (deltaTime) {
 					botsToRemove.push(key);
 				}
 			}
-		}
 
-		//Determine if player should be leveled up
-		if (!currentPlayer.levelUpInProgress) {
-			if (currentPlayer.orbs >= upgrades.AMOUNT_TO_UPGRADE[currentPlayer.level]) {
-				//Level up!
-				currentPlayer.levelUpInProgress = true;
-				currentPlayer.availableUpgrades = upgrades.getUpgradeSet(currentPlayer);
+			//Determine if player should be leveled up
+			if (!currentPlayer.levelUpInProgress) {
+				if (currentPlayer.orbs >= upgrades.AMOUNT_TO_UPGRADE[currentPlayer.level]) {
+					//Level up!
+					currentPlayer.levelUpInProgress = true;
+					currentPlayer.availableUpgrades = upgrades.getUpgradeSet(currentPlayer);
+				}
+			}
+
+		} else {
+			//Player is dead. Tick up death timer
+			if (!currentPlayer.bot) {
+				currentPlayer.timeDead += deltaTime;
+				if (currentPlayer.timeDead > 60) {
+					//Remove them from the server
+					let clientSocket = io.sockets.connected[key];
+					if (clientSocket != undefined) {
+						clientSocket.disconnect();
+						playersToKick.push(currentPlayer);
+					}
+				}
 			}
 		}
 	}); //END update player positions
+
+	//Delete kicked players
+	for (let i = playersToKick.length - 1; i >= 0; i--) {
+		let removeID = playersToKick.pop();
+		players.delete(removeID);
+	}
 
 	//Delete dead bots and bots who have stayed too long
 	for (let i = botsToRemove.length - 1; i >= 0; i--) {
@@ -555,6 +576,7 @@ function Player(name, x, y, color) {
 	this.lastState = null;
 	this.playersSent = [];
 	this.lastLeaderBoardState = -1;
+	this.timeDead = 0;
 }
 
 var playerInput = function (socketID, input) {

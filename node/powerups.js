@@ -1,5 +1,6 @@
-const SPAWN_TIME = 15;
+const SPAWN_TIME = 30;
 const CONTEST_TIME = 5;
+const POWERUP_LAST_TIME = 60;
 
 const powerups = {
 	triShot: 0,
@@ -79,12 +80,12 @@ function updatePowerup(powerup, players, deltaTime) {
 			for (let i = 0; i < powerupList.length; i++) {
 				if (powerupList[i].type == powerup.powerupType) {
 					alreadyHas = true;
-					powerupList[i].timeLeft = 15;
+					powerupList[i].timeLeft = POWERUP_LAST_TIME;
 				}
 			}
 			if (!alreadyHas) {
 				//Add the powerup if the player doesn't have it
-				powerupList.push({ type: powerup.powerupType, timeLeft: 15 });
+				powerupList.push({ type: powerup.powerupType, timeLeft: POWERUP_LAST_TIME });
 			}
 
 			powerup.powerupType = getRandomPowerup();

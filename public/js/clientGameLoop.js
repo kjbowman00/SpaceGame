@@ -230,6 +230,8 @@ function update() {
 			obj.trail = new OrbTrail(obj.x, obj.y, obj.color, 10, 5);
 		}
 	});
+
+	updateTopInfoBar(deltaTime);
 }
 
 function draw() {

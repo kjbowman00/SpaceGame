@@ -85,13 +85,62 @@ const UPGRADE_LEVELS = {
 	specialized: 13
 };
 
+//For displaying orbs gained from a kill and also saying kill streaks
+var killInfoArray = [
+	{
+		orbs: 25
+	}];
+
+function updateTopInfoBar(deltaTime) {
+	//Manage stages and deletion
+	for (let i = killInfoArray.length - 1; i >= 0; i--) {
+		let currentKill = killInfoArray[i];
+		if (currentKill.stage == undefined) {
+			currentKill.stage = 0;
+			currentKill.a = 0.2;
+			currentKill.size = 3;
+			currentKill.timeDisplayed = 0;
+		}
+		currentKill.timeDisplayed += deltaTime;
+		if (currentKill.stage == 0) {
+			if (currentKill.timeDisplayed > 1.2) {
+				currentKill.stage++;
+				currentKill.timeDisplayed = 0;
+			}
+			//Big text decreasing in size
+			currentKill.a = lerp(currentKill.a, 1, currentKill.timeDisplayed / 1.2);
+			currentKill.size = lerp(currentKill.size, 1, currentKill.timeDisplayed / 1.2);
+		} else if (currentKill.stage == 1) {
+			if (currentKill.timeDisplayed > 0.5) {
+				currentKill.stage++;
+				currentKill.timeDisplayed = 0;
+			}
+		} else if (currentKill.stage == 2) {
+			if (currentKill.timeDisplayed > 0.5) {
+				//Dunzo
+				killInfoArray.splice(i, 1);
+			}
+			currentKill.a = lerp(currentKill.a, 0, currentKill.timeDisplayed / 0.5);
+		}
+	}
+}
 function drawTopInfoBar(ctx) {
+	ctx.textAlign = "center";
 	ctx.fillStyle = "rgba(255, 255, 255, 0.8)";
 	ctx.font = "12px Arial";
 	ctx.fillText("Kills: " + player.kills, canvas.width / 3, 25);
 
 	ctx.fillText("Orbs: " + player.orbs, canvas.width * 1.5 / 3, 25);
 	ctx.fillText("Orbs for upgrade: " + player.orbsToUpgrade, canvas.width * 2 / 3, 25);
+
+	let y = canvas.height / 2 - 125;
+	for (let i = 0; i < killInfoArray.length; i++) {
+		let currentKill = killInfoArray[i];
+		ctx.fillStyle = "rgba(220, 220, 20, " + currentKill.a + ")";
+		ctx.font = (currentKill.size * 12).toFixed(0) + "px Arial";
+		ctx.textAlign = "center";
+		ctx.fillText("Kill: +" + currentKill.orbs + " Orbs", canvas.width*1.5/3, y);
+	}
 }
 
 

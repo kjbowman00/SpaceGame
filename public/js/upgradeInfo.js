@@ -99,6 +99,9 @@ function updateTopInfoBar(deltaTime) {
 	for (let i = killInfoArray.length - 1; i >= 0; i--) {
 		let currentKill = killInfoArray[i];
 		if (currentKill.stage == undefined) {
+			if (currentKill.killStreakOrbs != undefined) {
+				Sounds.playKillStreak(currentKill.killStreakNumber);
+			}
 			currentKill.stage = 0;
 			currentKill.a = 0.2;
 			currentKill.size = 3;
@@ -114,7 +117,7 @@ function updateTopInfoBar(deltaTime) {
 			currentKill.a = lerp(currentKill.a, 1, currentKill.timeDisplayed / 1.2);
 			currentKill.size = lerp(currentKill.size, 1, currentKill.timeDisplayed / 1.2);
 		} else if (currentKill.stage == 1) {
-			if (currentKill.timeDisplayed > 0.5) {
+			if (currentKill.timeDisplayed > 1) {
 				currentKill.stage++;
 				currentKill.timeDisplayed = 0;
 			}

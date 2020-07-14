@@ -30,6 +30,64 @@ function _Sounds() {
         })
     ];
 
+    var killstreakSounds = [
+        new Howl({
+            src: ['sounds/killstreaks/finisher.mp3'],
+            buffer: true,
+            volume: 0.8
+        }),
+        new Howl({
+            src: ['sounds/killstreaks/punisher.mp3'],
+            buffer: true,
+            volume: 0.8
+        }),
+        new Howl({
+            src: ['sounds/killstreaks/maniac.mp3'],
+            buffer: false,
+            volume: 0.8
+        }),
+        new Howl({
+            src: ['sounds/killstreaks/destroyer.mp3'],
+            buffer: false,
+            volume: 0.8
+        }),
+        new Howl({
+            src: ['sounds/killstreaks/tormentor.mp3'],
+            buffer: false,
+            volume: 0.8
+        }),
+        new Howl({
+            src: ['sounds/killstreaks/obliterator.mp3'],
+            buffer: false,
+            volume: 0.8
+        }),
+        new Howl({
+            src: ['sounds/killstreaks/executioner.mp3'],
+            buffer: false,
+            volume: 0.8
+        }),
+        new Howl({
+            src: ['sounds/killstreaks/annihilator.mp3'],
+            buffer: false,
+            volume: 0.8
+        }),
+        new Howl({
+            src: ['sounds/killstreaks/exterminator.mp3'],
+            buffer: false,
+            volume: 0.8
+        }),
+        new Howl({
+            src: ['sounds/killstreaks/bearer_of_death.mp3'],
+            buffer: false,
+            volume: 0.8
+        }),
+        new Howl({
+            src: ['sounds/killstreaks/unstoppable.mp3'],
+            buffer: false,
+            volume: 0.8
+        }),
+    ];
+
     var damageSounds = new Howl({
         src: ['sounds/hitSounds.mp3'],
         sprite: {
@@ -55,6 +113,10 @@ function _Sounds() {
 
     this.playPowerup = function (powerupType) {
         powerupSounds[powerupType].play();
+    }
+
+    this.playKillStreak = function (num) {
+        killstreakSounds[num].play();
     }
 
     this.changeVolume = function (vol) {

@@ -134,6 +134,9 @@ function _Sounds() {
         for (let i = 0; i < powerupSounds.length; i++) {
             powerupSounds[i].volume(vol * 1.6);
         }
+        for (let i = 0; i < killstreakSounds.length; i++) {
+            killstreakSounds[i].volume(vol * 1.6);
+        }
     }
     this.changeMusicVolume = function (vol) {
     }

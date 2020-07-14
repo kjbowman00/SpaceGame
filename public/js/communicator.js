@@ -147,7 +147,6 @@ function socketStuff(formData) {
 
         if (data.player.playersJustKilled != undefined) {
             let killInfo = data.player.playersJustKilled;
-            console.log(killInfo);
             for (let i = 0; i < killInfo.length; i++) {
                 killInfoArray.push(killInfo[i]);
             }

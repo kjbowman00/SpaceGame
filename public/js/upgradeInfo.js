@@ -243,7 +243,6 @@ function checkUpgradeClick(pos) {
 
 			if (pos.x >= x && pos.x <= x + width) {
 				if (pos.y >= y && pos.y <= y + height) {
-					console.log("UPGRADE " + i);
 					//Notify server of choice
 					sendUpgradeRequest(i);
 				}

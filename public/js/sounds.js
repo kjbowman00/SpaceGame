@@ -57,6 +57,16 @@ function _Sounds() {
             volume: 0.8
         }),
         new Howl({
+            src: ['sounds/killstreaks/extinguisher.mp3'],
+            buffer: false,
+            volume: 0.8
+        }),
+        new Howl({
+            src: ['sounds/killstreaks/terminator.mp3'],
+            buffer: false,
+            volume: 0.8
+        }),
+        new Howl({
             src: ['sounds/killstreaks/obliterator.mp3'],
             buffer: false,
             volume: 0.8

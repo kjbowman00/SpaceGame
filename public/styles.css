@@ -110,6 +110,14 @@ html, body {
 	#respawn_form_box button:hover {
 		background-color: rgba(30,30,30,1);
 	}
+#space_games_footer {
+	position: fixed;
+	left: 0;
+	bottom: 10px;
+	width: 100%;
+	color: blue;
+	text-align: center;
+}
 
 #quit_button {
 	width: 80%;

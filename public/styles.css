@@ -9,12 +9,18 @@ html, body {
 	height:100%;
 }
 
+#title_screen_image_box {
+	width: 100%;
+}
+
 #username {
-	padding:5px;
+	background-color: black;
+	width:50%;
 	margin:5px;
-	background-color:black;
-	border:solid 2px red;
-	color:white;
+	margin-top:30px;
+	padding:2px;
+	border: solid 2px red;
+	color: white;
 }
 #server_selection_input {
 	margin:5px;
@@ -72,7 +78,7 @@ html, body {
 
 #form_box {
 	width: 20%;
-	height: 40%;
+	height: 45%;
 	position: absolute;
 	top: 20%;
 	left: 40%;

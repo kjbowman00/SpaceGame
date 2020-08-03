@@ -47,6 +47,8 @@ function handleKeyDown(event) {
 		upHeld = true;
 	} else if (code=="83" || code =="40") {
 		downHeld = true;
+	} else if (code == "32") {
+		Mouse.pressed = true;
 	}
 	yDir = getYDir();
 	xDir = getXDir();
@@ -64,6 +66,8 @@ function handleKeyUp(event) {
 		upHeld = false;
 	} else if (code == "83" || code == "40") {
 		downHeld = false;
+	} else if (code == "32") {
+		Mouse.pressed = false;
 	}
 
 	yDir = getYDir();

@@ -12,6 +12,9 @@ document.getElementById("name_form").onsubmit = onPlay;
 
 function socketStuff(formData) {
     var gameName = formData.get('server');
+    gtag('event', 'level_start', {
+        level_name: gameName
+    });
 
     let playerColor = "#" + $('#color_picker').spectrum("get").toHex();
     let pColor = playerColor;

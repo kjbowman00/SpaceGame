@@ -1,6 +1,8 @@
 /*jshint esversion: 6 */
 var socket;
 
+var playerName = "";
+
 function onPlay() {
     var form = document.getElementById("name_form");
     console.log('play');
@@ -12,9 +14,6 @@ document.getElementById("name_form").onsubmit = onPlay;
 
 function socketStuff(formData) {
     var gameName = formData.get('server');
-    gtag('event', 'level_start', {
-        level_name: gameName
-    });
 
     let playerColor = "#" + $('#color_picker').spectrum("get").toHex();
     let pColor = playerColor;
@@ -27,7 +26,15 @@ function socketStuff(formData) {
         path: path
     });
 
+
+    var playersKilledAnalytics = 0;
     socket.on('join_game_success', function (data) {
+        //Analytics
+        gtag('event', 'level_start', {
+            level_name: gameName
+        });
+        playersKilledAnalytics = 0;
+
         //Initialize player attributes
         initializeWorldObjects();
         player = {
@@ -149,6 +156,11 @@ function socketStuff(formData) {
         powerupObjs = data.objects.powerups;
 
         if (data.player.playersJustKilled != undefined) {
+            playersKilledAnalytics++;
+            gtag('event', 'killed_player', {
+                amount: playersKilledAnalytics
+            });
+
             let killInfo = data.player.playersJustKilled;
             for (let i = 0; i < killInfo.length; i++) {
                 killInfoArray.push(killInfo[i]);
@@ -206,6 +218,12 @@ function socketStuff(formData) {
         socket.emit('player_input', { xDir: xDir, yDir: yDir, rotation: player.gun.rotation });
     });
     socket.on('player_respawn_success', function (data) {
+        //Analytics
+        gtag('event', 'level_start', {
+            level_name: gameName + "Respawn"
+        });
+        playersKilledAnalytics = 0;
+
         respawnSuccess(data);
     });
 
@@ -214,8 +232,9 @@ function socketStuff(formData) {
         toMenu();
     });
 
+    playerName = formData.get('username');
     socket.emit('play_game', {
-        name: formData.get('username'),
+        name: playerName,
         color: playerColor
     });
 
@@ -225,7 +244,13 @@ function sendBullet() {
     socket.emit('player_shot');
 }
 
+var levelForAnalytics = 1;
 function sendUpgradeRequest(upgradeNum) {
+    gtag('event', 'level_up', {
+        level: levelForAnalytics,
+        character: playerName
+    });
+    levelForAnalytics++;
     socket.emit('upgrade_request', upgradeNum);
 }
 

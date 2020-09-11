@@ -36,6 +36,12 @@ function toMenu() {
 }
 
 function died() {
+	//analytics
+	gtag('event', 'level_end', {
+		level_name: 'The journey begins...',
+		success: true,
+	});
+
 	alive = false; //This will change the game loop to draw a gray overlay and stop allowing player updates
 
 	//Pop up with play again and back to menu buttons

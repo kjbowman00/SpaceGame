@@ -1,0 +1,333 @@
+html, body {
+	width: 100%;
+	height: 100%;
+	/* remove the extra whites around */
+	margin: 0;
+}
+#main_menu {
+	width:100%;
+	height:100%;
+}
+
+#title_screen_image_box {
+	width: 100%;
+}
+
+#username {
+	background-color: black;
+	width:50%;
+	margin:5px;
+	margin-top:30px;
+	padding:2px;
+	border: solid 2px red;
+	color: white;
+}
+#server_selection_input {
+	margin:5px;
+	padding: 5px;
+	background-color:black;
+	width:70%;
+	color:white;
+	border:solid 2px red;
+}
+#name_form_submit {
+	margin:5px;
+	padding:5px;
+	width:70%;
+	background-color:black;
+	border:solid 2px red;
+	color:white;
+}
+	#name_form_submit:hover {
+		background-color: rgba(30,30,30,1);
+	}
+
+#main_menu_canvas {
+	z-index: -1;
+	position:absolute;
+	top:0px;
+	left:0px;
+}
+
+#canvas_holder {
+	position: absolute;
+	display:none;
+	top:0px;
+	left:0px;
+}
+#canvas_holder canvas {
+	position:absolute;
+	top:0px;
+	left:0px;
+}
+#canvas {
+	z-index: -2;
+}
+#background_canvas {
+	z-index:-3;
+}
+#UI_canvas {
+	z-index: -1;
+}
+
+#title_screen_image {
+	min-width: 100%;
+	max-width:100%;
+	height: auto;
+}
+
+#form_box {
+	width: 20%;
+	height: 45%;
+	position: absolute;
+	top: 20%;
+	left: 40%;
+	margin: auto;
+	background-color: rgba(150,150,150,0.35);
+	border: 2px solid;
+	border-color: rgba(150,150,150,0.5);
+	text-align: center;
+}
+#name_form {
+	position:relative;
+	top:25%;
+	transform: translateY(-50%);
+}
+#respawn_form_box {
+	display: none;
+	width: 20%;
+	height: 30%;
+	position: absolute;
+	top: 30%;
+	left: 40%;
+	margin: auto;
+	background-color: rgba(150,150,150,0.35);
+	border: 2px solid;
+	border-color: rgba(150,150,150,0.5);
+	text-align: center;
+}
+#respawn_form_box button {
+	padding: 5px;
+	margin: 5px;
+	background-color: black;
+	border: solid 2px red;
+	color: white;
+}
+	#respawn_form_box button:hover {
+		background-color: rgba(30,30,30,1);
+	}
+#space_games_footer {
+	position: fixed;
+	left: 0;
+	bottom: 10px;
+	width: 100%;
+	color: blue;
+	text-align: center;
+}
+
+#quit_button {
+	width: 80%;
+	padding: 5px;
+	margin: 5px;
+	background-color: black;
+	border: solid 2px red;
+	color: white;
+}
+	#quit_button:hover {
+		background-color: rgba(30,30,30,1);
+	}
+
+#open_options {
+	position:absolute;
+	top: 7px;
+	left: 7px;
+	width:50px;
+	height:50px;
+	margin:0px;
+	padding:0px;
+	border:none;
+	background-color:transparent;
+}
+	#open_options:hover {
+		background-color: rgba(150,150,150,0.35);
+	}
+	#open_options img {
+		height:100%;
+	}
+#close_options {
+	position:absolute;
+	top:0px;
+	left:0px;
+	margin:0px;
+	padding:20px;
+}
+
+#options_box {
+	text-align:center;
+	position: absolute;
+	display:none;
+	top: 7px;
+	left: 7px;
+	width: 20%;
+	height: 35%;
+	background-color: rgba(150,150,150,0.35);
+	border: 2px solid;
+	border-color: rgba(150,150,150,0.5);
+}
+	#options_box h5 {
+		margin:5px;
+		color:white
+	}
+.trail_quality {
+	text-align:center;
+	list-style-type:none;
+	margin:auto;
+	margin-top:2px;
+	margin-bottom:2px;
+	padding:2px;
+	width:60%;
+	overflow:hidden;
+	border-bottom: 2px black solid;
+}
+	.trail_quality input {
+		opacity:0;
+		width:0;
+		position:fixed;
+	}
+	.trail_quality label {
+		display: inline-block;
+		background-color: black;
+		padding: 5px 10px;
+		font-family: sans-serif, Arial;
+		color:white;
+		font-size: 12px;
+		border: 2px solid red;
+	}
+		.trail_quality label:hover {
+			background-color: crimson;
+		}
+	.trail_quality input:checked + label {
+		background-color:crimson;
+		border-color: red;
+		border: 3px solid red;
+	}
+
+
+/*Stupid cross browser styling for input sliders*/
+input[type=range] {
+	-webkit-appearance: none; /* Hides the slider so that custom slider can be made */
+	width: 60%; /* Specific width is required for Firefox. */
+	background: black; /* Otherwise white in Chrome */
+}
+
+	input[type=range]::-webkit-slider-thumb {
+		-webkit-appearance: none;
+	}
+
+	input[type=range]:focus {
+		outline: none; /* Removes the blue border. You should probably do some kind of focus styling for accessibility reasons though. */
+	}
+
+	input[type=range]::-ms-track {
+		width: 100%;
+		cursor: pointer;
+		/* Hides the slider so custom styles can be added */
+		background: transparent;
+		border-color: transparent;
+		color: transparent;
+	}
+/*Even more cross browser slider styling*/
+	/* Special styling for WebKit/Blink */
+	input[type=range]::-webkit-slider-thumb {
+		-webkit-appearance: none;
+		border: 1px solid #000000;
+		height: 16px;
+		width: 16px;
+		border-radius: 3px;
+		background: red;
+		cursor: pointer;
+		margin-top: -14px; /* You need to specify a margin in Chrome, but in Firefox and IE it is automatic */
+		box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d; /* Add cool effects to your sliders! */
+	}
+
+	/* All the same stuff for Firefox */
+	input[type=range]::-moz-range-thumb {
+		box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;
+		border: 1px solid #000000;
+		height: 16px;
+		width: 16px;
+		border-radius: 3px;
+		background: red;
+		cursor: pointer;
+	}
+
+	/* All the same stuff for IE */
+	input[type=range]::-ms-thumb {
+		box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;
+		border: 1px solid #000000;
+		height: 16px;
+		width: 16px;
+		border-radius: 3px;
+		background: red;
+		cursor: pointer;
+	}
+
+
+
+.fade-in {
+	animation: fadeIn ease 1s;
+	-webkit-animation: fadeIn ease 1s;
+	-moz-animation: fadeIn ease 1s;
+	-o-animation: fadeIn ease 1s;
+	-ms-animation: fadeIn ease 1s;
+}
+
+@keyframes fadeIn {
+	0% {
+		opacity: 0;
+	}
+
+	100% {
+		opacity: 1;
+	}
+}
+
+@-moz-keyframes fadeIn {
+	0% {
+		opacity: 0;
+	}
+
+	100% {
+		opacity: 1;
+	}
+}
+
+@-webkit-keyframes fadeIn {
+	0% {
+		opacity: 0;
+	}
+
+	100% {
+		opacity: 1;
+	}
+}
+
+@-o-keyframes fadeIn {
+	0% {
+		opacity: 0;
+	}
+
+	100% {
+		opacity: 1;
+	}
+}
+
+@-ms-keyframes fadeIn {
+	0% {
+		opacity: 0;
+	}
+
+	100% {
+		opacity: 1;
+	}
+}

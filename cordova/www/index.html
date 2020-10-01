@@ -1,0 +1,115 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+	<!-- Global site tag (gtag.js) - Google Analytics -->
+	<script async src="https://www.googletagmanager.com/gtag/js?id=G-QVS3R6R6D3"></script>
+	<script>
+		window.dataLayer = window.dataLayer || [];
+		function gtag() { dataLayer.push(arguments); }
+		gtag('js', new Date());
+
+		gtag('config', 'G-QVS3R6R6D3');
+	</script>
+
+
+	<meta charset="utf-8">
+
+	<title>Hex Wars</title>
+	<meta name="description" content="A real-time multiplayer space arcade shooter">
+	<meta name="author" content="Kyle Bowman">
+
+	<link rel="stylesheet" href="styles.css">
+
+	<script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+	<script src='libs/spectrum/spectrum.js'></script>
+	<link rel='stylesheet' href='libs/spectrum/spectrum.css' />
+</head>
+
+<body>
+	<div id="main_menu">
+		<canvas id="main_menu_canvas"></canvas>
+		<div id="form_box">
+			<div id="title_screen_image_box"><img id="title_screen_image" src="images/titleScreen.png" /></div>
+			<form id="name_form" autocomplete="off" action="none">
+				<div>
+					<input type="text" id="username" name="username" placeholder="Enter Name:">
+					<input type='text' id="color_picker" />
+				</div><br />
+				<script src="js/color_picker.js"></script>
+				<select name="server" id="server_selection_input">
+					<option value="game1">Game 1: N Players</option>
+				</select><br />
+				<input id="name_form_submit" type="submit" value="Play">
+			</form>
+		</div>
+	</div>
+
+	<div id="options_box">
+		<button id="close_options" onclick="closeOptions();"></button>
+		<h5>Player Trail Quality</h5>
+		<div id="player_trail_options" class="trail_quality">
+			<input type="radio" name="playerTrailQuality" id="playerTrailQualityNone" onclick="changePlayerTrailQuality(0);">
+			<label for="playerTrailQualityNone">None</label>
+			<input type="radio" name="playerTrailQuality" id="playerTrailQualityBasic" onclick="changePlayerTrailQuality(1);">
+			<label for="playerTrailQualityBasic">Basic</label>
+			<input type="radio" name="playerTrailQuality" id="playerTrailQualityBest" onclick="changePlayerTrailQuality(2);" checked="checked" />
+			<label for="playerTrailQualityBest">Best</label>
+		</div>
+		<h5>Orb Trail Quality</h5>
+		<div id="orb_trail_options" class="trail_quality">
+			<input type="radio" name="orbTrailQuality" id="orbTrailQualityNone" onclick="changeOrbTrailQuality(0);">
+			<label for="orbTrailQualityNone">None</label>
+			<input type="radio" name="orbTrailQuality" id="orbTrailQualityBasic" onclick="changeOrbTrailQuality(1);">
+			<label for="orbTrailQualityBasic">Basic</label>
+			<input type="radio" name="orbTrailQuality" id="orbTrailQualityBest" onclick="changeOrbTrailQuality(2);" checked="checked" />
+			<label for="orbTrailQualityBest">Best</label>
+		</div>
+		<h5>Music</h5>
+
+		<div id="music_options">
+			<input type="range" id="music_volume" name="music_volume" onchange="changeMusicVolume();">
+		</div>
+		<h5>Sound</h5>
+		<div id="sound_options">
+			<input type="range" id="sound_volume" name="sound_volume" onchange="changeSoundVolume();">
+		</div>
+		<button id="quit_button" onclick="quitButtonAction()">Quit Game</button>
+	</div>
+	<button id="open_options" onclick="openOptions();"><img src="images/gear.png"/></button>
+
+	<div id="respawn_form_box" class="fade-in">
+		<button type="button">Respawn</button>
+		<button type="button">Quit</button>
+	</div>
+
+	<div id="canvas_holder">
+		<canvas id="background_canvas"></canvas>
+		<canvas id="canvas"></canvas>
+		<canvas id="UI_canvas"></canvas>
+		<canvas id="invisible_background_canvas" style="display:none"></canvas>
+	</div>
+	<script src="js/options.js"></script>
+	<script src="js/upgradeEffectAmounts.js"></script>
+	<script src="js/deathAnimation.js"></script>
+	<script src="js/mainMenuBackground.js"></script>
+	<script src="js/camera.js"></script>
+	<script src="js/input.js"></script>
+	<script src="js/clientWorld.js"></script>
+	<script src="js/trails.js"></script>
+	<script src="js/playerInfoBox.js"></script>
+	<script src="js/players.js"></script>
+	<script src="js/clientPowerups.js"></script>
+	<script src="libs/howler.core.js"></script>
+	<script src="js/sounds.js"></script>
+	<script src="js/leaderboard.js"></script>
+	<script src="js/upgradeInfo.js"></script>
+
+	<script src="js/clientGameLoop.js"></script>
+	<script src="js/socket/socket.io.js"></script>
+	<script src="js/communicator.js"></script>
+
+	<script src="js/clientCollisionDetection.js"></script>
+	<script src="js/clientStateHandler.js"></script>
+	<script src="js/resizeCanvas.js"></script>
+</body>
+</html>

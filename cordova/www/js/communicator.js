@@ -20,7 +20,7 @@ function socketStuff(formData) {
     playerColor = getColorIndexFromPalette(playerColor); //For sending to the server in weird form
 
 	var path = '/' + gameName + '/socket.io';
-    socket = io('/', {
+    socket = io('https://hexwars.net', {
         secure: true,
         rejectUnauthorized: false,
         path: path
@@ -256,7 +256,7 @@ function sendUpgradeRequest(upgradeNum) {
 
 
 //Grab player count of server
-window.fetch("/game1/playerCount").then(function (response) {
+window.fetch("https://hexwars.net/game1/playerCount").then(function (response) {
     return response.json();
 }).then(function (data) {
     let playerInfo = document.getElementById("server_selection_input").children[0];

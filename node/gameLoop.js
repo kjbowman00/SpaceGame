@@ -1,4 +1,4 @@
-const tickLengthMs = 1000 / 60;
+const tickLengthMs = 1000 / 20;
 const outputTickLengthMs = 1000 / 20;
 var previousTick = Date.now();
 var previousOutputTick = Date.now();
@@ -27,7 +27,7 @@ var loop = function () {
 
 	//Determine whether to immediately loop again or wait a bit
 	//16 is the variability in setTimeout in ms
-	if (Date.now() - previousTick < tickLengthMs - 16) {
+	if (now - previousTick < tickLengthMs - 16) {
 		setTimeout(loop);
 	} else {
 		setImmediate(loop);

@@ -11,3 +11,4 @@ function updateCamera() {
 	if (Math.abs(camera.x - nCameraX) > 4) camera.x = lerp(camera.x, nCameraX, 0.08);
 	if (Math.abs(camera.y - nCameraY) > 4) camera.y = lerp(camera.y, nCameraY, 0.08);
 }
+Console.log("POOPY");

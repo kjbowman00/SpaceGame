@@ -9,7 +9,7 @@
     "helmet": "^3.23.3",
     "node": "^13.12.0",
     "npm": "^6.14.5",
-    "socket.io": "^2.3.0"
+    "socket.io": "^2.4.0"
   },
   "devDependencies": {},
   "scripts": {

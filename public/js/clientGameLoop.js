@@ -253,6 +253,7 @@ function draw() {
 	bCtx.drawImage(offscreenBackgroundCanvas, -backGroundImage.width, -backGroundImage.height);
 	bCtx.resetTransform();
 
+
 	//Draw black over anything beyond world borders
 	ctx.fillStyle = "#000000";
 	if (camera.x < -world.width / 2) { // Fill left
@@ -350,6 +351,21 @@ function draw() {
 		ctx.fillStyle = 'rgba(255, 255, 255, ' + lerp(0,0.2,(fadeTimer / fadeTime)) + ')';
 		ctx.fillRect(0, 0, canvas.width, canvas.height);
 	}
+
+	var realCtx = realCanvas.getContext('2d');
+	let bW = canvas.width;
+	let bH = canvas.height;
+	let nH = realCanvas.height;
+	let nW = (nH / bH) * bW;
+
+	let nX = Math.floor((realCanvas.width - nW)/ 2);
+
+	realCtx.drawImage(backgroundCanvas, 0, 0, bW, bH, nX, 0, nW, nH);
+	realCtx.drawImage(canvas, 0, 0, bW, bH, nX, 0, nW, nH);
+	realCtx.drawImage(UICanvas, 0, 0, bW, bH, nX, 0, nW, nH);
+	realCtx.fillStyle = "black";
+	realCtx.fillRect(0, 0, nX, nH);
+	realCtx.fillRect(realCanvas.width - nX, 0, nX, nH);
 }
 
 function mainLoop(timestamp) {

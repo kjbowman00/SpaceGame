@@ -2,16 +2,28 @@ var canvas_container = document.getElementById('canvas_holder');
 var canvas = document.getElementById('canvas');
 var backgroundCanvas = document.getElementById('background_canvas');
 var UICanvas = document.getElementById('UI_canvas');
+let actualResX = 1280;
+let actualResY = 720;
+canvas.width = actualResX;
+canvas.height = actualResY;
+backgroundCanvas.width = actualResX;
+backgroundCanvas.height = actualResY;
+UICanvas.width = actualResX;
+UICanvas.height = actualResY;
 
 /*var offscreenBackgroundCanvas = new OffscreenCanvas(window.innerWidth + backGroundImage.width * 2,
 	window.innerHeight + backGroundImage.height *2);*/
 var offscreenBackgroundCanvas = document.getElementById('invisible_background_canvas');
+offscreenBackgroundCanvas.width = canvas.width + backGroundImage.width * 2;
+offscreenBackgroundCanvas.height = canvas.height + backGroundImage.height * 2;
+
+var realCanvas = document.getElementById("real_canvas");
 
 function resizeCanvas() {
-	mainMenuCanvas.width = window.innerWidth;
-	mainMenuCanvas.height = window.innerHeight;
+	//mainMenuCanvas.width = window.innerWidth;
+	//mainMenuCanvas.height = window.innerHeight;
 	if (gameRunning) {
-		canvas.width = window.innerWidth;
+		/*canvas.width = window.innerWidth;
 		canvas.height = window.innerHeight;
 		camera.w = canvas.width;
 		camera.h = canvas.height;
@@ -20,7 +32,9 @@ function resizeCanvas() {
 		UICanvas.width = canvas.width;
 		UICanvas.height = canvas.height;
 		offscreenBackgroundCanvas.width = canvas.width + backGroundImage.width*2;
-		offscreenBackgroundCanvas.height = canvas.height + backGroundImage.height * 2;
+		offscreenBackgroundCanvas.height = canvas.height + backGroundImage.height * 2;*/
+		realCanvas.width = window.innerWidth;
+		realCanvas.height = window.innerHeight;
 		drawBackground();
 	}
 

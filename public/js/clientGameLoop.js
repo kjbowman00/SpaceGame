@@ -148,8 +148,11 @@ function update() {
 
 		//Update gun rotation
 		let centerX = Math.round(player.x) - camera.x + PLAYER_W/2;
-		let centerY = Math.round(player.y) - camera.y + PLAYER_W/2;
-		player.gun.rotation = Math.atan2(Mouse.cameraY - centerY, Mouse.cameraX - centerX);
+		let centerY = Math.round(player.y) - camera.y + PLAYER_W / 2;
+		let realCanvasScale = realCanvas.height / canvas.height;
+		let xDiffFromScale = (realCanvas.width - realCanvasScale * canvas.width) / 2;
+
+		player.gun.rotation = Math.atan2(Mouse.cameraY / realCanvasScale - centerY, (Mouse.cameraX - xDiffFromScale) / realCanvasScale - centerX);
 
 		let fireTimeMod = 1;
 		if (isPowerupActive(powerups.overcharge, player)) fireTimeMod *= 2;

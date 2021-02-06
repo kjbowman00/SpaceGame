@@ -148,8 +148,11 @@ function update() {
 
 		//Update gun rotation
 		let centerX = Math.round(player.x) - camera.x + PLAYER_W/2;
-		let centerY = Math.round(player.y) - camera.y + PLAYER_W/2;
-		player.gun.rotation = Math.atan2(Mouse.cameraY - centerY, Mouse.cameraX - centerX);
+		let centerY = Math.round(player.y) - camera.y + PLAYER_W / 2;
+		let realCanvasScale = realCanvas.height / canvas.height;
+		let xDiffFromScale = (realCanvas.width - realCanvasScale * canvas.width) / 2;
+
+		player.gun.rotation = Math.atan2(Mouse.cameraY / realCanvasScale - centerY, (Mouse.cameraX - xDiffFromScale) / realCanvasScale - centerX);
 
 		let fireTimeMod = 1;
 		if (isPowerupActive(powerups.overcharge, player)) fireTimeMod *= 2;
@@ -350,6 +353,21 @@ function draw() {
 		ctx.fillStyle = 'rgba(255, 255, 255, ' + lerp(0,0.2,(fadeTimer / fadeTime)) + ')';
 		ctx.fillRect(0, 0, canvas.width, canvas.height);
 	}
+
+	var realCtx = realCanvas.getContext('2d');
+	let bW = canvas.width;
+	let bH = canvas.height;
+	let nH = realCanvas.height;
+	let nW = (nH / bH) * bW;
+
+	let nX = Math.floor((realCanvas.width - nW) / 2);
+
+	realCtx.drawImage(backgroundCanvas, 0, 0, bW, bH, nX, 0, nW, nH);
+	realCtx.drawImage(canvas, 0, 0, bW, bH, nX, 0, nW, nH);
+	realCtx.drawImage(UICanvas, 0, 0, bW, bH, nX, 0, nW, nH);
+	realCtx.fillStyle = "black";
+	realCtx.fillRect(0, 0, nX, nH);
+	realCtx.fillRect(realCanvas.width - nX, 0, nX, nH);
 }
 
 function mainLoop(timestamp) {

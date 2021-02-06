@@ -60,6 +60,11 @@ html, body {
 	top:0px;
 	left:0px;
 }
+
+#real_canvas {
+	z-index: -2;
+}
+
 #canvas {
 	z-index: -2;
 }

@@ -1,8 +1,8 @@
 var camera = {
 	x: 0,
 	y: 0,
-	w: 0,
-	h: 0
+	w: 1280,
+	h: 720
 };
 
 function updateCamera() {
@@ -11,4 +11,3 @@ function updateCamera() {
 	if (Math.abs(camera.x - nCameraX) > 4) camera.x = lerp(camera.x, nCameraX, 0.08);
 	if (Math.abs(camera.y - nCameraY) > 4) camera.y = lerp(camera.y, nCameraY, 0.08);
 }
-Console.log("POOPY");

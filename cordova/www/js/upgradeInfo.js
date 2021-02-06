@@ -86,10 +86,10 @@ const UPGRADE_LEVELS = {
 };
 
 const KILL_STREAK_TEXT = ["Finisher", "Punisher", "Maniac", "Destroyer",
-		"Tormentor", "Extinguisher", "Terminator", "Obliterator",
-		"Executioner", "Annihilator", "Exterminator", "Bearer Of Death",
-		"Unstoppable", "Hello from dev"
-	];
+	"Tormentor", "Extinguisher", "Terminator", "Obliterator",
+	"Executioner", "Annihilator", "Exterminator", "Bearer Of Death",
+	"Unstoppable", "Hello from dev"
+];
 
 //For displaying orbs gained from a kill and also saying kill streaks
 var killInfoArray = [];
@@ -175,6 +175,13 @@ function drawUpgrades(ctx) {
 	}
 
 	if (player.levelUpInProgress) {
+		//put here to handle rescaling the canvas at the end -
+		//	mouse position isn't accurate to the hidden canvas
+		let realCanvasScale = realCanvas.height / canvas.height;
+		let xDiffFromScale = (realCanvas.width - realCanvasScale * canvas.width) / 2;
+		let realMouseX = (Mouse.cameraX - xDiffFromScale) / realCanvasScale;
+		let realMouseY = Mouse.cameraY / realCanvasScale;
+
 		let largestOffset = 0;
 		let textVertOffset = 7;
 		for (let i = 0; i < upgradeButtons.length; i++) {
@@ -191,8 +198,8 @@ function drawUpgrades(ctx) {
 			}
 
 			//Lighten if mouse hover
-			if (Mouse.cameraX >= x && Mouse.cameraX <= x + width) {
-				if (Mouse.cameraY >= y && Mouse.cameraY <= y + height) {
+			if (realMouseX >= x && realMouseX <= x + width) {
+				if (realMouseY >= y && realMouseY <= y + height) {
 					ctx.fillStyle = "rgba(150, 150, 150, 0.4)";
 					ctx.fillRect(x, y, width, height);
 				}
@@ -235,14 +242,18 @@ function drawUpgrades(ctx) {
 
 function checkUpgradeClick(pos) {
 	if (player.levelUpInProgress) {
+		let realCanvasScale = realCanvas.height / canvas.height;
+		let xDiffFromScale = (realCanvas.width - realCanvasScale * canvas.width) / 2;
+		let realMouseX = (pos.x - xDiffFromScale) / realCanvasScale;
+		let realMouseY = pos.y / realCanvasScale;
 		for (let i = 0; i < upgradeButtons.length; i++) {
 			let x = upgradeButtons[i].x;
 			let y = upgradeButtons[i].y;
 			let width = upgradeButtons[i].width;
 			let height = upgradeButtons[i].height;
 
-			if (pos.x >= x && pos.x <= x + width) {
-				if (pos.y >= y && pos.y <= y + height) {
+			if (realMouseX >= x && realMouseX <= x + width) {
+				if (realMouseY >= y && realMouseY <= y + height) {
 					//Notify server of choice
 					sendUpgradeRequest(i);
 				}
@@ -277,6 +288,6 @@ function drawShimmer(button, ctx, col1, col2) {
 
 	shimmerOffset += 0.17 * 2;
 	if (shimmerOffset >= 0) {
-		shimmerOffset -= shimmerWidth/2;
+		shimmerOffset -= shimmerWidth / 2;
 	}
 }

@@ -20,7 +20,7 @@ function socketStuff(formData) {
     playerColor = getColorIndexFromPalette(playerColor); //For sending to the server in weird form
 
 	var path = '/' + gameName + '/socket.io';
-    socket = io('https://hexwars.net', {
+    socket = io('http://10.0.0.131:3030', {
         secure: true,
         rejectUnauthorized: false,
         path: path
@@ -211,11 +211,13 @@ function socketStuff(formData) {
         handleInitialPowerup(serverPlayerState);
         player.activePowerups = serverPlayerState.activePowerups;
 
-        lastInput.xVel = playerSpeed * xDir;
-        lastInput.yVel = playerSpeed * yDir;
+        let tempXDir = getXDir();
+        let tempYDir = getYDir();
+        lastInput.xVel = playerSpeed * tempXDir;
+        lastInput.yVel = playerSpeed * tempYDir;
         //Send current input
         lastInputTime = performance.now();
-        socket.emit('player_input', { xDir: xDir, yDir: yDir, rotation: player.gun.rotation });
+        socket.emit('player_input', { xDir: tempXDir, yDir: tempYDir, rotation: player.gun.rotation });
     });
     socket.on('player_respawn_success', function (data) {
         //Analytics

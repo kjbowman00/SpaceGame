@@ -1,99 +1,109 @@
-//Mouse information
-var Mouse = {cameraX:0, cameraY:0, pressed: false};
-
-//Booleans saying if key is held
-var leftHeld = false;
-var rightHeld = false;
-var upHeld = false;
-var downHeld = false;
-
-//Direction to multiply velocity by
-var yDir = 0;
-var xDir = 0;
 
 function getXDir() {
-	if (leftHeld && rightHeld) {
-		return 0;
-	} else if (leftHeld) {
-		return -1;
-	} else if (rightHeld) {
-		return 1;
-	} else {
-		return 0;
-	}
+	if (firstTouch == null) return 0;
+
+	let dx = firstTouch.currentX - firstTouch.startX;
+	let maxDx = window.innerHeight / 5; //1/4th of the screen height
+	let percentage = dx / maxDx;
+	if (percentage > 1) percentage = 1;
+	if (percentage < -1) percentage = -1;
+	return percentage;
 }
 function getYDir() {
-	if (upHeld && downHeld) {
-		return 0;
-	} else if (upHeld) {
-		return -1;
-	} else if (downHeld) {
-		return 1;
-	} else {
-		return 0;
+	if (firstTouch == null) return 0;
+
+	let dy = firstTouch.currentY - firstTouch.startY;
+	let maxDy = window.innerHeight / 5; //1/4th of the screen height
+	let percentage = dy / maxDy;
+	if (percentage > 1) percentage = 1;
+	if (percentage < -1) percentage = -1;
+	return percentage;
+}
+
+//EX: {identifier: 0, startX, startY, currentX, currentY}
+var firstTouch = null;
+var secondTouch = null;
+
+function handleStart(e) {
+	let touchList = e.changedTouches;
+	for (let i = 0; i < touchList.length; i++) {
+		let touch = touchList.item(i);
+
+		//Check buttons
+		//   if in button, kill the current touch
+
+		//If first touch null, make this first touch
+		//Store the position as the center of the joystick
+		if (firstTouch == null) {
+			let touch = e.changedTouches.item(0);
+			firstTouch = {
+				identifier: touch.identifier, startX: touch.screenX, startY: touch.screenY,
+				currentX: touch.screenX, currentY: touch.screenY
+			};
+		}
+		//Else, if second touch null, make this second touch
+		//Store the center of this joystick too
+		//Begin firing
+		else if (secondTouch == null) {
+			let touch = e.changedTouches.item(0);
+			secondTouch = {
+				identifier: touch.identifier, startX: touch.screenX, startY: touch.screenY,
+				currentX: touch.screenX, currentY: touch.screenY
+			};
+		}
 	}
 }
 
-function handleKeyDown(event) {
-	let code = event.keyCode;
-
-	if (code == "27") flipOptions();
-
-	if (code=="65" || code == "37") {
-		leftHeld = true;
-	} else if (code=="68" || code =="39") {
-		rightHeld = true;
-	} else if (code=="87" || code =="38") {
-		upHeld = true;
-	} else if (code=="83" || code =="40") {
-		downHeld = true;
-	} else if (code == "32") {
-		Mouse.pressed = true;
-	}
-	yDir = getYDir();
-	xDir = getXDir();
-	player.xVel = playerSpeed * xDir;
-	player.yVel = playerSpeed * yDir;
-}
-
-function handleKeyUp(event) {
-	let code = event.keyCode
-	if (code == "65" || code == "37") {
-		leftHeld = false;
-	} else if (code == "68" || code == "39") {
-		rightHeld = false;
-	} else if (code == "87" || code == "38") {
-		upHeld = false;
-	} else if (code == "83" || code == "40") {
-		downHeld = false;
-	} else if (code == "32") {
-		Mouse.pressed = false;
-	}
-
-	yDir = getYDir();
-	xDir = getXDir();
-}
-
-function mouseMove(event) {
-	Mouse.cameraX = event.clientX;
-	Mouse.cameraY = event.clientY;
-}
-
-function mouseDown(event) {
-	Mouse.pressed = true;
-	try {
-		checkUpgradeClick({ x: event.clientX, y: event.clientY });
-	} catch(err) {
-		//Not all scripts loaded yet
+function handleEnd(e) {
+	let touchList = e.changedTouches;
+	//Remove any matching touches
+	for (let i = 0; i < touchList.length; i++) {
+		let touch = touchList.item(i);
+		if (firstTouch != null && firstTouch.identifier == touch.identifier) {
+			firstTouch = null;
+		}
+		else if (secondTouch != null && secondTouch.identifier == touch.identifier) {
+			secondTouch = null;
+		}
 	}
 }
-function mouseUp(event) {
-	Mouse.pressed = false;
+
+function handleCancel(e) {
+	//Remove any matching touches
+	let touchList = e.changedTouches;
+	for (let i = 0; i < touchList.length; i++) {
+		let touch = touchList.item(i);
+		if (firstTouch != null && firstTouch.identifier == touch.identifier) {
+			firstTouch = null;
+		}
+		else if (secondTouch != null && secondTouch.identifier == touch.identifier) {
+			secondTouch = null;
+		}
+	}
 }
 
-window.addEventListener("mousedown", mouseDown);
-window.addEventListener("mouseup", mouseUp);
-window.addEventListener("mousemove", mouseMove);
-window.addEventListener("keydown", handleKeyDown);
-window.addEventListener("keyup", handleKeyUp);
+function handleMove(e) {
+	let touchList = e.changedTouches;
+	for (let i = 0; i < touchList.length; i++) {
+		let touch = touchList.item(i);
+		//If first touch
+		//   determine the xDir and yDir from this position relative to joystick center
+		if (firstTouch != null && firstTouch.identifier == touch.identifier) {
+			firstTouch.currentX = touch.screenX;
+			firstTouch.currentY = touch.screenY;
+		}
+
+		//If second touch
+		//   determine gun direction
+		else if (secondTouch != null && secondTouch.identifier == touch.identifier) {
+			secondTouch.currentX = touch.screenX;
+			secondTouch.currentY = touch.screenY;
+		}
+	}
+}
+
+window.addEventListener("touchstart", handleStart, false);
+window.addEventListener("touchend", handleEnd, false);
+window.addEventListener("touchcancel", handleCancel, false);
+window.addEventListener("touchmove", handleMove, false);
 

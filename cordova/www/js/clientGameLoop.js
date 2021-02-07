@@ -133,8 +133,8 @@ function update() {
 		player.oldX = player.x;
 		player.oldY = player.y;
 		//Update player position
-		player.x += deltaTime * xDir * playerSpeed * velocityMod * velMod2;
-		player.y += deltaTime * yDir * playerSpeed * velocityMod * velMod2;
+		player.x += deltaTime * getXDir() * playerSpeed * velocityMod * velMod2;
+		player.y += deltaTime * getYDir() * playerSpeed * velocityMod * velMod2;
 
 		//Lerp to predicted server state
 		var predictX = serverPlayerState.x + lastInput.xVel * deltaServer * velocityMod * velMod2;
@@ -147,12 +147,12 @@ function update() {
 		updateCollisions()
 
 		//Update gun rotation
-		let centerX = Math.round(player.x) - camera.x + PLAYER_W/2;
+		/*let centerX = Math.round(player.x) - camera.x + PLAYER_W/2;
 		let centerY = Math.round(player.y) - camera.y + PLAYER_W / 2;
 		let realCanvasScale = realCanvas.height / canvas.height;
 		let xDiffFromScale = (realCanvas.width - realCanvasScale * canvas.width) / 2;
 
-		player.gun.rotation = Math.atan2(Mouse.cameraY / realCanvasScale - centerY, (Mouse.cameraX - xDiffFromScale) / realCanvasScale - centerX);
+		player.gun.rotation = Math.atan2(Mouse.cameraY / realCanvasScale - centerY, (Mouse.cameraX - xDiffFromScale) / realCanvasScale - centerX);*/
 
 		let fireTimeMod = 1;
 		if (isPowerupActive(powerups.overcharge, player)) fireTimeMod *= 2;
@@ -161,12 +161,12 @@ function update() {
 		if (player.upgrades[UPGRADE_TYPES.bullet_hose] > 0) fireTimeMod *= UPGRADE_EFFECT_AMOUNTS.bullet_hose.fireRateMod;
 
 		//Fire gun
-		playerFireTimer += deltaTime;
+		/*playerFireTimer += deltaTime;
 		if (Mouse.pressed && playerFireTimer >= playerFireTimeNeeded / fireTimeMod) {
 			playerFireTimer = 0;
 			sendBullet();
 			Sounds.playLaser();
-		}
+		}*/
 
 		if (player.trail != undefined) {
 			player.trail.update(player.x, player.y, PLAYER_W/2, deltaTime);
@@ -368,6 +368,29 @@ function draw() {
 	realCtx.fillStyle = "black";
 	realCtx.fillRect(0, 0, nX, nH);
 	realCtx.fillRect(realCanvas.width - nX, 0, nX, nH);
+
+	//Draw Joysticks
+	if (firstTouch != null) {
+		//Back of joystick
+		realCtx.beginPath();
+		realCtx.arc(firstTouch.startX, firstTouch.startY, window.innerHeight / 5, 0, 2 * Math.PI, false);
+		realCtx.fillStyle = "rgba(128,128,128, 0.5)";
+		realCtx.closePath();
+		realCtx.fill();
+
+		//Actual stick
+		realCtx.beginPath();
+		let ftx = firstTouch.currentX;
+		let fty = firstTouch.currentY;
+		if (ftx > firstTouch.startX + window.innerHeight / 5) ftx = firstTouch.startX + window.innerHeight / 5;
+		if (ftx < firstTouch.startX - window.innerHeight / 5) ftx = firstTouch.startX - window.innerHeight / 5;
+		if (fty > firstTouch.startY + window.innerHeight / 5) fty = firstTouch.startY + window.innerHeight / 5;
+		if (fty < firstTouch.startY - window.innerHeight / 5) fty = firstTouch.startY - window.innerHeight / 5;
+		realCtx.arc(ftx, fty, window.innerHeight / 15, 0, 2 * Math.PI, false);
+		realCtx.fillStyle = "rgba(128,128,128, 0.5)";
+		realCtx.closePath();
+		realCtx.fill();
+	}
 }
 
 function mainLoop(timestamp) {

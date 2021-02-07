@@ -396,8 +396,8 @@ function inRange(o1, o2, range) {
 var sendUpdates = function (io) {
 	let leaderboardToSend = leaderboard.getTop10(players);
 
-	const DIST_NEEDED = 1000 * 1000;
-	const DIST_REMOVE_NEEDED = 1500 * 1500;
+	const DIST_NEEDED = 700 * 700;
+	const DIST_REMOVE_NEEDED = 800 * 800;
 	players.forEach((value, key, map) => {
 		if (!value.bot) {
 			let newPlayersSent = [];
@@ -604,21 +604,16 @@ var playerInput = function (socketID, input) {
 	var currentPlayer = players.get(socketID);
 	if (currentPlayer == undefined) return;
 
-	if (input.xDir == 1) {
-		currentPlayer.xVel = PLAYER_SPEED;
-	} else if (input.xDir == -1) {
-		currentPlayer.xVel = -PLAYER_SPEED;
+	if (input.xDir <= 1 && input.xDir >= -1) {
+		currentPlayer.xVel = PLAYER_SPEED * input.xDir;
 	} else {
 		currentPlayer.xVel = 0;
 	}
-	if (input.yDir == 1) {
-		currentPlayer.yVel = PLAYER_SPEED;
-	} else if (input.yDir == -1) {
-		currentPlayer.yVel = -PLAYER_SPEED;
+	if (input.yDir <= 1 && input.yDir >= -1) {
+		currentPlayer.yVel = PLAYER_SPEED * input.yDir;
 	} else {
 		currentPlayer.yVel = 0;
 	}
-
 	currentPlayer.gun.rotation = input.rotation;
 }
 

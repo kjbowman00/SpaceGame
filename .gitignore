@@ -1,3 +1,4 @@
 .vs
 nginx
 !nginx/conf/nginx.conf
+node/node_modules

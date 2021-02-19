@@ -25,7 +25,8 @@ const io = require('socket.io')(http, {
 
 
 
-io.on('connection', function(socket) {
+io.on('connection', function (socket) {
+    console.log("YEET");
     socket.on('play_game', function (data) {
         try {
             //Input checking

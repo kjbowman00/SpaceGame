@@ -236,7 +236,7 @@ var update = function (deltaTime, io) {
 				currentPlayer.timeDead += deltaTime;
 				if (currentPlayer.timeDead > 60) {
 					//Remove them from the server
-					let clientSocket = io.sockets.connected[key];
+					let clientSocket = io.of("/").sockets.get(key);
 					if (clientSocket != undefined) {
 						clientSocket.disconnect();
 						playersToKick.push(currentPlayer);

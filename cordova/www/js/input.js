@@ -1,9 +1,10 @@
+let joystickScreenHeightFraction = 1 / 6;
 
 function getXDir() {
 	if (firstTouch == null) return 0;
 
 	let dx = firstTouch.currentX - firstTouch.startX;
-	let maxDx = window.innerHeight / 5; //1/4th of the screen height
+	let maxDx = window.innerHeight * joystickScreenHeightFraction;
 	let percentage = dx / maxDx;
 	if (percentage > 1) percentage = 1;
 	if (percentage < -1) percentage = -1;
@@ -13,11 +14,19 @@ function getYDir() {
 	if (firstTouch == null) return 0;
 
 	let dy = firstTouch.currentY - firstTouch.startY;
-	let maxDy = window.innerHeight / 5; //1/4th of the screen height
+	let maxDy = window.innerHeight * joystickScreenHeightFraction; //1/4th of the screen height
 	let percentage = dy / maxDy;
 	if (percentage > 1) percentage = 1;
 	if (percentage < -1) percentage = -1;
 	return percentage;
+}
+
+let inputCurrentRotation = 0;
+function inputGetGunRotation() {
+	if (secondTouch != null) {
+		inputCurrentRotation = Math.atan2(secondTouch.currentY - secondTouch.startY, secondTouch.currentX - secondTouch.startX);
+	}
+	return inputCurrentRotation;
 }
 
 //EX: {identifier: 0, startX, startY, currentX, currentY}

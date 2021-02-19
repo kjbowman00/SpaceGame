@@ -150,10 +150,11 @@ function update() {
 		/*let centerX = Math.round(player.x) - camera.x + PLAYER_W/2;
 		let centerY = Math.round(player.y) - camera.y + PLAYER_W / 2;
 		let realCanvasScale = realCanvas.height / canvas.height;
-		let xDiffFromScale = (realCanvas.width - realCanvasScale * canvas.width) / 2;
+		let xDiffFromScale = (realCanvas.width - realCanvasScale * canvas.width) / 2;*/
 
-		player.gun.rotation = Math.atan2(Mouse.cameraY / realCanvasScale - centerY, (Mouse.cameraX - xDiffFromScale) / realCanvasScale - centerX);*/
+		player.gun.rotation = inputGetGunRotation();
 
+			/*
 		let fireTimeMod = 1;
 		if (isPowerupActive(powerups.overcharge, player)) fireTimeMod *= 2;
 		fireTimeMod += UPGRADE_EFFECT_AMOUNTS.fire_rate * player.upgrades[UPGRADE_TYPES.fire_rate];
@@ -373,7 +374,7 @@ function draw() {
 	if (firstTouch != null) {
 		//Back of joystick
 		realCtx.beginPath();
-		realCtx.arc(firstTouch.startX, firstTouch.startY, window.innerHeight / 5, 0, 2 * Math.PI, false);
+		realCtx.arc(firstTouch.startX, firstTouch.startY, window.innerHeight * joystickScreenHeightFraction, 0, 2 * Math.PI, false);
 		realCtx.fillStyle = "rgba(128,128,128, 0.5)";
 		realCtx.closePath();
 		realCtx.fill();
@@ -382,10 +383,31 @@ function draw() {
 		realCtx.beginPath();
 		let ftx = firstTouch.currentX;
 		let fty = firstTouch.currentY;
-		if (ftx > firstTouch.startX + window.innerHeight / 5) ftx = firstTouch.startX + window.innerHeight / 5;
-		if (ftx < firstTouch.startX - window.innerHeight / 5) ftx = firstTouch.startX - window.innerHeight / 5;
-		if (fty > firstTouch.startY + window.innerHeight / 5) fty = firstTouch.startY + window.innerHeight / 5;
-		if (fty < firstTouch.startY - window.innerHeight / 5) fty = firstTouch.startY - window.innerHeight / 5;
+		if (ftx > firstTouch.startX + window.innerHeight * joystickScreenHeightFraction) ftx = firstTouch.startX + window.innerHeight * joystickScreenHeightFraction;
+		if (ftx < firstTouch.startX - window.innerHeight * joystickScreenHeightFraction) ftx = firstTouch.startX - window.innerHeight * joystickScreenHeightFraction;
+		if (fty > firstTouch.startY + window.innerHeight * joystickScreenHeightFraction) fty = firstTouch.startY + window.innerHeight * joystickScreenHeightFraction;
+		if (fty < firstTouch.startY - window.innerHeight * joystickScreenHeightFraction) fty = firstTouch.startY - window.innerHeight * joystickScreenHeightFraction;
+		realCtx.arc(ftx, fty, window.innerHeight / 15, 0, 2 * Math.PI, false);
+		realCtx.fillStyle = "rgba(128,128,128, 0.5)";
+		realCtx.closePath();
+		realCtx.fill();
+	}
+	if (secondTouch != null) {
+		//Back of joystick
+		realCtx.beginPath();
+		realCtx.arc(secondTouch.startX, secondTouch.startY, window.innerHeight * joystickScreenHeightFraction, 0, 2 * Math.PI, false);
+		realCtx.fillStyle = "rgba(128,128,128, 0.5)";
+		realCtx.closePath();
+		realCtx.fill();
+
+		//Actual stick
+		realCtx.beginPath();
+		let ftx = secondTouch.currentX;
+		let fty = secondTouch.currentY;
+		if (ftx > secondTouch.startX + window.innerHeight * joystickScreenHeightFraction) ftx = secondTouch.startX + window.innerHeight * joystickScreenHeightFraction;
+		if (ftx < secondTouch.startX - window.innerHeight * joystickScreenHeightFraction) ftx = secondTouch.startX - window.innerHeight * joystickScreenHeightFraction;
+		if (fty > secondTouch.startY + window.innerHeight * joystickScreenHeightFraction) fty = secondTouch.startY + window.innerHeight * joystickScreenHeightFraction;
+		if (fty < secondTouch.startY - window.innerHeight * joystickScreenHeightFraction) fty = secondTouch.startY - window.innerHeight * joystickScreenHeightFraction;
 		realCtx.arc(ftx, fty, window.innerHeight / 15, 0, 2 * Math.PI, false);
 		realCtx.fillStyle = "rgba(128,128,128, 0.5)";
 		realCtx.closePath();

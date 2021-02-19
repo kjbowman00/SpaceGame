@@ -179,8 +179,8 @@ function drawUpgrades(ctx) {
 		//	mouse position isn't accurate to the hidden canvas
 		let realCanvasScale = realCanvas.height / canvas.height;
 		let xDiffFromScale = (realCanvas.width - realCanvasScale * canvas.width) / 2;
-		let realMouseX = (Mouse.cameraX - xDiffFromScale) / realCanvasScale;
-		let realMouseY = Mouse.cameraY / realCanvasScale;
+		//let realMouseX = (Mouse.cameraX - xDiffFromScale) / realCanvasScale;
+		//let realMouseY = Mouse.cameraY / realCanvasScale;
 
 		let largestOffset = 0;
 		let textVertOffset = 7;
@@ -197,13 +197,14 @@ function drawUpgrades(ctx) {
 				ctx.drawImage(UPGRADE_IMAGES[upgradeNum], x, y, width, height);
 			}
 
-			//Lighten if mouse hover
+			//NOT NEEDED ON MOBILE
+			/*//Lighten if mouse hover
 			if (realMouseX >= x && realMouseX <= x + width) {
 				if (realMouseY >= y && realMouseY <= y + height) {
 					ctx.fillStyle = "rgba(150, 150, 150, 0.4)";
 					ctx.fillRect(x, y, width, height);
 				}
-			}
+			}*/
 
 			if (upgradeNum >= UPGRADE_LEVELS.specialized) {
 				drawShimmer(upgradeButtons[i], ctx, "rgba(150, 150, 0, 0.5)", "rgba(100, 100, 0, 0.5)");

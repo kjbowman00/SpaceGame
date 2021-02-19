@@ -154,7 +154,6 @@ function update() {
 
 		player.gun.rotation = inputGetGunRotation();
 
-			/*
 		let fireTimeMod = 1;
 		if (isPowerupActive(powerups.overcharge, player)) fireTimeMod *= 2;
 		fireTimeMod += UPGRADE_EFFECT_AMOUNTS.fire_rate * player.upgrades[UPGRADE_TYPES.fire_rate];
@@ -162,12 +161,12 @@ function update() {
 		if (player.upgrades[UPGRADE_TYPES.bullet_hose] > 0) fireTimeMod *= UPGRADE_EFFECT_AMOUNTS.bullet_hose.fireRateMod;
 
 		//Fire gun
-		/*playerFireTimer += deltaTime;
-		if (Mouse.pressed && playerFireTimer >= playerFireTimeNeeded / fireTimeMod) {
+		playerFireTimer += deltaTime;
+		if (secondTouch != null && playerFireTimer >= playerFireTimeNeeded / fireTimeMod) {
 			playerFireTimer = 0;
 			sendBullet();
 			Sounds.playLaser();
-		}*/
+		}
 
 		if (player.trail != undefined) {
 			player.trail.update(player.x, player.y, PLAYER_W/2, deltaTime);
